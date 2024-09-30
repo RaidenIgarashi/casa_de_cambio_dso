@@ -91,13 +91,13 @@ class Emprestimo:
 
 
 
-    def ver_estado_emprestimo(self, data):
+    def ver_estado_emprestimo(self, data_a_ver):
         qnt = self.quantidade_usd
-        juros = self.juros_mensal
+        i = self.juros_mensal / 100
         nome = self.cliente.nome
-        t = data - self.data    #fazer com que 't' seja a quantidade de meses da data de empréstimo pra data pedida
-        mped = self.moeda_pedida
-        ment = self.moeda_entregue
-        print(f'Empréstimo com valor de ${qnt} dólares feita por {nome}, no dia {data}. O cliente pegou emprestado \
-              {mped.__cifra}{mped*mped.__valor_usd} e deve devolver {ment.cifra}{ment*ment.valor_usd} com {juros/100} de juros mensal. \
-              nesta data, a quantidade a se pagar com juros cumulativo é de {qnt * (1 + (juros/100))**t}')
+        t = data_a_ver - self.data    #'t' precisa ser a quantidade de meses completos que passaram da data de empréstimo até a data pedida
+        m_ped = self.moeda_pedida
+        m_ent = self.moeda_entregue
+        print(f"""Empréstimo com valor de ${qnt} dólares feito por {nome}, no dia {self.data}. O cliente pegou emprestado 
+              {m_ped.cifra}{qnt*m_ped.valor_usd} e deve devolver {m_ent.cifra}{qnt*m_ent.valor_usd} com {i}% de juros mensal. 
+              no dia {data_a_ver}, a quantidade a se pagar com juros cumulativo é de {qnt * (1 + i)**t}""")

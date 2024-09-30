@@ -65,7 +65,7 @@ class Troca:
         juros = self.__porcentagem_juros
         nome = self.__pessoa.nome
         data = self.__data
-        mped = self.__moeda_pedida
-        ment = self.__moeda_entregue
+        m_ped = self.__moeda_pedida
+        m_ent = self.__moeda_entregue
         print(f'Troca com valor de ${qnt} dólares feita por {nome}, no dia {data}. O cliente trocou 
-              {mped.__cifra}{mped*mped.__valor_usd} por {ment.__cifra}{ment*ment.__valor_usd} com juros de {qnt * juros/100} dólares.')
+              {m_ped.cifra}{qnt*m_ped.valor_usd} por {m_ent.cifra}{qnt*m_ent.valor_usd} com juros de {qnt * juros/100} dólares.')
