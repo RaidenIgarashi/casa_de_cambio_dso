@@ -1,6 +1,6 @@
-from pessoa import Pessoa
-from organizacao import Organizacao
-from moeda import Moeda
+from entity.pessoa import Pessoa
+from entity.organizacao import Organizacao
+from entity.moeda import Moeda
 
 class Emprestimo:
     def __init__(self, id:int, cliente:Pessoa, emprestador:Organizacao, quantidade_usd:float, data:str,

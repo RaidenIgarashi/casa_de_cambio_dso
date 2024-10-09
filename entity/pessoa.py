@@ -1,5 +1,5 @@
-from emprestimo import Emprestimo
-from troca import Troca
+from entity.emprestimo import Emprestimo
+from entity.troca import Troca
 
 
 class Pessoa:

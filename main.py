@@ -1,7 +1,7 @@
-from pessoa import Pessoa
-from organizacao import Organizacao
-from troca import Troca
-from bancomoedas import BancoMoedas
+from entity.pessoa import Pessoa
+from entity.organizacao import Organizacao
+from entity.troca import Troca
+from controle.bancomoedas import BancoMoedas
 
 banco = BancoMoedas()
 banco.add_moeda(nome='Real', regioes=['Brasil'], cifra='R$', valor_usd=5.00)
