@@ -9,10 +9,6 @@ class Controlador(ABC):
         pass
 
     @abstractmethod
-    def busca(self):
-        pass
-
-    @abstractmethod
     def inclui(self):
         pass
 
@@ -26,8 +22,4 @@ class Controlador(ABC):
 
     @abstractmethod
     def altera(self):
-        pass
-
-    @abstractmethod
-    def mostra(self):
         pass

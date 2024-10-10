@@ -1,6 +1,6 @@
-from ..limit.tela_organizacao import Tela_Organizacao
-from ..entity.organizacao import Organizacao
-from controlador import Controlador
+from programacao.limit.tela_organizacao import Tela_Organizacao
+from programacao.entity.organizacao import Organizacao
+from programacao.controle.controlador import Controlador
 
 class ControladorOrganizacao(Controlador):
     def __init__(self, controlador_sistema):
@@ -35,17 +35,17 @@ class ControladorOrganizacao(Controlador):
         cnpj = self.__tela_organizacao.selecionar()
         organizacao = self.pegar_por_cnpj(cnpj)
         if organizacao != None:
-            for org in self.__organizacoes():
+            for org in self.__organizacoes:
                 if org.cnpj == organizacao.cnpj:
                     new_org = self.__tela_organizacao.pegar_dados()
                     org.nome = new_org['nome']
-                    org.cpnj = new_org['cnpj']
+                    org.cnpj = new_org['cnpj']
         else:
             self.__tela_organizacao.mostra_msg('Organização não existe')
                     
 
     def abre_tela(self):
-        command_list = {1: self.inclui, 2: self.exclui, 3: self.altera, 4: self.listar}
+        command_list = {0: self.retornar, 1: self.inclui, 2: self.exclui, 3: self.listar, 4: self.altera}
 
         continuar = True
         while continuar:

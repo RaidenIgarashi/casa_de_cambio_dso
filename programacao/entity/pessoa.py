@@ -1,5 +1,5 @@
-from entity.emprestimo import Emprestimo
-from entity.troca import Troca
+from  programacao.entity.emprestimo import Emprestimo
+from  programacao.entity.troca import Troca
 
 
 class Pessoa:

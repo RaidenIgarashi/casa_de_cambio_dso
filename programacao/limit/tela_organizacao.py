@@ -1,8 +1,8 @@
-from tela import Tela
+from programacao.limit.tela import Tela
 
 
 class Tela_Organizacao(Tela):
-    def tela_opcoes():
+    def tela_opcoes(self):
         print('-------ORGANIZAÇÕES-------')
         print('1 - Incluir organização')
         print('2 - Excluir organização')
@@ -10,14 +10,14 @@ class Tela_Organizacao(Tela):
         print('4 - Alterar organização')
         print('0 - Retornar')
 
-        opcao = int(input("Escolha uma Opção"))
+        opcao = int(input("Escolha uma Opção: "))
         return opcao
 
     def pegar_dados(self):
         print('-------CADASTRE SUA ORGANIZAÇÃO--------')
-        nome = str(input('Digite o nome de sua Organização'))
-        cnpj = str(input('Digite seu cnpj'))
-        return {nome:nome, cnpj:cnpj}
+        nome = str(input('Digite o nome de sua Organização: '))
+        cnpj = str(input('Digite seu cnpj: '))
+        return {"nome":nome, "cnpj":cnpj}
     
     def monstrar(self, dados_organizacao):
         print('--------INFORMAÇÕES--------')
@@ -28,7 +28,7 @@ class Tela_Organizacao(Tela):
         print("\n")
 
     def selecionar(self):
-        cnpj = input('Digite o cnpj da organizacao que deseja achar')
+        cnpj = input('Digite o cnpj da organizacao que deseja achar: ')
         return cnpj
 
     def mostra_msg(self, msg):

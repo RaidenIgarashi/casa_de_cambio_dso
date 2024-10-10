@@ -1,10 +1,10 @@
-from controle.controlador_organizacao import ControladorOrganizacao
-from ..limit.tela_inicializador import TelaInicializador
+from programacao.controle.controlador_organizacao import ControladorOrganizacao
+from programacao.limit.tela_inicializador import TelaInicializador
 
 class Inicializador():
     def __init__(self):
-        self.__tela = TelaInicializador(self)
-        self.__org_controler = ControladorOrganizacao()
+        self.__tela = TelaInicializador()
+        self.__org_controler = ControladorOrganizacao(self)
 
     @property
     def tela_inicializadora(self):
@@ -17,7 +17,7 @@ class Inicializador():
         self.__org_controler.abre_tela()
     
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastra_organizacao, 2: self.sla}
+        lista_opcoes = {2: self.cadastra_organizacao}
 
         while True:
             opcao_escolhida = self.__tela.tela_opcoes()

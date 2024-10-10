@@ -1,7 +1,3 @@
-from entity.emprestimo import Emprestimo
-from entity.troca import Troca
-
-
 class Organizacao:
     def __init__(self, nome:str, cnpj:str, credito_usd:float):
         self.__nome = nome
@@ -35,8 +31,7 @@ class Organizacao:
         self.__credito_usd = credito_usd
 
 #o tipo_pedido é um bool que serva para identificar se é um emprestimo do tipo pedido ou cedido
-    def add_emprestimo(self, emprestimo:Emprestimo, tipo_pedido:bool):
-        if isinstance(emprestimo, Emprestimo):
+    def add_emprestimo(self, emprestimo, tipo_pedido:bool):
             if tipo_pedido:
                 for emp_pedido in self.__emprestimos_pedidos:
                     if emp_pedido.id == emprestimo.id:

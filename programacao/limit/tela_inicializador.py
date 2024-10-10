@@ -7,3 +7,5 @@ class TelaInicializador():
         print("3 - Moeda")
         print("4 - Troca")
         print("5 - Emprestimo")
+        opcao = int(input("Escolha uma opção "))
+        return opcao
