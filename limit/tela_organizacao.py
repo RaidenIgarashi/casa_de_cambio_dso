@@ -23,6 +23,8 @@ class Tela_Organizacao(Tela):
         print('--------INFORMAÇÕES--------')
         print(f'NOME DA ORGANIZAÇÃO: {dados_organizacao['nome']}')
         print(f'CNPJ DA ORGANIZAÇÃO: {dados_organizacao['cnpj']}')
+        print(f'CREDITO_USD DA ORGANIZAÇÃO: {dados_organizacao['credito_usd']}')
+
         print("\n")
 
     def selecionar(self):
