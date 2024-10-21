@@ -2,18 +2,9 @@ from programacao.entity.cliente import Cliente
 
 class Organizacao(Cliente):
     def __init__(self, nome:str, cnpj:str, credito_usd:float):
-        super().__init__(nome, credito_usd)
-        self.__cnpj = cnpj
+        super().__init__(nome, credito_usd, cnpj)
         self.__emprestimos_pedidos = []
         self.__emprestimos_cedidos = []
-
-    @property
-    def cnpj(self):
-        return self.__cnpj
-
-    @cnpj.setter
-    def cnpj(self, cnpj):
-        self.__cnpj = cnpj
 
 #o tipo_pedido é um bool que serva para identificar se é um emprestimo do tipo pedido ou cedido
     def add_emprestimo(self, emprestimo, tipo_pedido:bool):

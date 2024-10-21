@@ -1,30 +1,15 @@
 from  programacao.entity.emprestimo import Emprestimo
 from  programacao.entity.troca import Troca
+from programacao.entity.cliente import Cliente
 
 
-class Pessoa:
+class Pessoa(Cliente):
     def __init__(self, nome:str, cpf:str, idade:int, credito_usd:float):
-        self.__nome = nome
-        self.__cpf = cpf
+        super().__init__(nome, credito_usd, cpf)
         self.__idade = idade
         self.__emprestimos_pedidos = []
         self.__emprestimos_concedidos = []
         self.__trocas_feitas = []
-        self.__credito_usd = credito_usd
-
-    @property
-    def nome(self):
-        return self.__nome
-    @nome.setter
-    def nome(self, nome):
-        self.__nome = nome
-
-    @property
-    def cpf(self):
-        return self.__cpf
-    @cpf.setter
-    def cpf(self, cpf):
-        self.__cpf = cpf
 
     @property
     def idade(self):

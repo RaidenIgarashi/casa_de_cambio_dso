@@ -2,9 +2,9 @@ from abc import abstractmethod, ABC
 
 class Cliente(ABC):
     @abstractmethod
-    def __init__(self, nome: str, credito_usd: int):
+    def __init__(self, nome: str, credito_usd: int, id:str):
         self.__nome = nome 
-        # self.__identificacao = identificacao
+        self.__id = id
         self.__credito_usd = credito_usd
 
     @property
@@ -15,13 +15,13 @@ class Cliente(ABC):
     def nome(self, nome):
         self.__nome = nome 
 
-    # @property
-    # def identificacao(self):
-    #     return self.__identificacao
+    @property
+    def id(self):
+        return self.__id
 
-    # @identificacao.setter
-    # def identificacao(self, identificacao):
-    #     self.__identificacao = identificacao
+    @id.setter
+    def id(self, id):
+        self.__id = id
 
     @property
     def credito_usd(self):

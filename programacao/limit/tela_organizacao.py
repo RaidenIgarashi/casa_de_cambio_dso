@@ -16,20 +16,20 @@ class Tela_Organizacao(Tela):
     def pegar_dados(self):
         print('-------CADASTRE SUA ORGANIZAÇÃO--------')
         nome = str(input('Digite o nome de sua Organização: '))
-        cnpj = str(input('Digite seu cnpj: '))
-        return {"nome":nome, "cnpj":cnpj}
+        id = str(input('Digite seu cnpj: '))
+        return {"nome":nome, "id":id}
     
     def monstrar(self, dados_organizacao):
         print('--------INFORMAÇÕES--------')
         print(f'NOME DA ORGANIZAÇÃO: {dados_organizacao['nome']}')
-        print(f'CNPJ DA ORGANIZAÇÃO: {dados_organizacao['cnpj']}')
+        print(f'CNPJ DA ORGANIZAÇÃO: {dados_organizacao['id']}')
         print(f'CREDITO_USD DA ORGANIZAÇÃO: {dados_organizacao['credito_usd']}')
 
         print("\n")
 
     def selecionar(self):
-        cnpj = input('Digite o cnpj da organizacao que deseja achar: ')
-        return cnpj
+        id = input('Digite o cnpj da organizacao que deseja achar: ')
+        return id
 
     def mostra_msg(self, msg):
         return super().mostra_msg(msg)

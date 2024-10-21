@@ -8,19 +8,19 @@ class ControladorOrganizacao(Controlador):
         self.__tela_organizacao = Tela_Organizacao()
         self.__organizacoes = []
 
-    def pegar_por_cnpj(self, cnpj):
+    def pegar_por_id(self, id):
         for organizacoes in self.__organizacoes:
-            if organizacoes.cnpj == cnpj:
+            if organizacoes.id == id:
                 return organizacoes
         return None
 
     def inclui(self):
         dados_organizacao = self.__tela_organizacao.pegar_dados()
-        self.__organizacoes.append(Organizacao(dados_organizacao['nome'], dados_organizacao['cnpj'], 0))
+        self.__organizacoes.append(Organizacao(dados_organizacao['nome'], dados_organizacao['id'], 0))
 
     def exclui(self):
-        cnpj = self.__tela_organizacao.selecionar()
-        organizacao = self.pegar_por_cnpj(cnpj)
+        id = self.__tela_organizacao.selecionar()
+        organizacao = self.pegar_por_id(id)
         if not organizacao == None:
             self.__organizacoes.remove(organizacao)
         else:
@@ -28,18 +28,18 @@ class ControladorOrganizacao(Controlador):
 
     def listar(self):
         for organizacao in self.__organizacoes:
-            self.__tela_organizacao.monstrar({'nome': organizacao.nome, 'cnpj': organizacao.cnpj, 'credito_usd': organizacao.credito_usd})
+            self.__tela_organizacao.monstrar({'nome': organizacao.nome, 'id': organizacao.id, 'credito_usd': organizacao.credito_usd})
 
     def altera(self):
         self.listar()
-        cnpj = self.__tela_organizacao.selecionar()
-        organizacao = self.pegar_por_cnpj(cnpj)
+        id = self.__tela_organizacao.selecionar()
+        organizacao = self.pegar_por_id(id)
         if organizacao != None:
             for org in self.__organizacoes:
-                if org.cnpj == organizacao.cnpj:
+                if org.id == organizacao.id:
                     new_org = self.__tela_organizacao.pegar_dados()
                     org.nome = new_org['nome']
-                    org.cnpj = new_org['cnpj']
+                    org.id = new_org['id']
         else:
             self.__tela_organizacao.mostra_msg('Organização não existe')
                     
