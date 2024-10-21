@@ -1,4 +1,4 @@
-from programacao.limit.tela import Tela
+from programacao.telas.tela import Tela
 
 
 class Tela_Organizacao(Tela):
@@ -19,7 +19,7 @@ class Tela_Organizacao(Tela):
         id = str(input('Digite seu cnpj: '))
         return {"nome":nome, "id":id}
     
-    def monstrar(self, dados_organizacao):
+    def mostrar(self, dados_organizacao):
         print('--------INFORMAÇÕES--------')
         print(f'NOME DA ORGANIZAÇÃO: {dados_organizacao['nome']}')
         print(f'CNPJ DA ORGANIZAÇÃO: {dados_organizacao['id']}')

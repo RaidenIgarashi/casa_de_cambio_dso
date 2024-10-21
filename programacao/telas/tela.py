@@ -11,7 +11,7 @@ class Tela(ABC):
         pass
 
     @abstractmethod
-    def monstrar(self):
+    def mostrar(self):
         pass
 
     @abstractmethod

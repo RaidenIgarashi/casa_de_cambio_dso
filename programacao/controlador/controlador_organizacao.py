@@ -1,6 +1,6 @@
-from programacao.limit.tela_organizacao import Tela_Organizacao
-from programacao.entity.organizacao import Organizacao
-from programacao.controle.controlador import Controlador
+from programacao.telas.tela_organizacao import Tela_Organizacao
+from programacao.entidades.organizacao import Organizacao
+from programacao.controlador.controlador import Controlador
 
 class ControladorOrganizacao(Controlador):
     def __init__(self, controlador_sistema):
@@ -28,7 +28,7 @@ class ControladorOrganizacao(Controlador):
 
     def listar(self):
         for organizacao in self.__organizacoes:
-            self.__tela_organizacao.monstrar({'nome': organizacao.nome, 'id': organizacao.id, 'credito_usd': organizacao.credito_usd})
+            self.__tela_organizacao.mostrar({'nome': organizacao.nome, 'id': organizacao.id, 'credito_usd': organizacao.credito_usd})
 
     def altera(self):
         self.listar()
@@ -37,9 +37,9 @@ class ControladorOrganizacao(Controlador):
         if organizacao != None:
             for org in self.__organizacoes:
                 if org.id == organizacao.id:
-                    new_org = self.__tela_organizacao.pegar_dados()
-                    org.nome = new_org['nome']
-                    org.id = new_org['id']
+                    nova_org = self.__tela_organizacao.pegar_dados()
+                    org.nome = nova_org['nome']
+                    org.id = nova_org['id']
         else:
             self.__tela_organizacao.mostra_msg('Organização não existe')
                     

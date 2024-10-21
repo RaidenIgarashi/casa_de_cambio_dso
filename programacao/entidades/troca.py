@@ -1,5 +1,5 @@
-from entity.pessoa import Pessoa
-from entity.moeda import Moeda
+from entidades.pessoa import Pessoa
+from entidades.moeda import Moeda
 
 
 class Troca:

@@ -1,4 +1,4 @@
-from entity.moeda import Moeda
+from entidades.moeda import Moeda
 
 
 class BancoMoedas:

@@ -1,4 +1,4 @@
-from programacao.entity.cliente import Cliente
+from programacao.entidades.cliente import Cliente
 
 class Organizacao(Cliente):
     def __init__(self, nome:str, cnpj:str, credito_usd:float):
