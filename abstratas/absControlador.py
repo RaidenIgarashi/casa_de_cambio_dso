@@ -9,6 +9,14 @@ class Controlador(ABC):
         pass
 
     @abstractmethod
+    def mostra_dados(self):
+        pass
+
+    @abstractmethod
+    def pega_objeto(self):
+        pass
+
+    @abstractmethod
     def inclui(self):
         pass
 
@@ -17,9 +25,9 @@ class Controlador(ABC):
         pass
 
     @abstractmethod
-    def listar(self):
+    def altera(self):
         pass
 
     @abstractmethod
-    def altera(self):
+    def mostra_todas(self):
         pass

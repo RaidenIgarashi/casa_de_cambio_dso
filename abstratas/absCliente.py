@@ -2,7 +2,7 @@ from abc import abstractmethod, ABC
 
 class Cliente(ABC):
     @abstractmethod
-    def __init__(self, nome: str, credito_usd: int, id:str):
+    def __init__(self, nome: str, id:str, credito_usd: int):
         self.__nome = nome 
         self.__id = id
         self.__credito_usd = credito_usd

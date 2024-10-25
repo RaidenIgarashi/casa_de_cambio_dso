@@ -1,4 +1,4 @@
-from controladores.inicializador import Inicializador
+from controladores.inicializadorSistema import InicializadorSistema
 
 if __name__ == "__main__":
-    Inicializador().inicializa_sistema()
+    InicializadorSistema().inicializa_sistema()

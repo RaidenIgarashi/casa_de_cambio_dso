@@ -1,7 +1,7 @@
 from entidades.moeda import Moeda
 
 
-class BancoMoedas:
+class ControladorMoeda:
     def __init__(self):
         self.__moedas = []
 

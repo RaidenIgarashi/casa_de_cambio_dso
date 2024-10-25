@@ -19,5 +19,5 @@ class Tela(ABC):
         pass
 
     @abstractmethod
-    def mostra_msg(self, msg):
-        print(msg)
+    def mostra_msg(self):
+        pass

@@ -1,57 +1,80 @@
+from abstratas.absControlador import Controlador
 from telas.telaCliente import TelaCliente
 from entidades.organizacao import Organizacao
-from abstratas.absControlador import Controlador
+from entidades.pessoa import Pessoa
 
 class ControladorCliente(Controlador):
     def __init__(self, controlador_sistema):
         self.__controlador_sistema = controlador_sistema
-        self.__tela_organizacao = TelaCliente()
-        self.__organizacoes = []
+        self.__tela_cliente = TelaCliente()
+        self.__pessoas = [Pessoa]
+        self.__organizacoes = [Organizacao]
 
-    def pegar_por_id(self, id):
-        for organizacoes in self.__organizacoes:
-            if organizacoes.id == id:
-                return organizacoes
-        return None
-
-    def inclui(self):
-        dados_organizacao = self.__tela_organizacao.pegar_dados()
-        self.__organizacoes.append(Organizacao(dados_organizacao['nome'], dados_organizacao['id'], 0))
-
-    def exclui(self):
-        id = self.__tela_organizacao.selecionar()
-        organizacao = self.pegar_por_id(id)
-        if not organizacao == None:
-            self.__organizacoes.remove(organizacao)
-        else:
-            self.__tela_organizacao.mostra_msg('Organização não existe')
-
-    def listar(self):
-        for organizacao in self.__organizacoes:
-            self.__tela_organizacao.mostrar({'nome': organizacao.nome, 'id': organizacao.id, 'credito_usd': organizacao.credito_usd})
-
-    def altera(self):
-        self.listar()
-        id = self.__tela_organizacao.selecionar()
-        organizacao = self.pegar_por_id(id)
-        if organizacao != None:
-            for org in self.__organizacoes:
-                if org.id == organizacao.id:
-                    nova_org = self.__tela_organizacao.pegar_dados()
-                    org.nome = nova_org['nome']
-                    org.id = nova_org['id']
-        else:
-            self.__tela_organizacao.mostra_msg('Organização não existe')
-                    
 
     def abre_tela(self):
-        command_list = {0: self.retornar, 1: self.inclui, 2: self.exclui, 3: self.listar, 4: self.altera}
-
+        command_list = {1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.altera, 5: self.mostra_todas, 0: self.voltar_tela}
         continuar = True
         while continuar:
-            command_list[self.__tela_organizacao.tela_opcoes()]()
+            command_list[self.__tela_cliente.tela_opcoes()]()
 
-    def retornar(self):
+    def mostra_dados(self, id):
+        if len(id) == 11: #cpf
+            for pessoa in self.__pessoas:
+                if pessoa.id == id:
+                    self.__tela_cliente.mostrar({'nome': pessoa.nome, 'id': pessoa.id, 'credito_usd': pessoa.credito_usd})
+
+        elif len(id) == 14: #cnpj
+            for org in self.__organizacoes:
+                if org.id == id:
+                    self.__tela_cliente.mostrar({'nome': org.nome, 'id': org.id, 'credito_usd': org.credito_usd})
+
+    def pega_objeto(self, id):
+        if len(id) == 11: #cpf
+            for pessoa in self.__pessoas:
+                if pessoa.id == id:
+                    return pessoa
+        elif len(id) == 14: #cnpj
+            for org in self.__organizacoes:
+                if org.id == id:
+                    return org
+
+    def inclui(self):
+        dados_cliente = self.__tela_cliente.cadastrar_dados()
+        if len(dados_cliente) == 2:
+            self.__organizacoes.append(Organizacao(dados_cliente['nome'], dados_cliente['id'], 0))
+        elif len(dados_cliente) == 3:
+            self.__organizacoes.append(Pessoa(dados_cliente['nome'], dados_cliente['id'], 0, dados_cliente['idade']))
+
+    def exclui(self):
+        id = self.__tela_cliente.selecionar()
+        cliente = self.pega_objeto(id)
+        if not cliente == None:
+            self.__organizacoes.remove(cliente)
+        else:
+            self.__tela_cliente.mostrar_msg('Organização não existe')
+
+    def mostra_todas(self):
+        for org in self.__organizacoes:
+            self.__tela_cliente.mostrar({'nome': org.nome, 'id': org.id, 'credito_usd': org.credito_usd})
+        for pessoa in self.__pessoas:
+            self.__tela_cliente.mostrar({'nome': pessoa.nome, 'id': pessoa.id, 'idade': pessoa.idade, 'credito_usd': pessoa.credito_usd})
+
+    def altera(self):
+        self.mostra_todas()
+        id = self.__tela_cliente.selecionar()
+        id_a_alterar = self.pega_objeto(id)
+        if id_a_alterar != None:
+            lista = self.__pessoas if len(id) == 11 else self.__organizacoes
+            for cliente in lista:
+                if cliente.id == id_a_alterar.id:
+                    novo_cliente = self.__tela_cliente.cadastrar_dados()
+                    cliente.nome = novo_cliente['nome']
+                    cliente.id = novo_cliente['id']
+                    if len(id) == 11:
+                        cliente.idade = novo_cliente['idade']
+        else:
+            self.__tela_cliente.mostrar_msg('Organização não existe')
+
+    def voltar_tela(self):
         self.__controlador_sistema.abre_tela()
-
 
