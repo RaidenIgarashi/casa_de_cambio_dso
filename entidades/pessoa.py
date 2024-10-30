@@ -3,7 +3,7 @@ from abstratas.absCliente import Cliente
 
 class Pessoa(Cliente):
     def __init__(self, nome:str, cpf:str, credito_usd:float, idade:int):
-        super().__init__(nome, credito_usd, cpf)
+        super().__init__(nome, cpf, credito_usd)
         self.__idade = idade
         self.__emprestimos_pedidos = []
         self.__emprestimos_concedidos = []
