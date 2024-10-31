@@ -45,5 +45,8 @@ class TelaCliente(Tela):
         id = input('Digite o cpf/cnpj do cliente que deseja achar: ')
         return id
 
-    def mostrar_msg(self, msg):
+    def mostra_msg(self, msg):
         print(msg)
+
+    def pegar_dados(self):
+        pass
