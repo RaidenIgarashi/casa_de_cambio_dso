@@ -18,12 +18,12 @@ class InicializadorSistema():
         self.abre_tela()
 
     def abre_tela(self):
-        lista_opcoes = {0:self.encerra_sistema, 1: self.cadastra_cliente}   
+        opcoes = {1: self.cadastra_cliente, 0:self.encerra_sistema}   
 
         while True:
             opcao_escolhida = self.__tela.tela_opcoes()
-            funcao_escolhida = lista_opcoes[opcao_escolhida]
-            funcao_escolhida()
+            funcao_a_executar = opcoes[opcao_escolhida]
+            funcao_a_executar()
 
     def encerra_sistema(self):
         pass

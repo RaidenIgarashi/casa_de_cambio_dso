@@ -1,25 +1,32 @@
+from abstratas.absControlador import Controlador
 from entidades.moeda import Moeda
+from telas.telaMoeda import TelaMoeda
 
-
-class ControladorMoeda:
+class controladorMoeda(Controlador):
     def __init__(self):
-        self.__moedas = []
+        self.__moeda = [Moeda]
+        self.__tela = TelaMoeda()
+    
+    def inclui(self):
+        pass
 
-    def add_moeda(self, nome:str, regioes:list, cifra:str, valor_usd:float):
-        m = Moeda(nome, regioes, cifra, valor_usd)
-        self.__moedas.append(m)
+    def exclui(self):
+        pass
 
-    def del_moeda(self, nome_moeda):
-        for m in self.__moedas:
-            if m.nome == nome_moeda:
-                self.__moedas.remove(m)
-                break
+    def pega_objeto(self):
+        pass
 
-    def ver_todas_moedas(self):
-        for m in self.__moedas:
-            print(m.mostrar_infos())
+    def altera(self):
+        pass
 
-    def pegar_moeda(self, nome_moeda):
-        for m in self.__moedas:
-            if m.nome == nome_moeda:
-                return m
+    def mostra_todas(self):
+        pass
+
+    def voltar_tela(self):
+        pass
+
+    def abre_tela(self):
+        pass
+
+    def mostra_dados(self):
+        pass
