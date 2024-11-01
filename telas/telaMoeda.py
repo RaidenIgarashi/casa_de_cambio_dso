@@ -12,7 +12,7 @@ class TelaMoeda(Tela):
         opcoes = int(input("Escolha uma opção para ver/cadastrar: "))
         return opcoes
 
-    def cadastrar_dados(self, id):
+    def cadastrar_dados(self):
         print('-------CADASTRAR MOEDA--------')
         nome = input('Digite o nome dá moeda')
         reg = input('Digite de onde veio')
@@ -32,10 +32,11 @@ class TelaMoeda(Tela):
         print('\n')
 
     def selecionar(self):
-        pass
+        nome = input('Escreva o nome da moeda que deseja achar')
+        return nome
 
-    def mostra_msg(self):
-        pass
+    def mostra_msg(msg):
+        print(msg)
 
     def mostrar_trocas(self):
         pass
