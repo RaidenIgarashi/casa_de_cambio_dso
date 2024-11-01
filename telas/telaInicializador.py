@@ -1,4 +1,4 @@
-class TelaInicializadora():
+class TelaInicializador():
     def tela_opcoes(self):
         print("------CASA DE CAMBIO E EMPRÉSTIMOS------")
         print("OPÇÕES:")
@@ -8,4 +8,5 @@ class TelaInicializadora():
         print("4 - ...")
         print("0 - Encerrar :(")
         opcao = int(input("Escolha uma opção para ver/cadastrar: "))
+        print()
         return opcao

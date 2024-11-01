@@ -7,17 +7,25 @@ class Tela(ABC):
         pass
 
     @abstractmethod
-    def pegar_dados(self):
+    def cadastrar_dados(self):
         pass
 
     @abstractmethod
-    def mostrar(self):
+    def alterar_dados(self):
         pass
 
     @abstractmethod
-    def selecionar(self):
+    def mostrar_dados(self):
         pass
 
     @abstractmethod
-    def mostra_msg(self):
+    def excluir(self):
         pass
+
+    @abstractmethod
+    def ver_dados(self):
+        pass
+
+    @abstractmethod
+    def mostrar_msg(self, msg):
+        print(msg)
