@@ -24,7 +24,7 @@ class TelaMoeda(Tela):
     def mostrar_dados(self, dados_moeda):
         print('--------INFORMAÇÕES DA MOEDA--------')
         print(f'NOME: {dados_moeda["nome"]}')
-        print(f'REGIOES: {dados_moeda["reg"]}')
+        print(f'REGIOES: {dados_moeda["regioes"]}')
         print(f'CIFRA: {dados_moeda["cifra"]}')
         print(f'VALOR: {dados_moeda["valor"]}')
         print('\n')
@@ -41,7 +41,7 @@ class TelaMoeda(Tela):
         nome = input('Escreva o nome da moeda que deseja achar: ')
         return nome
 
-    def mostrar_msg(msg):
+    def mostrar_msg(self, msg):
         print(msg)
 
     def mostrar_trocas(self):

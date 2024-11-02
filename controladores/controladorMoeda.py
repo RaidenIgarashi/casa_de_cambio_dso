@@ -4,7 +4,7 @@ from telas.telaMoeda import TelaMoeda
 
 class ControladorMoeda(Controlador):
     def __init__(self, controlador_sistema):
-        self.__moedas = [Moeda]
+        self.__moedas = []
         self.__tela = TelaMoeda()
         self.__controlador_sistema = controlador_sistema
     
@@ -17,6 +17,7 @@ class ControladorMoeda(Controlador):
         moeda = self.pega_objeto(nome)
         if moeda is not None:
             self.__moedas.remove(moeda)
+            self.__tela.mostrar_msg(f'A moeda {moeda.nome} foi excluida com sucesso')
 
     def pega_objeto(self, nome):
         for moeda in self.__moedas:
@@ -35,7 +36,7 @@ class ControladorMoeda(Controlador):
 
     def mostra_todas(self):
         for moeda in self.__moedas:
-            self.__tela.mostrar_dados({'nome':moeda.nome, 'reg':moeda.regioes, 'cifra':moeda.cifra, 'valor':moeda.valor_usd})
+            self.__tela.mostrar_dados({'nome':moeda.nome, 'regioes':moeda.regioes, 'cifra':moeda.cifra, 'valor':moeda.valor_usd})
 
     def voltar_tela(self):
         self.__controlador_sistema.abre_tela()
