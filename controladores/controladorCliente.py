@@ -8,8 +8,8 @@ class ControladorCliente(Controlador):
     def __init__(self, controlador_sistema):
         self.__controlador_sistema = controlador_sistema
         self.__tela_cliente = TelaCliente()
-        self.__pessoas = [Pessoa]
-        self.__organizacoes = [Organizacao]
+        self.__pessoas = []
+        self.__organizacoes = []
 
     def abre_tela(self):
         lista_comandos = {1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.altera, 5: self.mostra_todas, 0: self.voltar_tela}
@@ -19,44 +19,62 @@ class ControladorCliente(Controlador):
 
     def mostra_dados(self):
         id = self.__tela_cliente.ver_dados()
+        existente = False
         if eh_pessoa(id): #cpf
             for pessoa in self.__pessoas:
                 if pessoa.id == id:
                     self.__tela_cliente.mostrar_dados({'nome': pessoa.nome, 'id': pessoa.id, 'credito_usd': pessoa.credito_usd, 'idade':pessoa.idade})
+                    existente = True
         else: #cnpj
             for org in self.__organizacoes:
                 if org.id == id:
                     self.__tela_cliente.mostrar_dados({'nome': org.nome, 'id': org.id, 'credito_usd': org.credito_usd})
+                    existente = True
+        if not existente:
+            self.__tela_cliente.mostrar_msg("Nenhum cliente registrado com esta identidade.")
 
     def pega_objeto(self, id):
-        if eh_pessoa(id): #cpf
-            clientes = self.__pessoas
-        else: #cnpj
-            clientes = self.__organizacoes
-        for cli in clientes:
+        for cli in self.__pessoas:
             if cli.id == id:
-                return cli
+                return cli 
+        for cli in self.__organizacoes:
+            if cli.id == id:
+                return cli 
 
     def inclui(self):
         dados_cliente = self.__tela_cliente.cadastrar_dados()
-        if eh_pessoa(dados_cliente['id']): 
+        if eh_pessoa(dados_cliente['id']) and 'idade' in dados_cliente: 
             self.__pessoas.append(Pessoa(dados_cliente['nome'], dados_cliente['id'], 0, dados_cliente['idade']))
-        else:
+        elif not eh_pessoa(dados_cliente['id']):
             self.__organizacoes.append(Organizacao(dados_cliente['nome'], dados_cliente['id'], 0))
+        else:
+            print('Dados incorretos para o tipo de cliente.')
 
     def exclui(self):
         id = self.__tela_cliente.excluir()
         cliente = self.pega_objeto(id)
         if cliente != None:
-            self.__organizacoes.remove(cliente)
+            if eh_pessoa(id):
+                self.__pessoas.remove(cliente)
+            else:
+                self.__organizacoes.remove(cliente)
+            self.__tela_cliente.mostrar_msg(f'Cliente "{cliente.nome}" excluído.')
         else:
-            self.__tela_cliente.mostrar_msg('\n## Cliente não cadastrado ##\n')
+            self.__tela_cliente.mostrar_msg('\n## Nenhum cliente cadastrado com esta identidade ##\n')
 
     def mostra_todas(self):
-        for org in self.__organizacoes:
-            self.__tela_cliente.mostrar_dados({'nome': org.nome, 'id': org.id, 'credito_usd': org.credito_usd})
-        for pessoa in self.__pessoas:
-            self.__tela_cliente.mostrar_dados({'nome': pessoa.nome, 'id': pessoa.id, 'idade': pessoa.idade, 'credito_usd': pessoa.credito_usd})
+        if len(self.__organizacoes) > 0:
+            for org in self.__organizacoes:
+                self.__tela_cliente.mostrar_dados({'nome': org.nome, 'id': org.id, 'credito_usd': org.credito_usd})
+        else:
+            self.__tela_cliente.mostrar_msg("Nenhuma Organização cadastrada.\n")
+
+        if len(self.__pessoas) > 0:
+            for pessoa in self.__pessoas:
+                self.__tela_cliente.mostrar_dados({'nome': pessoa.nome, 'id': pessoa.id, 'idade': pessoa.idade, 'credito_usd': pessoa.credito_usd})
+        else:
+            self.__tela_cliente.mostrar_msg("Nenhuma Pessoa cadastrada.\n")
+        
 
     def altera(self):
         self.mostra_todas()
