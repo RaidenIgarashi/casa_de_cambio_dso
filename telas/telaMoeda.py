@@ -26,10 +26,10 @@ class TelaMoeda(Tela):
 
     def mostrar(self, dados_moeda):
         print('--------INFORMAÇÕES DA MOEDA--------')
-        print(f'NOME: {dados_moeda['nome']}')
-        print(f'REGIOES: {dados_moeda['reg']}')
-        print(f'CIFRA: {dados_moeda['cifra']}')
-        print(f'VALOR: {dados_moeda['valor']}')
+        print(f'NOME: {dados_moeda["nome"]}')
+        print(f'REGIOES: {dados_moeda["reg"]}')
+        print(f'CIFRA: {dados_moeda["cifra"]}')
+        print(f'VALOR: {dados_moeda["valor"]}')
         print('\n')
 
     def selecionar(self):

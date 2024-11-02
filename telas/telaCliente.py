@@ -24,7 +24,7 @@ class TelaCliente(Tela):
             idade = input('Digite a idade da pessoa: ')
             print()
             return {"nome":nome, "id":id, "idade":idade}
-        else:
+        elif tipo == "1":
             nome = input('Digite o nome da organização: ')
             id = input('Digite o cnpj da organização: ')
             print()
@@ -37,18 +37,18 @@ class TelaCliente(Tela):
         return id
     
     def mostrar_dados(self, dados_cliente):
-        print('--------INFORMAÇÃO DO CLIENTE--------')
-        print(f'NOME: {dados_cliente['nome']}')
+        print('--------INFORMAÇÕES DO CLIENTE--------')
+        print(f"NOME: {dados_cliente['nome']}")
         if eh_pessoa(dados_cliente['id']):
-            print(f'CPF: {dados_cliente['id']}')
-            print(f'IDADE: {dados_cliente['idade']}')
+            print(f"CPF: {dados_cliente['id']}")
+            print(f"IDADE: {dados_cliente['idade']}")
         else:
-            print(f'CNPJ: {dados_cliente['id']}')
-        print(f'CRÉDITO: U$D{dados_cliente['credito_usd']:.2f}')
+            print(f"CNPJ: {dados_cliente['id']}")
+        print(f"CRÉDITO: U$D {dados_cliente['credito_usd']}")
         print()
 
     def excluir(self):
-        id = input('Digite o cpf/cnpj do cliente que deseja fazer esta alteração: ')
+        id = input('Digite o cpf/cnpj do cliente que deseja excluir: ')
         print()
         return id
 

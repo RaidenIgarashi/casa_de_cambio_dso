@@ -29,3 +29,4 @@ class Tela(ABC):
     @abstractmethod
     def mostrar_msg(self, msg):
         print(msg)
+        print()
