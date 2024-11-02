@@ -77,11 +77,3 @@ class Devolucao:
         else:
             self.__devolvido = True 
         self.__data_devolvida = data_devolvida
-
-    @property
-    def quantia_repassada(self):
-        return self.__quantia_repassada
-
-    @quantia_repassada.setter
-    def quantia_repassada(self, quantia_repassada):
-        self.__quantia_repassada = quantia_repassada
