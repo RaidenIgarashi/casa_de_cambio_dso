@@ -3,12 +3,12 @@ from entidades.moeda import Moeda
 
 
 class Troca:
-    def __init__(self, id:int, pessoa:Pessoa, quantidade_usd:float, data:str, moeda_pedida:Moeda, moeda_entregue:Moeda, porcentagem_juros:int):
+    def __init__(self, id:int, pessoa:Pessoa, quantidade_usd:float, data:str, moeda_entrada:Moeda, moeda_saida:Moeda, porcentagem_juros:int):
         self.__id = id
         self.__pessoa = pessoa
         self.__quantidade_usd = quantidade_usd
-        self.__moeda_pedida = moeda_pedida
-        self.__moeda_entregue = moeda_entregue
+        self.__moeda_entrada = moeda_entrada
+        self.__moeda_saida = moeda_saida
         self.__porcentagem_juros = porcentagem_juros
 
     @property
@@ -40,18 +40,18 @@ class Troca:
         self.__data = data
 
     @property
-    def moeda_pedida(self):
-        return self.__moeda_pedida
-    @moeda_pedida.setter
-    def moeda_pedida(self, moeda_pedida):
-        self.__moeda_pedida = moeda_pedida
+    def moeda_entrada(self):
+        return self.__moeda_entrada
+    @moeda_entrada.setter
+    def moeda_entrada(self, moeda_entrada):
+        self.__moeda_entrada = moeda_entrada
 
     @property
-    def moeda_entregue(self):
-        return self.__moeda_entregue
-    @moeda_entregue.setter
-    def moeda_entregue(self, moeda_entregue):
-        self.__moeda_entregue = moeda_entregue
+    def moeda_saida(self):
+        return self.__moeda_saida
+    @moeda_saida.setter
+    def moeda_saida(self, moeda_saida):
+        self.__moeda_saida = moeda_saida
 
     @property
     def porcentagem_juros(self):
@@ -65,7 +65,7 @@ class Troca:
         juros = self.__porcentagem_juros
         nome = self.__pessoa.nome
         data = self.__data
-        m_ped = self.__moeda_pedida
-        m_ent = self.__moeda_entregue
+        m_ped = self.__moeda_entrada
+        m_ent = self.__moeda_saida
         print(f'Troca com valor de ${qnt} dólares feita por {nome}, no dia {data}. O cliente trocou \
               {m_ped.cifra}{qnt*m_ped.valor_usd} por {m_ent.cifra}{qnt*m_ent.valor_usd} com juros de {qnt * juros/100} dólares.')
