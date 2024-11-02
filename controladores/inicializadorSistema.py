@@ -10,7 +10,7 @@ class InicializadorSistema():
         self.__controlador_cliente = ControladorCliente(self)
         self.__controlador_troca = None #ControladorTroca(self)
         self.__controlador_emprestimo = None #ControladorEmprestimo(self)
-        self.__controlador_moeda = None #ControladorMoeda(self)
+        self.__controlador_moeda = ControladorMoeda(self) #ControladorMoeda(self)
 
     @property
     def tela_inicializadora(self):
