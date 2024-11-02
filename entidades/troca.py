@@ -3,13 +3,14 @@ from entidades.moeda import Moeda
 
 
 class Troca:
-    def __init__(self, id:int, pessoa:Pessoa, quantidade_usd:float, data:str, moeda_entrada:Moeda, moeda_saida:Moeda, porcentagem_juros:int):
+    def __init__(self, id:str, pessoa:Pessoa, quantidade_pegada:float, data:str, moeda_entrada:Moeda, moeda_saida:Moeda, porcentagem_juros:int):
         self.__id = id
         self.__pessoa = pessoa
-        self.__quantidade_usd = quantidade_usd
+        self.__quantidade_pegada = quantidade_pegada
         self.__moeda_entrada = moeda_entrada
         self.__moeda_saida = moeda_saida
         self.__porcentagem_juros = porcentagem_juros
+        self.__data = data
 
     @property
     def id(self):
@@ -26,11 +27,11 @@ class Troca:
         self.__pessoa = pessoa
 
     @property
-    def quantidade_usd(self):
-        return self.__quantidade_usd
-    @quantidade_usd.setter
-    def quantidade_usd(self, quantidade_usd):
-        self.__quantidade_usd = quantidade_usd
+    def quantidade_pegada(self):
+        return self.__quantidade_pegada
+    @quantidade_pegada.setter
+    def quantidade_pegada(self, quantidade_pegada):
+        self.__quantidade_pegada = quantidade_pegada
 
     @property
     def data(self):
@@ -59,6 +60,13 @@ class Troca:
     @porcentagem_juros.setter
     def porcentagem_juros(self, porcentagem_juros):
         self.__porcentagem_juros = porcentagem_juros
+
+    @property
+    def data(self):
+        return self.__data
+    @data.setter
+    def data(self, data):
+        self.__data = data
 
     def ver_troca(self):
         qnt = self.__quantidade_usd
