@@ -25,7 +25,7 @@ class ControladorMoeda(Controlador):
                 return moeda        
 
     def altera(self):
-        nome = self.__tela.alterar()
+        nome = self.__tela.alterar_dados()
         moeda = self.pega_objeto(nome)
         if moeda is not None:
             new_moeda = self.__tela.cadastrar_dados()
@@ -50,4 +50,4 @@ class ControladorMoeda(Controlador):
         nome = self.__tela.ver_dados()
         for moeda in self.__moedas:
             if nome == moeda.nome:
-                self.__tela.mostrar({'nome': moeda.nome, 'reg': moeda.regioes, 'cifra': moeda.cifra, 'valor': moeda.valor_usd})
+                self.__tela.mostrar({'nome': moeda.nome, 'regioes': moeda.regioes, 'cifra': moeda.cifra, 'valor': moeda.valor_usd})

@@ -4,7 +4,7 @@ class TelaInicializador():
         print("OPÇÕES:")
         print("1 - Cliente")
         print("2 - Moeda")
-        print("3 - ...")
+        print("3 - Troca")
         print("4 - ...")
         print("0 - Encerrar :(")
         opcao = int(input("Escolha uma opção para ver/cadastrar: "))

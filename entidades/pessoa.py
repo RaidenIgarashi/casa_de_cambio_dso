@@ -8,6 +8,7 @@ class Pessoa(Cliente):
         self.__emprestimos_pedidos = []
         self.__emprestimos_concedidos = []
         self.__trocas_feitas = []
+        self.__cpf = cpf
 
 
     @property
@@ -16,3 +17,11 @@ class Pessoa(Cliente):
     @idade.setter
     def idade(self, idade):
         self.__idade = idade
+    
+    @property
+    def cpf(self):
+        return self.__cpf
+    @cpf.setter
+    def cpf(self, cpf):
+        self.__cpf = cpf
+

@@ -10,27 +10,29 @@ class TelaTroca(Tela):
         print(f'4 - Alterar Troca')
         print('0 - Retornar')        
 
-        opcoes = int(input('Escolha uma opção para ver/cadastrar'))
+        opcoes = int(input('Escolha uma opção para ver/cadastrar: '))
         print()
         return opcoes
 
     def cadastrar_dados(self):
         id = int(input('Digite o id da troca: '))
-        nome = input('Digite o nome da pessoa: ')
-        quantidade_pegada = input('Digite o quanto você quer trocar: ')
-        moeda_entrada = input('Digite o nome da moeda que será fornecida pelo cliente:')
+        id_pessoa = input('Digite o cpf da pessoa: ')
+        quantidade_entrada = float(input('Digite o quanto você quer trocar: '))
+        moeda_entrada = input('Digite o nome da moeda que será fornecida pelo cliente: ')
         moeda_saida = input('Digite o nome da moeda desejada: ')
         juros = float(input('Digite o juros que será aplicado: '))
-        data = input('Digite a data da transação no estilo XX/XX/XXXX')
+        data = input('Digite a data da transação no estilo XX/XX/XXXX: ')
 
-        return {'id': id, 'nome': nome, 'quantidade_usd': quantidade_pegada, 'moeda_entrada': moeda_entrada, 'moeda_saida': moeda_saida, 'juros': juros, 'data':data}
+        return {'id': id, 'id_pessoa': id_pessoa, 'quantidade_entrada': quantidade_entrada, 'quantidade_saida': 0, 'moeda_entrada': moeda_entrada, 'moeda_saida': moeda_saida, 'juros': juros, 'data':data}
 
     def mostrar_dados(self, dados_troca):
         print('--------INFORMAÇÕES DA TROCA--------')
-        print(f'NOME: {dados_troca["nome"]}')
-        print(f'QUANTIDADE TROCADA: {dados_troca["quantidade_usd"]}')
+        print(f'ID: {dados_troca["id"]}')
+        print(f'CPF DO CLIENTE: {dados_troca["id_pessoa"]}')
         print(f'MOEDA ENTREGUE: {dados_troca["moeda_entrada"]}')
         print(f'MOEDA RECEBIDA: {dados_troca["moeda_saida"]}')
+        print(f'QUANTIA DA MOEDA DE ENTRADA {dados_troca["moeda_entrada"]}: {dados_troca["quantidade_entrada"]}')
+        print(f'QUANTIA DA MOEDA DE SAIDA {dados_troca["moeda_saida"]}: {dados_troca["quantidade_saida"]}')       
         print(f'JUROS: {dados_troca["juros"]}')
         print('\n')
 
