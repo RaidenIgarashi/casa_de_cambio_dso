@@ -80,15 +80,28 @@ class TelaTroca(Tela):
         print(msg)
 
     def excluir(self):
-        id = int(input('Escreva o id da troca que deseja excluir: '))
-        return id 
+        try:
+            id = int(input('Escreva o id da troca que deseja excluir: '))
+            return id 
+        except:
+            print('## O ID deve ser apenas numérico ##')
+            return
+        
 
     def alterar_dados(self):
-        id = int(input('Escreva o id da troca que deseja alterar: '))
-        return id 
+        try:
+            id = int(input('Escreva o id da troca que deseja alterar: '))
+            return id 
+        except:
+            print('## O ID deve ser apenas numérico ##')
+            return
 
     def ver_dados(self):
-        id = int(input('Escreva o id da troca que deseja ver: '))
-        return id
+        try:
+            id = int(input('Escreva o id da troca que deseja ver: '))
+            return id
+        except:
+            print('## o ID deve ser apenas numérico ##')
+            return
 
 
