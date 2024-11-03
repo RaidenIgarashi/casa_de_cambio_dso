@@ -10,6 +10,14 @@ class ControladorMoeda(Controlador):
     
     def inclui(self):
         dados = self.__tela.cadastrar_dados()
+        try:
+            for moeda in self.__moedas:
+                if dados['nome'] == moeda.nome:
+                    raise ValueError
+        except:
+            print()
+            print(f'## a moeda {moeda.nome} já está registrada ##')
+            print()
         self.__moedas.append(Moeda(dados['nome'], dados['regioes'], dados['cifra'], dados['valor']))
 
     def exclui(self):
@@ -18,6 +26,10 @@ class ControladorMoeda(Controlador):
         if moeda is not None:
             self.__moedas.remove(moeda)
             self.__tela.mostrar_msg(f'A moeda {moeda.nome} foi excluida com sucesso')
+        else:
+            print()
+            print('## Essa moeda não está registrada ##')
+            print()
 
     def pega_objeto(self, nome):
         for moeda in self.__moedas:
@@ -33,8 +45,15 @@ class ControladorMoeda(Controlador):
             moeda.regioes = new_moeda['regioes']
             moeda.cifra = new_moeda['cifra']
             moeda.valor_usd = new_moeda['valor']
-
+        else:
+            print()
+            print('## Essa moeda não está registrada ##')
+            print()
+            
     def mostra_todas(self):
+        if self.__moedas == []:
+            self.__tela.mostrar_msg('## Não há moedas registradas ##')
+            print()
         for moeda in self.__moedas:
             self.__tela.mostrar_dados({'nome':moeda.nome, 'regioes':moeda.regioes, 'cifra':moeda.cifra, 'valor':moeda.valor_usd})
 
@@ -42,7 +61,7 @@ class ControladorMoeda(Controlador):
         self.__controlador_sistema.abre_tela()
 
     def abre_tela(self):
-        command_lst = {0: self.voltar_tela, 1: self.inclui, 2: self.exclui, 3: self.mostra_todas, 4: self.altera}
+        command_lst = {0: self.voltar_tela, 1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 5: self.altera}
         while True:
             command_lst[self.__tela.tela_opcoes()]()
 

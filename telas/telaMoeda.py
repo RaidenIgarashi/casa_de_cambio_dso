@@ -3,10 +3,11 @@ from abstratas.absTela import Tela
 class TelaMoeda(Tela):
     def tela_opcoes(self):
         print(f'-------MOEDAS-------')
-        print(f'1 - Incluir moeda')
-        print(f'2 - Excluir moeda')
-        print(f'3 - Listar tudo de moedas')
-        print(f'4 - Alterar moeda')
+        print(f'1 - Ver dados de uma Moeda')
+        print(f'2 - Incluir moeda')
+        print(f'3 - Excluir moeda')
+        print(f'4 - Listar tudo de moedas')
+        print(f'5 - Alterar moeda')
         print('0 - Retornar')
 
         opcoes = int(input("Escolha uma opção para ver/cadastrar: "))
@@ -18,7 +19,12 @@ class TelaMoeda(Tela):
         nome = input('Digite o nome da moeda: ')           #transforma as regioes em uma lista separando elas nas virgulas
         regioes = input('Digite uma ou mais regiões da moeda, separados por vírgula: ').split(',') 
         cifra = input('Digite a cifra da moeda: ')
-        valor = float(input('Digite o valor em dólares da moeda: '))
+        try:
+            valor = float(input('Digite o valor em dólares da moeda: '))
+        except:
+            print()
+            print('## isso não é um valor')
+            print()
         return {'nome': nome, 'regioes': regioes, 'cifra': cifra, 'valor': valor}
 
     def mostrar_dados(self, dados_moeda):

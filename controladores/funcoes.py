@@ -7,7 +7,7 @@ def eh_pessoa(info): # funcao para facilitar de ver se é pessoa ou organizacao 
             for char in info:
                 if not char.isnumeric: # deixa o cpf só com números, tira todo o resto
                     info = info.replace(char, '')
-            if len(info) == 3: #cpf
+            if len(info) == 11: #cpf
                 return True            # eh como se cpf tivesse 3 numeros e cnpj 5 pra ficar mais facil de testar
             elif len(info) == 5: #cnpj
                 return False
