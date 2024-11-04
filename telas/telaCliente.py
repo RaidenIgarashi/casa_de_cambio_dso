@@ -25,14 +25,39 @@ class TelaCliente(Tela):
 
     def cadastrar_dados(self):
         print('-------CADASTRAR CLIENTE--------')
-        tipo = input('Digite 0 para cadastrar Pessoa Física e 1 para cadastrar Organização: ')
-        if tipo == "0": 
-            nome = input('Digite o nome da pessoa: ')
-            id = input('Digite o cpf da pessoa: ')
-            idade = input('Digite a idade da pessoa: ')
+        try:
+            tipo = int(input('Digite 0 para cadastrar Pessoa Física e 1 para cadastrar Organização: '))
+            if tipo < 0 or tipo > 1:
+                raise ValueError
+        except:
             print()
+            print('## As únicas entradas possíveis são 0 e 1 ##')
+            print()
+            return
+
+        if tipo == 0: 
+            try:
+                nome = input('Digite o nome da pessoa: ')
+                for char in nome:
+                    if char.isnumeric():
+                        raise ValueError
+            except:
+                print()
+                print('## Não coloque números no nome ##')
+                print()
+                return
+            id = input('Digite o cpf da pessoa: ')
+            try:
+                idade = int(input('Digite a idade da pessoa: '))
+            except:
+                print()
+                print('## idade deve ser apenas numérica')
+                print()
+                return
+            print()
+        
             return {"nome":nome, "id":id, "idade":idade}
-        elif tipo == "1":
+        elif tipo == 1:
             nome = input('Digite o nome da organização: ')
             id = input('Digite o cnpj da organização: ')
             print()

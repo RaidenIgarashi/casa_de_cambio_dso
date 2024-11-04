@@ -24,7 +24,16 @@ class TelaMoeda(Tela):
 
     def cadastrar_dados(self):
         print('-------CADASTRAR MOEDA--------')
-        nome = input('Digite o nome da moeda: ')           #transforma as regioes em uma lista separando elas nas virgulas
+        try:
+            nome = input('Digite o nome da moeda: ')           #transforma as regioes em uma lista separando elas nas virgulas
+            for char in nome:
+                if char.isnumeric():
+                    raise ValueError
+        except:
+            print()
+            print('## Não existe moeda com número no nome ##')
+            print()
+            return
         regioes = input('Digite uma ou mais regiões da moeda, separados por vírgula: ').split(',') 
         cifra = input('Digite a cifra da moeda: ')
         try:

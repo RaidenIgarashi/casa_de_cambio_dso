@@ -37,22 +37,24 @@ class TelaEmprestimo(Tela):
         juros_mensal_atraso = input('Digite a quantidade de juros (%) que será aplicado mensalmente em caso de atraso: ')
         devolvido = input('O empréstimo já foi devolvido e está sendo apenas registrado? 0- não, 1- sim: ')
         if devolvido == 1:
+            devolvido = True
             data_devolvida = input('Digite a data em que o empréstimo foi devolvido [dd/mm/aaaa]: ')
         else:
-            data_devolvida = None
+            data_devolvida = 'a devolver'
+            devolvido = False
         return {'id':id, 'cliente_id':cliente_id, 'emprestador_id':emprestador_id, 'moeda':moeda, 'quantia':quantia, 
                 'data_do_repasse':data_do_repasse, 'data_devolvida':data_devolvida, 'data_pretendida':data_pretendida, 
-                'juros_normal':juros_normal, 'juros_mensal_atraso':juros_mensal_atraso}
+                'juros_normal':juros_normal, 'juros_mensal_atraso':juros_mensal_atraso, 'devolvido': devolvido}
 
     def mostrar_dados(self, dados_emprestimo):
         print('--------INFORMAÇÕES DO EMPRÉSTIMO--------')
         print(f'ID: {dados_emprestimo["id"]}')
-        print(f'CLIENTE: {dados_emprestimo["cliente"]}')
-        print(f'EMPRESTADOR: {dados_emprestimo["emprestador"]}')
+        print(f'CLIENTE: {dados_emprestimo["cliente_id"]}')
+        print(f'EMPRESTADOR: {dados_emprestimo["emprestador_id"]}')
         print(f'VALOR: {dados_emprestimo["quantia"]} {dados_emprestimo["moeda"]}(s)')
         print(f'DATAS: Repassado dia {dados_emprestimo["data_do_repasse"]}, com prazo até {dados_emprestimo["data_pretendida"]}.')
         print(f'JUROS: {dados_emprestimo["juros_normal"]}% + {dados_emprestimo["juros_mensal_atraso"]} por mês em caso de atraso.')
-        if dados_emprestimo["devolvido"]:
+        if dados_emprestimo['devolvido']:
             print(f'SITUAÇÃO: DEVOLVIDO no dia {dados_emprestimo["data_devolvida"]}')
         else:
             print('SITUAÇÃO: NÃO devolvido')

@@ -49,12 +49,13 @@ class ControladorCliente(Controlador):
 
     def inclui(self):
         dados_cliente = self.__tela_cliente.cadastrar_dados()
-        if eh_pessoa(dados_cliente['id']) and 'idade' in dados_cliente: 
-            self.__pessoas.append(Pessoa(dados_cliente['nome'], dados_cliente['id'], 0, dados_cliente['idade']))
-        elif not eh_pessoa(dados_cliente['id']):
-            self.__organizacoes.append(Organizacao(dados_cliente['nome'], dados_cliente['id'], 0))
-        else:
-            print('\n## Dados incorretos para o tipo de cliente ##\n')
+        if dados_cliente is not None:
+            if eh_pessoa(dados_cliente['id']) and 'idade' in dados_cliente: 
+                self.__pessoas.append(Pessoa(dados_cliente['nome'], dados_cliente['id'], 0, dados_cliente['idade']))
+            elif not eh_pessoa(dados_cliente['id']):
+                self.__organizacoes.append(Organizacao(dados_cliente['nome'], dados_cliente['id'], 0))
+            else:
+                print('\n## Dados incorretos para o tipo de cliente ##\n')
 
     def exclui(self):
         id = self.__tela_cliente.excluir()

@@ -10,15 +10,16 @@ class ControladorMoeda(Controlador):
 
     def inclui(self):
         dados = self.__tela.cadastrar_dados()
-        try:
-            for moeda in self.__moedas:
-                if dados['nome'] == moeda.nome:
-                    raise ValueError
-        except:
-            print()
-            print(f'## a moeda {moeda.nome} já está registrada ##')
-            print()
-        self.__moedas.append(Moeda(dados['nome'], dados['regioes'], dados['cifra'], dados['valor']))
+        if dados is not None:
+            try:
+                for moeda in self.__moedas:
+                    if dados['nome'] == moeda.nome:
+                        raise ValueError
+            except:
+                print()
+                print(f'## a moeda {moeda.nome} já está registrada ##')
+                print()
+            self.__moedas.append(Moeda(dados['nome'], dados['regioes'], dados['cifra'], dados['valor']))
 
     def exclui(self):
         nome = self.__tela.excluir()

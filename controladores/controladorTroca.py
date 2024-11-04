@@ -40,7 +40,8 @@ class ControladorTroca(Controlador):
                         dados['data'], self.__moeda.pega_objeto(dados['moeda_entrada']), 
                         self.__moeda.pega_objeto(dados['moeda_saida']), dados['juros'])
             self.__trocas.append(trc)
-            trc.pessoa.__trocas_feitas.append(trc)
+            pessoa = self.__cliente.pega_objeto(dados['id_pessoa'])
+            pessoa.trocas_feitas = trc
 
 
     def exclui(self):

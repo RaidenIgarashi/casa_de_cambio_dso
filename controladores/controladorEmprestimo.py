@@ -1,6 +1,7 @@
 from telas.telaEmprestimo import TelaEmprestimo
 from entidades.emprestimo import Emprestimo
 from abstratas.absControlador import Controlador
+from controladores.funcoes import eh_pessoa
 
 class ControladorEmprestimo(Controlador):
     def __init__(self, controlador_sistema, controlador_moeda, controlador_cliente):
@@ -16,17 +17,17 @@ class ControladorEmprestimo(Controlador):
         if dados is not None:
             try:
                 is_cliente = False
-                cliente_verify = self.__cliente.pega_objeto(dados['cliente_id'])
-                emprestador_verify = self.__cliente.pega_objeto(dados['emprestador_id'])
-                moeda_verify = self.__moeda.pega_objeto(dados['moeda'])
-                if cliente_verify is None:
+                cliente = self.__cliente.pega_objeto(dados['cliente_id'])
+                emprestador = self.__cliente.pega_objeto(dados['emprestador_id'])
+                moeda = self.__moeda.pega_objeto(dados['moeda'])
+                if cliente is None:
                     is_cliente = True
                     raise ValueError(dados['cliente_id'])
-                if emprestador_verify is None:
+                if emprestador is None:
                     is_cliente = True
                     raise ValueError(dados['emprestador_id'])
-                if moeda_verify is None:
-                    raise ValueError(dados['moeda_entrada'])
+                if moeda is None:
+                    raise ValueError(dados['moeda'])
             except ValueError as e:
                 print()
                 if is_cliente:
@@ -35,12 +36,12 @@ class ControladorEmprestimo(Controlador):
                     print(f'A moeda "{e}" não está registrada')
                 print()
                 return
-            emp = Emprestimo(dados['id'], self.pega_objeto(dados['cliente_id']), self.pega_objeto(dados['emprestador_id']), 
-                             dados['moeda'], dados['quantia'], dados['data_do_repasse'], dados['data_devolvida'], 
-                             dados['data_pretendida'], dados['juros_normal'], dados['juros_mensal_atraso'])
+            emp = Emprestimo(dados['id'], cliente, emprestador, moeda, dados['quantia'], 
+                             dados['data_do_repasse'], dados['data_pretendida'], dados['juros_normal'], 
+                             dados['juros_mensal_atraso'], dados['devolvido'], dados['data_devolvida'])
             self.__emprestimos.append(emp)
-            emp.cliente.__emprestimos_pedidos.append(emp)
-            emp.emprestador.__emprestimos_concedidos.append(emp)
+            emp.cliente.emprestimos_pedidos = emp
+            emp.emprestador.emprestimos_concedidos = emp
 
 
     def calcula_juros(self):
@@ -88,14 +89,14 @@ class ControladorEmprestimo(Controlador):
             print('## não foi encontrado empréstimo com esse ID ##')
             print()
         else:
-            cliente_id = emp.cliente.cpf if emp.eh_pessoa(emp.cliente) else emp.cliente.cnpj
-            emp_id = emp.emprestador.cpf if emp.eh_pessoa(emp.emprestador) else emp.emprestador.cnpj
+            cliente_id = emp.cliente.cpf if eh_pessoa(emp.cliente) else emp.cliente.cnpj
+            emp_id = emp.emprestador.cpf if eh_pessoa(emp.emprestador) else emp.emprestador.cnpj
             self.__tela.mostrar_dados({'id':emp.id, 'cliente_id':cliente_id, 'emprestador_id':emp_id, 
-                                       'moeda':emp.moeda, 'quantia':emp.quantia, 'data_do_repasse':emp.data_do_repasse, 
+                                       'moeda':emp.moeda, 'quantia':emp.quantia_repassada, 'data_do_repasse':emp.data_do_repasse, 
                                        'data_devolvida':emp.data_devolvida, 'data_pretendida':emp.data_pretendida, 
-                                       'juros_normal':emp.juros_normal, 'juros_mensal_atraso':emp.juros_mensal_atraso})
+                                       'juros_normal':emp.juros_normal, 'juros_mensal_atraso':emp.juros_mensal_atraso, 'devolvido': emp.devolvido})
 
-    def pega_objeto(self):
+    def pega_objeto(self, id):
         for emp in self.__emprestimos:
             if id == emp.id:
                 return emp
@@ -107,8 +108,9 @@ class ControladorEmprestimo(Controlador):
         emprestimo = self.pega_objeto(id)
         if emprestimo != None:
             self.__emprestimos.remove(emprestimo)
-            emprestimo.cliente.emprestimos_pedidos.remove(emprestimo)
-            emprestimo.emprestador.emprestimos_concedidos.remove(emprestimo)
+            emprestimo.cliente.emprestimos_pedidos_remove(emprestimo)
+            emprestimo.emprestador.emprestimos_concedidos_remove(emprestimo)
+            
         else:
             print()
             print('## não foi encontrado empréstimo com esse ID ##')
@@ -120,13 +122,13 @@ class ControladorEmprestimo(Controlador):
         if emp != None:
             novos_dados = self.__tela.cadastrar_dados()
             nomes = ['id', 'cliente_id', 'emprestador_id', 'moeda', 'quantia', 'data_do_repasse', 
-                     'data_devolvida', 'data_pretendida', 'juros_normal', 'juros_mensal_atraso']
+                     'data_devolvida', 'data_pretendida', 'juros_normal', 'juros_mensal_atraso', 'devolvido']
             
-            cliente_id = emp.cliente.cpf if emp.eh_pessoa(emp.cliente) else emp.cliente.cnpj
-            emp_id = emp.emprestador.cpf if emp.eh_pessoa(emp.emprestador) else emp.emprestador.cnpj
+            cliente_id = emp.cliente.cpf if eh_pessoa(emp.cliente) else emp.cliente.cnpj
+            emp_id = emp.emprestador.cpf if eh_pessoa(emp.emprestador) else emp.emprestador.cnpj
 
-            dados_alterar = [emp.id, emp.cliente_id, emp.emp_id, emp.moeda, emp.quantia, emp.data_do_repasse, 
-                     emp.data_devolvida, emp.data_pretendida, emp.juros_normal, emp.juros_mensal_atraso]
+            dados_alterar = [emp.id, emp.cliente, emp.emprestador, emp.moeda, emp.quantia_repassada, emp.data_do_repasse, 
+                     emp.data_devolvida, emp.data_pretendida, emp.juros_normal, emp.juros_mensal_atraso, emp.devolvido]
             for d in range(len(dados_alterar)):
                 dados_alterar[d] = novos_dados[nomes[d]]
 
@@ -136,18 +138,18 @@ class ControladorEmprestimo(Controlador):
             print()
 
     def mostra_todas(self):
-        if len(self.__trocas) == 0:
+        if len(self.__emprestimos) == 0:
             print()
-            print('Nenhum empréstimo registrado.')
+            print('## Nenhum empréstimo registrado ##')
             print()
         else:
             for emp in self.__emprestimos:
-                cliente_id = emp.cliente.cpf if emp.eh_pessoa(emp.cliente) else emp.cliente.cnpj
-                emp_id = emp.emprestador.cpf if emp.eh_pessoa(emp.emprestador) else emp.emprestador.cnpj
+                cliente_id = emp.cliente.cpf if eh_pessoa(emp.cliente) else emp.cliente.cnpj
+                emp_id = emp.emprestador.cpf if eh_pessoa(emp.emprestador) else emp.emprestador.cnpj
                 self.__tela.mostrar_dados({'id':emp.id, 'cliente_id':cliente_id, 'emprestador_id':emp_id, 
-                                       'moeda':emp.moeda, 'quantia':emp.quantia, 'data_do_repasse':emp.data_do_repasse, 
+                                       'moeda':emp.moeda, 'quantia':emp.quantia_repassada, 'data_do_repasse':emp.data_do_repasse, 
                                        'data_devolvida':emp.data_devolvida, 'data_pretendida':emp.data_pretendida, 
-                                       'juros_normal':emp.juros_normal, 'juros_mensal_atraso':emp.juros_mensal_atraso})
+                                       'juros_normal':emp.juros_normal, 'juros_mensal_atraso':emp.juros_mensal_atraso, 'devolvido': emp.devolvido})
     
     def abre_tela(self):
         commandlst = {0: self.volta_tela, 1: self.inclui, 2: self.mostra_dados, 3: self.exclui, 
