@@ -64,7 +64,7 @@ class ControladorEmprestimo(Controlador):
         
 
     def emprestimo_devolvido(self):
-        dados = self.__tela.emprestimo_devolvido
+        dados = self.__tela.emprestimo_devolvido()
         id = dados['id']
         data = dados['data']
         existe = False

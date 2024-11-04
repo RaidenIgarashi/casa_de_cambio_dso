@@ -26,21 +26,37 @@ class TelaEmprestimo(Tela):
 
     def cadastrar_dados(self):
         print('-------REGISTRANDO EMPRÉSTIMO--------')
-        id = input('Digite um id novo para a transação: ')
+        try:
+            id = int(input('Digite um id novo para a transação: '))
+        except:
+            print()
+            print('## O ID deve ser um número ##')
+            print()
+            return
         cliente_id = input('Digite o cpf/cnpj do cliente que pediu o empréstimo: ')
         emprestador_id = input('Digite o cpf/cnpj do cliente que concedeu: ')
         moeda = input('Digite o nome da moeda utilizada: ')
-        quantia = input('Digite a quantia repassada nesta moeda: ')
+        try:
+            quantia = float(input('Digite a quantia repassada nesta moeda: '))
+        except:
+            print()
+            print('## O valor digitado não é uma quantia ##')
+            print()
         data_do_repasse = input('Digite a data em que foi feito o repasse [dd/mm/aaaa]: ')
         data_pretendida = input('Digite a data máxima combinada para devolução [dd/mm/aaaa]: ')
-        juros_normal = input('Digite a quantidade de juros normal (em %) que será aplicado: ')
-        juros_mensal_atraso = input('Digite a quantidade de juros (%) que será aplicado mensalmente em caso de atraso: ')
+        try:
+            juros_normal = int(input('Digite a quantidade de juros normal (em %) que será aplicado: '))
+            juros_mensal_atraso = int(input('Digite a quantidade de juros (%) que será aplicado mensalmente em caso de atraso: '))
+        except:
+            print()
+            print('## Valor digitado não corresponde a juros ##')
+            print()
         devolvido = input('O empréstimo já foi devolvido e está sendo apenas registrado? 0- não, 1- sim: ')
         if devolvido == 1:
             devolvido = True
             data_devolvida = input('Digite a data em que o empréstimo foi devolvido [dd/mm/aaaa]: ')
         else:
-            data_devolvida = 'a devolver'
+            data_devolvida = None
             devolvido = False
         return {'id':id, 'cliente_id':cliente_id, 'emprestador_id':emprestador_id, 'moeda':moeda, 'quantia':quantia, 
                 'data_do_repasse':data_do_repasse, 'data_devolvida':data_devolvida, 'data_pretendida':data_pretendida, 
