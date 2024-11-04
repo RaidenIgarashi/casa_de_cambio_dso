@@ -5,8 +5,18 @@ class TelaInicializador():
         print("1 - Cliente")
         print("2 - Moeda")
         print("3 - Troca")
-        print("4 - ...")
+        print("4 - Empréstimo")
         print("0 - Encerrar :(")
-        opcao = int(input("Escolha uma opção para ver/cadastrar: "))
-        print()
-        return opcao
+        try:
+            opcao = int(input("Escolha uma opção: "))
+            if 0 <= opcao <= 4:
+                print()
+                return opcao
+            else:
+                print("\n## Digite um número de 0 a 4. ##\n")
+                return None
+        except:
+            print("\n## Opção digitada incorretamente. Tente novamente. ##\n")
+            return None
+        
+        

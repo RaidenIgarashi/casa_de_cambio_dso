@@ -11,9 +11,17 @@ class TelaTroca(Tela):
         print(f'5 - Alterar Troca')
         print('0 - Retornar')        
 
-        opcoes = int(input('Escolha uma opção para ver/cadastrar: '))
-        print()
-        return opcoes
+        try:
+            opcao = int(input("Escolha uma opção: "))
+            if 0 <= opcao <= 5:
+                print()
+                return opcao
+            else:
+                print("\n## Digite um número de 0 a 5. ##\n")
+                return None
+        except:
+            print("\n## Opção digitada incorretamente. Tente novamente. ##\n")
+            return None
 
     def cadastrar_dados(self):
         try:
@@ -40,10 +48,10 @@ class TelaTroca(Tela):
             print(' ## Isso não e uma quantia ## ')
             print()
             return
-        moeda_entrada = input('Digite o nome da moeda que será fornecida pelo cliente: ')
-        moeda_saida = input('Digite o nome da moeda desejada: ')
+        moeda_entrada = input('Digite o nome da moeda que o cliente tem para trocar: ')
+        moeda_saida = input('Digite o nome da moeda que o cliente quer: ')
         try:
-            juros = float(input('Digite o juros que será aplicado: '))
+            juros = float(input('Digite o juros que será aplicado (em %): ')) / 100
             if juros > 1:
                 raise ValueError
         except:
@@ -52,7 +60,7 @@ class TelaTroca(Tela):
             print()
             return
         try:
-            data = input('Digite a data da transação no estilo XX/XX/XXXX (dia/mês/ano): ')
+            data = input('Digite a data da transação (dd/mm/aaaa): ')
             data_sem_barra = data.replace('/', '')
             if len(data_sem_barra) != 8:
                 raise ValueError
@@ -71,8 +79,8 @@ class TelaTroca(Tela):
         print(f'CPF DO CLIENTE: {dados_troca["id_pessoa"]}')
         print(f'MOEDA ENTREGUE: {dados_troca["moeda_entrada"]}')
         print(f'MOEDA RECEBIDA: {dados_troca["moeda_saida"]}')
-        print(f'QUANTIA DA MOEDA DE ENTRADA {dados_troca["moeda_entrada"]}: {dados_troca["quantidade_entrada"]}')
-        print(f'QUANTIA DA MOEDA DE SAIDA {dados_troca["moeda_saida"]}: {dados_troca["quantidade_saida"]}')       
+        print(f'QUANTIA DA MOEDA DE ENTRADA {dados_troca["moeda_entrada"]} = {dados_troca["quantidade_entrada"]}')
+        print(f'QUANTIA DA MOEDA DE SAIDA {dados_troca["moeda_saida"]} = {dados_troca["quantidade_saida"]}')       
         print(f'JUROS: {dados_troca["juros"]}')
         print('\n')
 

@@ -10,9 +10,17 @@ class TelaMoeda(Tela):
         print(f'5 - Alterar moeda')
         print('0 - Retornar')
 
-        opcoes = int(input("Escolha uma opção para ver/cadastrar: "))
-        print()
-        return opcoes
+        try:
+            opcao = int(input("Escolha uma opção: "))
+            if 0 <= opcao <= 5:
+                print()
+                return opcao
+            else:
+                print("\n## Digite um número de 0 a 5. ##\n")
+                return None
+        except:
+            print("\n## Opção digitada incorretamente. Tente novamente. ##\n")
+            return None
 
     def cadastrar_dados(self):
         print('-------CADASTRAR MOEDA--------')

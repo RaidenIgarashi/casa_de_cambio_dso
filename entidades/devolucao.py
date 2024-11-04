@@ -12,18 +12,13 @@ class Devolucao:
         self.__data_devolvida = data_devolvida
         self.__quantia_repassada = quantia_repassada
 
-    def calcula_juros_total(self, data_a_ver=None):
-        if self.__devolvido:
-            data = self.__data_devolvida
-        else:
-            data = data_a_ver
-
+    def calcula_juros(self, data_a_ver):
         juros = self.__quantia_repassada * self.__juros_normal
         juros_extra = 0
-        if data > self.__data_do_repasse:
+        if data_a_ver > self.__data_do_repasse:
             n = self.__data_pretendida - self.__data_do_repasse
             juros_extra = self.__quantia_repassada * (1 + self.__juros_mensal_atraso)**n
-        return juros + juros_extra
+        return {'jn':juros, 'je':juros_extra}
 
 
     @property

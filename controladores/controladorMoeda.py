@@ -4,10 +4,10 @@ from telas.telaMoeda import TelaMoeda
 
 class ControladorMoeda(Controlador):
     def __init__(self, controlador_sistema):
-        self.__moedas = []
+        self.__moedas = [Moeda('Dólar', ['EUA', 'Canada'], '$', 1), Moeda('Real', ['Brasil'], 'R$', 5.70)]
         self.__tela = TelaMoeda()
         self.__controlador_sistema = controlador_sistema
-    
+
     def inclui(self):
         dados = self.__tela.cadastrar_dados()
         try:
@@ -69,4 +69,4 @@ class ControladorMoeda(Controlador):
         nome = self.__tela.ver_dados()
         for moeda in self.__moedas:
             if nome == moeda.nome:
-                self.__tela.mostrar({'nome': moeda.nome, 'regioes': moeda.regioes, 'cifra': moeda.cifra, 'valor': moeda.valor_usd})
+                self.__tela.mostrar_dados({'nome': moeda.nome, 'regioes': moeda.regioes, 'cifra': moeda.cifra, 'valor': moeda.valor_usd})

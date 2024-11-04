@@ -2,51 +2,86 @@ from abstratas.absTela import Tela
 
 class TelaEmprestimo(Tela):
     def tela_opcoes(self):
-        print(f'-------EMPRESTIMO-------')
-        print(f'1 - Registrar empréstimo')
-        print(f'2 - Ver empréstimo registrado')
-        print(f'3 - Excluir empréstimo')
-        print(f'4 - Alterar empréstimo')
-        print(f'5 - Listar todos empréstimos')
+        print('-------EMPRESTIMO-------')
+        print('1 - Registrar empréstimo')
+        print('2 - Ver empréstimo registrado')
+        print('3 - Excluir empréstimo')
+        print('4 - Alterar empréstimo')
+        print('5 - Registrar devolução de empréstimo')
+        print('6 - Listar todos empréstimos')
+        print('7 - Calcular valor de juros de um empréstimo')
         print('0 - Retornar')
 
-        opcoes = int(input("Escolha uma opção: "))
-        return opcoes
+        try:
+            opcao = int(input("Escolha uma opção: "))
+            if 0 <= opcao <= 7:
+                print()
+                return opcao
+            else:
+                print("\n## Digite um número de 0 a 7. ##\n")
+                return None
+        except:
+            print("\n## Opção digitada incorretamente. Tente novamente. ##\n")
+            return None
 
     def cadastrar_dados(self):
         print('-------REGISTRANDO EMPRÉSTIMO--------')
-        cliente = input('Digite o nome do cliente que pediu: ')
-        emprestador = input('Digite o nome do emprestador: ')
-        id = id
-        quantidade_usd = input('Digite a quantidade que será repassada, em dólares: ')
-        data = input('Digite a data em que foi feito o repasse [dd-mm-aa]: ')
+        id = input('Digite um id novo para a transação: ')
+        cliente_id = input('Digite o cpf/cnpj do cliente que pediu o empréstimo: ')
+        emprestador_id = input('Digite o cpf/cnpj do cliente que concedeu: ')
         moeda = input('Digite o nome da moeda utilizada: ')
-        juros_mensal = input('Digite a quantidade de juros mensal que será aplicado: ')
-        emprestimo_pago = input('O empréstimo já foi devolvido? 0- não, 1- sim: ')
-        return {'nome': nome, 'regioes': regioes, 'cifra': cifra, 'valor': valor}
+        quantia = input('Digite a quantia repassada nesta moeda: ')
+        data_do_repasse = input('Digite a data em que foi feito o repasse [dd/mm/aaaa]: ')
+        data_pretendida = input('Digite a data máxima combinada para devolução [dd/mm/aaaa]: ')
+        juros_normal = input('Digite a quantidade de juros normal (em %) que será aplicado: ')
+        juros_mensal_atraso = input('Digite a quantidade de juros (%) que será aplicado mensalmente em caso de atraso: ')
+        devolvido = input('O empréstimo já foi devolvido e está sendo apenas registrado? 0- não, 1- sim: ')
+        if devolvido == 1:
+            data_devolvida = input('Digite a data em que o empréstimo foi devolvido [dd/mm/aaaa]: ')
+        else:
+            data_devolvida = None
+        return {'id':id, 'cliente_id':cliente_id, 'emprestador_id':emprestador_id, 'moeda':moeda, 'quantia':quantia, 
+                'data_do_repasse':data_do_repasse, 'data_devolvida':data_devolvida, 'data_pretendida':data_pretendida, 
+                'juros_normal':juros_normal, 'juros_mensal_atraso':juros_mensal_atraso}
 
-    def mostrar_dados(self, dados_moeda):
-        print('--------INFORMAÇÕES DA MOEDA--------')
-        print(f'NOME: {dados_moeda["nome"]}')
-        print(f'REGIOES: {dados_moeda["regioes"]}')
-        print(f'CIFRA: {dados_moeda["cifra"]}')
-        print(f'VALOR: {dados_moeda["valor"]}')
+    def mostrar_dados(self, dados_emprestimo):
+        print('--------INFORMAÇÕES DO EMPRÉSTIMO--------')
+        print(f'ID: {dados_emprestimo["id"]}')
+        print(f'CLIENTE: {dados_emprestimo["cliente"]}')
+        print(f'EMPRESTADOR: {dados_emprestimo["emprestador"]}')
+        print(f'VALOR: {dados_emprestimo["quantia"]} {dados_emprestimo["moeda"]}(s)')
+        print(f'DATAS: Repassado dia {dados_emprestimo["data_do_repasse"]}, com prazo até {dados_emprestimo["data_pretendida"]}.')
+        print(f'JUROS: {dados_emprestimo["juros_normal"]}% + {dados_emprestimo["juros_mensal_atraso"]} por mês em caso de atraso.')
+        if dados_emprestimo["devolvido"]:
+            print(f'SITUAÇÃO: DEVOLVIDO no dia {dados_emprestimo["data_devolvida"]}')
+        else:
+            print('SITUAÇÃO: NÃO devolvido')
         print('\n')
 
+    def ver_juros(self):
+        id = input('Escreva o id do empréstimo a qual deseja ver o valor do juros: ')
+        return id
+    def escolher_data(self):
+        data = input('Escreva a data em qual se quer ver o possível valor acumulado: ')
+        return data
+        
+    def emprestimo_devolvido(self):
+        id = input('Escreva o id do empréstimo a qual se deseja registrar devolução: ')
+        data = input('Escreva a data em que o dinheiro foi devolvido: ')
+        return {'id':id, 'data':data}
+
+
     def excluir(self):
-        nome = input('Escreva o nome da moeda que deseja excluir: ')
-        return nome 
+        id = input('Escreva o id do empréstimo que deseja excluir: ')
+        return id 
 
     def alterar_dados(self):
-        nome = input('Escreva o nome da moeda que deseja alterar: ')
-        return nome
+        id = input('Escreva o id do empréstimo que deseja alterar: ')
+        return id
 
     def ver_dados(self):
-        nome = input('Escreva o nome da moeda que deseja achar: ')
-        return nome
+        id = input('Escreva o id do empréstimo que deseja ver: ')
+        return id
 
     def mostrar_msg(self, msg):
         print(msg)
-
-    def mostrar_trocas(self):
-        pass
