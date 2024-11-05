@@ -1,9 +1,10 @@
 from entidades.pessoa import Pessoa
 from entidades.moeda import Moeda
+from datetime import date
 
 
 class Troca:
-    def __init__(self, id:str, pessoa:Pessoa, quantidade_entrada:float, quantidade_saida:float, data:str, moeda_entrada:Moeda, moeda_saida:Moeda, porcentagem_juros:int):
+    def __init__(self, id:str, pessoa:Pessoa, quantidade_entrada:float, quantidade_saida:float, data:date, moeda_entrada:Moeda, moeda_saida:Moeda, porcentagem_juros:int):
         self.__id = id
         self.__pessoa = pessoa
         self.__quantidade_entrada = quantidade_entrada

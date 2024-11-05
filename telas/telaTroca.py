@@ -34,7 +34,7 @@ class TelaTroca(Tela):
         try:
             id_pessoa = input('Digite o cpf da pessoa: ')
             id_pessoa_verify = id_pessoa.replace('.', '')
-            if len(id_pessoa_verify) != 11:
+            if len(id_pessoa_verify) != 3:
                 raise ValueError('## entrada não corresponde a um cpf ##')
         except ValueError as e:
             print()

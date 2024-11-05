@@ -58,8 +58,17 @@ class TelaCliente(Tela):
         
             return {"nome":nome, "id":id, "idade":idade}
         elif tipo == 1:
-            nome = input('Digite o nome da organização: ')
-            id = input('Digite o cnpj da organização: ')
+            try:
+                nome = input('Digite o nome da organização: ')
+                for char in nome:
+                    if char.isnumeric():
+                        raise ValueError
+            except:
+                print()
+                print('## Não coloque números no nome ##')
+                print()
+                return
+            id = input('Digite o cnpj da organização: ').strip()
             print()
             return {"nome":nome, "id":id}
         

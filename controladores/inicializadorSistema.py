@@ -30,8 +30,7 @@ class InicializadorSistema():
             if opcao_escolhida == None:
                 pass
             else:
-                funcao_a_executar = opcoes[opcao_escolhida]
-                funcao_a_executar()                
+                opcoes[opcao_escolhida]()  
 
     def encerra_sistema(self):
         print('***')

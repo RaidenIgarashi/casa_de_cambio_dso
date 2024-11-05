@@ -6,10 +6,10 @@ def eh_pessoa(info): # funcao para facilitar de ver se é pessoa ou organizacao 
         if isinstance(info, str):
             info = info.replace('.', '')
 
-            if len(info) == 11:
+            if len(info) == 3: # CPF AQUI TEM 3 DIGITOS E CNPJ 5 PRA FACILITAR
                  return True
             info = info.replace('/', '')
-            if len(info) == 14:
+            if len(info) == 5:
                  return False
             else: #quantidade errada
                 print('\n## a quantidade de números não é a de uma identidade ##\n')

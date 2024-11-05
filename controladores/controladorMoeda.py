@@ -4,7 +4,7 @@ from telas.telaMoeda import TelaMoeda
 
 class ControladorMoeda(Controlador):
     def __init__(self, controlador_sistema):
-        self.__moedas = [Moeda('Dólar', ['EUA', 'Canada'], '$', 1), Moeda('Real', ['Brasil'], 'R$', 5.70)]
+        self.__moedas = [Moeda('Dolar', ['EUA', 'Canada'], '$', 1), Moeda('Real', ['Brasil'], 'R$', 5.70)]
         self.__tela = TelaMoeda()
         self.__controlador_sistema = controlador_sistema
 
@@ -13,7 +13,7 @@ class ControladorMoeda(Controlador):
         if dados is not None:
             try:
                 for moeda in self.__moedas:
-                    if dados['nome'] == moeda.nome:
+                    if dados['nome'].lower() == moeda.nome.lower():
                         raise ValueError
             except:
                 print()
@@ -34,7 +34,7 @@ class ControladorMoeda(Controlador):
 
     def pega_objeto(self, nome):
         for moeda in self.__moedas:
-            if nome == moeda.nome:
+            if nome.lower() == moeda.nome.lower():
                 return moeda        
 
     def altera(self):
@@ -62,12 +62,16 @@ class ControladorMoeda(Controlador):
         self.__controlador_sistema.abre_tela()
 
     def abre_tela(self):
-        command_lst = {0: self.voltar_tela, 1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 5: self.altera}
+        opcoes = {0: self.voltar_tela, 1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 5: self.altera}
         while True:
-            command_lst[self.__tela.tela_opcoes()]()
+            opcao_escolhida = self.__tela.tela_opcoes()
+            if opcao_escolhida == None:
+                pass
+            else:
+                opcoes[opcao_escolhida]()  
 
     def mostra_dados(self):
         nome = self.__tela.ver_dados()
         for moeda in self.__moedas:
-            if nome == moeda.nome:
+            if nome.lower() == moeda.nome.lower():
                 self.__tela.mostrar_dados({'nome': moeda.nome, 'regioes': moeda.regioes, 'cifra': moeda.cifra, 'valor': moeda.valor_usd})

@@ -16,10 +16,13 @@ class ControladorCliente(Controlador):
         self.__organizacoes = []
 
     def abre_tela(self):
-        lista_comandos = {1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.altera, 5: self.mostra_todas, 0: self.voltar_tela}
+        opcoes = {1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.altera, 5: self.mostra_todas, 0: self.voltar_tela}
         while True:
-            comando = lista_comandos[self.__tela_cliente.tela_opcoes()]
-            comando()
+            opcao_escolhida = self.__tela_cliente.tela_opcoes()
+            if opcao_escolhida == None:
+                pass
+            else:
+                opcoes[opcao_escolhida]()  
 
     def mostra_dados(self):
         id = self.__tela_cliente.ver_dados()
@@ -40,10 +43,7 @@ class ControladorCliente(Controlador):
             print("\n## Nenhum cliente registrado com esta identidade ##\n")
 
     def pega_objeto(self, id):
-        for cli in self.__pessoas:
-            if cli.id == id:
-                return cli 
-        for cli in self.__organizacoes:
+        for cli in self.__pessoas + self.__organizacoes:
             if cli.id == id:
                 return cli 
 
@@ -88,13 +88,13 @@ class ControladorCliente(Controlador):
         id = self.__tela_cliente.alterar_dados()
         id_a_alterar = self.pega_objeto(id)
         if id_a_alterar != None:
-            lista = self.__pessoas if len(id) == 11 else self.__organizacoes
+            lista = self.__pessoas if len(id) == 5 else self.__organizacoes
             for cliente in lista:
                 if cliente.id == id_a_alterar.id:
                     novo_cliente = self.__tela_cliente.cadastrar_dados()
                     cliente.nome = novo_cliente['nome']
                     cliente.id = novo_cliente['id']
-                    if len(id) == 11:
+                    if len(id) == 5:
                         cliente.idade = novo_cliente['idade']
         else:
             self.__tela_cliente.mostrar_msg('\n## Organização não existe ##\n')

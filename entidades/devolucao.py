@@ -1,4 +1,5 @@
 from datetime import date
+from dateutil.relativedelta import relativedelta
 
 
 class Devolucao:
@@ -13,12 +14,19 @@ class Devolucao:
         self.__quantia_repassada = quantia_repassada
 
     def calcula_juros(self, data_a_ver):
-        juros = self.__quantia_repassada * self.__juros_normal
-        juros_extra = 0
-        if data_a_ver > self.__data_do_repasse:
-            n = self.__data_pretendida - self.__data_do_repasse
-            juros_extra = self.__quantia_repassada * (1 + self.__juros_mensal_atraso)**n
-        return {'jn':juros, 'je':juros_extra}
+        if isinstance(data_a_ver, date):
+            if data_a_ver < self.__data_do_repasse:
+                print("\n## a data escrita é de antes do empréstimo ##\n")
+            else:
+                juros = self.__quantia_repassada * self.__juros_normal
+                juros_extra = 0
+                if data_a_ver > self.__data_pretendida:
+                    meses = relativedelta(self.__data_pretendida, self.__data_do_repasse).month + 1
+                    juros_extra = self.__quantia_repassada * (1 + self.__juros_mensal_atraso)**meses
+                return juros + juros_extra
+        else:
+            print("## data digitada incorretamente ##")
+        
 
 
     @property

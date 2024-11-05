@@ -55,9 +55,11 @@ class TelaEmprestimo(Tela):
         if devolvido == 1:
             devolvido = True
             data_devolvida = input('Digite a data em que o empréstimo foi devolvido [dd/mm/aaaa]: ')
-        else:
+        if devolvido == 1:
             data_devolvida = None
             devolvido = False
+        else:
+            print("## opcao errada ##")
         return {'id':id, 'cliente_id':cliente_id, 'emprestador_id':emprestador_id, 'moeda':moeda, 'quantia':quantia, 
                 'data_do_repasse':data_do_repasse, 'data_devolvida':data_devolvida, 'data_pretendida':data_pretendida, 
                 'juros_normal':juros_normal, 'juros_mensal_atraso':juros_mensal_atraso, 'devolvido': devolvido}

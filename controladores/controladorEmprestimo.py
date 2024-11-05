@@ -2,6 +2,7 @@ from telas.telaEmprestimo import TelaEmprestimo
 from entidades.emprestimo import Emprestimo
 from abstratas.absControlador import Controlador
 from controladores.funcoes import eh_pessoa
+from datetime import date
 
 class ControladorEmprestimo(Controlador):
     def __init__(self, controlador_sistema, controlador_moeda, controlador_cliente):
@@ -56,7 +57,7 @@ class ControladorEmprestimo(Controlador):
                 data = emp.data_devolvida
                 info = ['(Empréstimo já devolvido)', 'tinha']
             else:
-                data = self.__tela.escolher_data
+                data = self.__tela.escolher_data()
                 info = ['(Data escolhida)', 'teria']
             juros = emp.devolucao.calcula_juros(data)
             return(f'Na data {data}, o empréstimo de id {id} {info[1]} um acúmulo \
@@ -152,11 +153,15 @@ class ControladorEmprestimo(Controlador):
                                        'juros_normal':emp.juros_normal, 'juros_mensal_atraso':emp.juros_mensal_atraso, 'devolvido': emp.devolvido})
     
     def abre_tela(self):
-        commandlst = {0: self.volta_tela, 1: self.inclui, 2: self.mostra_dados, 3: self.exclui, 
+        opcoes = {0: self.volta_tela, 1: self.inclui, 2: self.mostra_dados, 3: self.exclui, 
                       4: self.altera, 5: self.emprestimo_devolvido, 6: self.mostra_todas, 7: self.calcula_juros}
         
         while True:
-            commandlst[self.__tela.tela_opcoes()]()
+            opcao_escolhida = self.__tela.tela_opcoes()
+            if opcao_escolhida == None:
+                pass
+            else:
+                opcoes[opcao_escolhida]()  
 
     def volta_tela(self):
         self.__controlador_sistema.abre_tela()

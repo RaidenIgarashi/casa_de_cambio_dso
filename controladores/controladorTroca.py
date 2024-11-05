@@ -114,10 +114,14 @@ class ControladorTroca(Controlador):
         return None
 
     def abre_tela(self):
-        commandlst = {0: self.volta_tela, 1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 5: self.altera}
+        opcoes = {0: self.volta_tela, 1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 5: self.altera}
         
         while True:
-            commandlst[self.__tela.tela_opcoes()]()
+            opcao_escolhida = self.__tela.tela_opcoes()
+            if opcao_escolhida == None:
+                pass
+            else:
+                opcoes[opcao_escolhida]()  
 
     def volta_tela(self):
         self.__controlador_sistema.abre_tela()
