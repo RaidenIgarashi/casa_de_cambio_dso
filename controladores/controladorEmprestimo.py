@@ -90,9 +90,8 @@ class ControladorEmprestimo(Controlador):
             print('## não foi encontrado empréstimo com esse ID ##')
             print()
         else:
-            cliente_id = emp.cliente.cpf if eh_pessoa(emp.cliente) else emp.cliente.cnpj
-            emp_id = emp.emprestador.cpf if eh_pessoa(emp.emprestador) else emp.emprestador.cnpj
-            self.__tela.mostrar_dados({'id':emp.id, 'cliente_id':cliente_id, 'emprestador_id':emp_id, 
+
+            self.__tela.mostrar_dados({'id':emp.id, 'cliente_id':emp.cliente.id, 'emprestador_id':emp.emprestador.id, 
                                        'moeda':emp.moeda, 'quantia':emp.quantia_repassada, 'data_do_repasse':emp.data_do_repasse, 
                                        'data_devolvida':emp.data_devolvida, 'data_pretendida':emp.data_pretendida, 
                                        'juros_normal':emp.juros_normal, 'juros_mensal_atraso':emp.juros_mensal_atraso, 'devolvido': emp.devolvido})
@@ -124,11 +123,8 @@ class ControladorEmprestimo(Controlador):
             novos_dados = self.__tela.cadastrar_dados()
             nomes = ['id', 'cliente_id', 'emprestador_id', 'moeda', 'quantia', 'data_do_repasse', 
                      'data_devolvida', 'data_pretendida', 'juros_normal', 'juros_mensal_atraso', 'devolvido']
-            
-            cliente_id = emp.cliente.cpf if eh_pessoa(emp.cliente) else emp.cliente.cnpj
-            emp_id = emp.emprestador.cpf if eh_pessoa(emp.emprestador) else emp.emprestador.cnpj
 
-            dados_alterar = [emp.id, emp.cliente, emp.emprestador, emp.moeda, emp.quantia_repassada, emp.data_do_repasse, 
+            dados_alterar = [emp.id, emp.cliente.id, emp.emprestador.id, emp.moeda, emp.quantia_repassada, emp.data_do_repasse, 
                      emp.data_devolvida, emp.data_pretendida, emp.juros_normal, emp.juros_mensal_atraso, emp.devolvido]
             for d in range(len(dados_alterar)):
                 dados_alterar[d] = novos_dados[nomes[d]]
@@ -145,9 +141,7 @@ class ControladorEmprestimo(Controlador):
             print()
         else:
             for emp in self.__emprestimos:
-                cliente_id = emp.cliente.cpf if eh_pessoa(emp.cliente) else emp.cliente.cnpj
-                emp_id = emp.emprestador.cpf if eh_pessoa(emp.emprestador) else emp.emprestador.cnpj
-                self.__tela.mostrar_dados({'id':emp.id, 'cliente_id':cliente_id, 'emprestador_id':emp_id, 
+                self.__tela.mostrar_dados({'id':emp.id, 'cliente_id':emp.cliente.id, 'emprestador_id':emp.emprestador.id, 
                                        'moeda':emp.moeda, 'quantia':emp.quantia_repassada, 'data_do_repasse':emp.data_do_repasse, 
                                        'data_devolvida':emp.data_devolvida, 'data_pretendida':emp.data_pretendida, 
                                        'juros_normal':emp.juros_normal, 'juros_mensal_atraso':emp.juros_mensal_atraso, 'devolvido': emp.devolvido})

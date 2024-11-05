@@ -83,7 +83,7 @@ class ControladorTroca(Controlador):
             print('## não foi encontrada troca com esse ID ##')
             print()
         else:
-            self.__tela.mostrar_dados({'id': troca.id, 'id_pessoa':troca.pessoa.cpf, 'data': troca.data, 
+            self.__tela.mostrar_dados({'id': troca.id, 'id_pessoa':troca.pessoa.id, 'data': troca.data, 
                                        'moeda_entrada': troca.moeda_entrada.nome, 'moeda_saida': troca.moeda_saida.nome, 
                                        'quantidade_entrada': troca.quantidade_entrada, 'quantidade_saida': troca.quantidade_saida, 
                                        'juros': troca.porcentagem_juros })

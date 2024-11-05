@@ -26,8 +26,7 @@ class Devolucao:
                 return juros + juros_extra
         else:
             print("## data digitada incorretamente ##")
-        
-
+    
 
     @property
     def data_do_repasse(self):

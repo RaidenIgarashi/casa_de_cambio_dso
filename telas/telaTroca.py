@@ -41,15 +41,15 @@ class TelaTroca(Tela):
             print(e)
             print()
             return
+        moeda_entrada = input('Digite o nome da moeda que o cliente tem para trocar: ')
+        moeda_saida = input('Digite o nome da moeda que o cliente quer receber: ')
         try:
-            quantidade_entrada = float(input('Digite o quanto você quer trocar: '))
+            quantidade_entrada = float(input(f'Digite o quanto de "{moeda_entrada}" o cliente quer trocar por "{moeda_saida}": '))
         except:
             print()
             print(' ## Isso não e uma quantia ## ')
             print()
             return
-        moeda_entrada = input('Digite o nome da moeda que o cliente tem para trocar: ')
-        moeda_saida = input('Digite o nome da moeda que o cliente quer: ')
         try:
             juros = float(input('Digite o juros que será aplicado (em %): ')) / 100
             if juros > 1:
@@ -79,9 +79,9 @@ class TelaTroca(Tela):
         print(f'CPF DO CLIENTE: {dados_troca["id_pessoa"]}')
         print(f'MOEDA ENTREGUE: {dados_troca["moeda_entrada"]}')
         print(f'MOEDA RECEBIDA: {dados_troca["moeda_saida"]}')
-        print(f'QUANTIA DA MOEDA DE ENTRADA {dados_troca["moeda_entrada"]} = {dados_troca["quantidade_entrada"]}')
-        print(f'QUANTIA DA MOEDA DE SAIDA {dados_troca["moeda_saida"]} = {dados_troca["quantidade_saida"]}')       
-        print(f'JUROS: {dados_troca["juros"]}')
+        print(f'QUANTIA DA MOEDA DE ENTRADA {dados_troca["moeda_entrada"]} = {dados_troca["quantidade_entrada"]:.2f}')
+        print(f'QUANTIA DA MOEDA DE SAIDA {dados_troca["moeda_saida"]} = {dados_troca["quantidade_saida"]:.2f}')       
+        print(f'JUROS: {dados_troca["juros"]*100}%')
         print('\n')
 
     def mostrar_msg(self, msg):
@@ -90,26 +90,31 @@ class TelaTroca(Tela):
     def excluir(self):
         try:
             id = int(input('Escreva o id da troca que deseja excluir: '))
+            print()
             return id 
         except:
-            print('## O ID deve ser apenas numérico ##')
+            print('\n## O ID deve ser apenas numérico ##\n')
             return
         
 
     def alterar_dados(self):
         try:
             id = int(input('Escreva o id da troca que deseja alterar: '))
+            print()
             return id 
         except:
             print('## O ID deve ser apenas numérico ##')
+            print()
             return
 
     def ver_dados(self):
         try:
             id = int(input('Escreva o id da troca que deseja ver: '))
+            print()
             return id
         except:
             print('## o ID deve ser apenas numérico ##')
+            print()
             return
 
 

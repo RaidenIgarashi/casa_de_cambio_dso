@@ -1,4 +1,5 @@
 from abstratas.absTela import Tela
+from datetime import date
 
 class TelaEmprestimo(Tela):
     def tela_opcoes(self):
@@ -51,13 +52,14 @@ class TelaEmprestimo(Tela):
             print()
             print('## Valor digitado não corresponde a juros ##')
             print()
-        devolvido = input('O empréstimo já foi devolvido e está sendo apenas registrado? 0- não, 1- sim: ')
-        if devolvido == 1:
+        dev = input('O empréstimo já foi devolvido e está sendo apenas registrado? 0- não, 1- sim: ')
+        if dev == 1:
             devolvido = True
             data_devolvida = input('Digite a data em que o empréstimo foi devolvido [dd/mm/aaaa]: ')
-        if devolvido == 1:
-            data_devolvida = None
+        elif dev == 0:
             devolvido = False
+            data_devolvida = None
+            
         else:
             print("## opcao errada ##")
         return {'id':id, 'cliente_id':cliente_id, 'emprestador_id':emprestador_id, 'moeda':moeda, 'quantia':quantia, 

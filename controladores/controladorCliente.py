@@ -13,7 +13,7 @@ class ControladorCliente(Controlador):
         self.__tela_emprestimo = TelaEmprestimo()
         self.__tela_troca = TelaTroca()
         self.__pessoas = [Pessoa('Yan', "333", 19), Pessoa('Raiden', "123", 20)]
-        self.__organizacoes = [Organizacao('IAR', "111"), Organizacao('McDonalds', "222")]
+        self.__organizacoes = [Organizacao('IAR', "11111"), Organizacao('McDonalds', "22222")]
 
     def abre_tela(self):
         opcoes = {1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.altera, 5: self.mostra_todas, 0: self.voltar_tela}
@@ -28,16 +28,14 @@ class ControladorCliente(Controlador):
         id = self.__tela_cliente.ver_dados()
         existente = False
         eh_pes = eh_pessoa(id)
-        if eh_pes == True: #id
-            for pessoa in self.__pessoas:
-                if pessoa.id == id:
-                    self.__tela_cliente.mostrar_dados({'nome': pessoa.nome, 'id': pessoa.id, 'idade':pessoa.idade})
-                    existente = True
-        elif eh_pes == False: #id
-            for org in self.__organizacoes:
-                if org.id == id:
-                    self.__tela_cliente.mostrar_dados({'nome': org.nome, 'id': org.id})
-                    existente = True
+        for pessoa in self.__pessoas:
+            if pessoa.id == id:
+                self.__tela_cliente.mostrar_dados({'nome': pessoa.nome, 'id': pessoa.id, 'idade':pessoa.idade})
+                existente = True
+        for org in self.__organizacoes:
+            if org.id == id:
+                self.__tela_cliente.mostrar_dados({'nome': org.nome, 'id': org.id})
+                existente = True
         if not existente and eh_pes != None:
             print("\n## Nenhum cliente registrado com esta identidade ##\n")
 

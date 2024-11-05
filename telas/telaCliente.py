@@ -81,7 +81,7 @@ class TelaCliente(Tela):
     def mostrar_dados(self, dados_cliente):
         print('--------INFORMAÇÕES DO CLIENTE--------')
         print(f"NOME: {dados_cliente['nome']}")
-        if eh_pessoa(dados_cliente['id']):
+        if 'idade' in dados_cliente:
             print(f"CPF: {dados_cliente['id']}")
             print(f"IDADE: {dados_cliente['idade']}")
         else:

@@ -1,6 +1,4 @@
 from abstratas.absCliente import Cliente
-from entidades.pessoa import Pessoa
-from entidades.organizacao import Organizacao
 from entidades.moeda import Moeda
 from entidades.devolucao import Devolucao
 from datetime import date
@@ -8,7 +6,7 @@ from datetime import date
 
 class Emprestimo:
     def __init__(self, id:int, cliente:Cliente, emprestador:Cliente, moeda:Moeda, quantia_repassada:float, data_do_repasse:date, 
-                 data_pretendida: date, juros_normal:float, juros_mensal_atraso:float, devolvido:bool, data_devolvida: date):
+                 data_pretendida: date, juros_normal:float, juros_mensal_atraso:float, devolvido:bool, data_devolvida):
         self.__id = id
         self.__cliente = cliente
         self.__emprestador = emprestador
