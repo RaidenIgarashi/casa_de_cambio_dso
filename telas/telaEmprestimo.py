@@ -10,12 +10,12 @@ class TelaEmprestimo(Tela):
         print('4 - Alterar empréstimo')
         print('5 - Registrar devolução de empréstimo')
         print('6 - Listar todos empréstimos')
-        print('7 - Calcular valor de juros de um empréstimo')
+        #print('7 - Calcular valor de juros de um empréstimo')
         print('0 - Retornar')
 
         try:
             opcao = int(input("Escolha uma opção: "))
-            if 0 <= opcao <= 7:
+            if 0 <= opcao <= 6:
                 print()
                 return opcao
             else:
