@@ -2,7 +2,7 @@ from telas.telaEmprestimo import TelaEmprestimo
 from entidades.emprestimo import Emprestimo
 from abstratas.absControlador import Controlador
 from controladores.funcoes import eh_pessoa
-from datetime import date
+from datetime import datetime
 
 class ControladorEmprestimo(Controlador):
     def __init__(self, controlador_sistema, controlador_moeda, controlador_cliente):
@@ -58,6 +58,7 @@ class ControladorEmprestimo(Controlador):
                 info = ['(Empréstimo já devolvido)', 'tinha']
             else:
                 data = self.__tela.escolher_data()
+                data = datetime.strptime(data, '%d/%m/%Y')
                 info = ['(Data escolhida)', 'teria']
             juros = emp.devolucao.calcula_juros(data)
             return(f'Na data {data}, o empréstimo de id {id} {info[1]} um acúmulo \

@@ -9,15 +9,16 @@ class TelaCliente(Tela):
         print(f'3 - Excluir cliente')
         print(f'4 - Alterar cliente')
         print(f'5 - Listar tudo de clientes')
-        print('0 - Retornar')
+        print(f'6 - Mostrar transações de um cliente')
+        print(f'0 - Retornar')
 
         try:
             opcao = int(input("Escolha uma opção: "))
-            if 0 <= opcao <= 5:
+            if 0 <= opcao <= 6:
                 print()
                 return opcao
             else:
-                print("\n## Digite um número de 0 a 5. ##\n")
+                print("\n## Digite um número de 0 a 6. ##\n")
                 return None
         except:
             print("\n## Opção digitada incorretamente. Tente novamente. ##\n")

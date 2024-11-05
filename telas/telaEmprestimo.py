@@ -1,5 +1,5 @@
 from abstratas.absTela import Tela
-from datetime import date
+from datetime import datetime
 
 class TelaEmprestimo(Tela):
     def tela_opcoes(self):
@@ -28,7 +28,7 @@ class TelaEmprestimo(Tela):
     def cadastrar_dados(self):
         print('-------REGISTRANDO EMPRÉSTIMO--------')
         try:
-            id = int(input('Digite um id novo para a transação: '))
+            id = input('Digite um id novo para a transação: ')
         except:
             print()
             print('## O ID deve ser um número ##')
@@ -44,18 +44,21 @@ class TelaEmprestimo(Tela):
             print('## O valor digitado não é uma quantia ##')
             print()
         data_do_repasse = input('Digite a data em que foi feito o repasse [dd/mm/aaaa]: ')
+        data_do_repasse = datetime.strptime(data_do_repasse, '%d/%m/%Y')
         data_pretendida = input('Digite a data máxima combinada para devolução [dd/mm/aaaa]: ')
+        data_pretendida = datetime.strptime(data_pretendida, '%d/%m/%Y')
         try:
-            juros_normal = int(input('Digite a quantidade de juros normal (em %) que será aplicado: '))
-            juros_mensal_atraso = int(input('Digite a quantidade de juros (%) que será aplicado mensalmente em caso de atraso: '))
+            juros_normal = float(input('Digite a quantidade de juros normal (em %) que será aplicado: '))
+            juros_mensal_atraso = float(input('Digite a quantidade de juros (%) que será aplicado mensalmente em caso de atraso: '))
         except:
             print()
             print('## Valor digitado não corresponde a juros ##')
             print()
-        dev = input('O empréstimo já foi devolvido e está sendo apenas registrado? 0- não, 1- sim: ')
+        dev = int(input('O empréstimo já foi devolvido e está sendo apenas registrado? 0- não, 1- sim: '))
         if dev == 1:
             devolvido = True
             data_devolvida = input('Digite a data em que o empréstimo foi devolvido [dd/mm/aaaa]: ')
+            data_devolvida = datetime.strptime(data_devolvida, '%d/%m/%Y')
         elif dev == 0:
             devolvido = False
             data_devolvida = None
@@ -71,9 +74,9 @@ class TelaEmprestimo(Tela):
         print(f'ID: {dados_emprestimo["id"]}')
         print(f'CLIENTE: {dados_emprestimo["cliente_id"]}')
         print(f'EMPRESTADOR: {dados_emprestimo["emprestador_id"]}')
-        print(f'VALOR: {dados_emprestimo["quantia"]} {dados_emprestimo["moeda"]}(s)')
+        print(f'VALOR: {dados_emprestimo["quantia"]} em "{dados_emprestimo["moeda"].nome}"')
         print(f'DATAS: Repassado dia {dados_emprestimo["data_do_repasse"]}, com prazo até {dados_emprestimo["data_pretendida"]}.')
-        print(f'JUROS: {dados_emprestimo["juros_normal"]}% + {dados_emprestimo["juros_mensal_atraso"]} por mês em caso de atraso.')
+        print(f'JUROS: {dados_emprestimo["juros_normal"]}% + {dados_emprestimo["juros_mensal_atraso"]}% por mês em caso de atraso.')
         if dados_emprestimo['devolvido']:
             print(f'SITUAÇÃO: DEVOLVIDO no dia {dados_emprestimo["data_devolvida"]}')
         else:
@@ -85,11 +88,13 @@ class TelaEmprestimo(Tela):
         return id
     def escolher_data(self):
         data = input('Escreva a data em qual se quer ver o possível valor acumulado: ')
+        data = datetime.strptime(data, '%d/%m/%Y')
         return data
         
     def emprestimo_devolvido(self):
         id = input('Escreva o id do empréstimo a qual se deseja registrar devolução: ')
         data = input('Escreva a data em que o dinheiro foi devolvido: ')
+        data = datetime.strptime(data, '%d/%m/%Y')
         return {'id':id, 'data':data}
 
 

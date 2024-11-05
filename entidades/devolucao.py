@@ -21,7 +21,7 @@ class Devolucao:
                 juros = self.__quantia_repassada * self.__juros_normal
                 juros_extra = 0
                 if data_a_ver > self.__data_pretendida:
-                    meses = relativedelta(self.__data_pretendida, self.__data_do_repasse).month + 1
+                    meses = relativedelta(self.__data_pretendida, self.__data_do_repasse).month #+ 1
                     juros_extra = self.__quantia_repassada * (1 + self.__juros_mensal_atraso)**meses
                 return juros + juros_extra
         else:

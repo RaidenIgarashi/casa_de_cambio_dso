@@ -16,7 +16,8 @@ class ControladorCliente(Controlador):
         self.__organizacoes = [Organizacao('IAR', "11111"), Organizacao('McDonalds', "22222")]
 
     def abre_tela(self):
-        opcoes = {1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.altera, 5: self.mostra_todas, 0: self.voltar_tela}
+        opcoes = {1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.altera, 
+                  5: self.mostra_todas, 6: self.mostra_transacoes, 0: self.voltar_tela}
         while True:
             opcao_escolhida = self.__tela_cliente.tela_opcoes()
             if opcao_escolhida == None:
