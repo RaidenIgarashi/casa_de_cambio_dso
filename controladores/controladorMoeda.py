@@ -19,6 +19,7 @@ class ControladorMoeda(Controlador):
                 print()
                 print(f'## a moeda {moeda.nome} já está registrada ##')
                 print()
+                return
             self.__moedas.append(Moeda(dados['nome'], dados['regioes'], dados['cifra'], dados['valor']))
 
     def exclui(self):
