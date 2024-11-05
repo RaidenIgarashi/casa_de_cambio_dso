@@ -103,9 +103,11 @@ class ControladorTroca(Controlador):
     def calculo_moeda_saida(self, moeda1_nome, moeda2_nome, quantidade_entrada, juros):
         valor_entrada = self.__moeda.pega_objeto(moeda1_nome).valor_usd
         valor_saida = self.__moeda.pega_objeto(moeda2_nome).valor_usd
-        valor_total = quantidade_entrada * valor_entrada
+        valor_entrada_convertido = 1/valor_entrada
+        valor_saida_convertido = 1/valor_saida
+        valor_total = quantidade_entrada * valor_entrada_convertido
         valor_total -= valor_total* juros
-        return valor_total/valor_saida
+        return valor_total/valor_saida_convertido
 
     def pega_objeto(self, id):
         for troca in self.__trocas:
