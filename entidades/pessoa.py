@@ -2,13 +2,13 @@ from abstratas.absCliente import Cliente
 
 
 class Pessoa(Cliente):
-    def __init__(self, nome:str, cpf:str, credito_usd:float, idade:int):
-        super().__init__(nome, cpf, credito_usd)
+    def __init__(self, nome:str, id:str, idade:int):
+        super().__init__(nome, id)
         self.__idade = idade
         self.__emprestimos_pedidos = []
         self.__emprestimos_concedidos = []
         self.__trocas_feitas = []
-        self.__cpf = cpf
+        self.__id = id
 
     @property
     def idade(self):
@@ -26,12 +26,12 @@ class Pessoa(Cliente):
         self.__trocas_feitas.append(trocas)
 
     @property
-    def cpf(self):
-        return self.__cpf
+    def id(self):
+        return self.__id
 
-    @cpf.setter
-    def cpf(self, cpf):
-        self.__cpf = cpf
+    @id.setter
+    def id(self, id):
+        self.__id = id
 
     @property
     def emprestimos_pedidos(self):

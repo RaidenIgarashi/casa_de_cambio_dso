@@ -86,7 +86,6 @@ class TelaCliente(Tela):
             print(f"IDADE: {dados_cliente['idade']}")
         else:
             print(f"CNPJ: {dados_cliente['id']}")
-        print(f"CRÉDITO: U$D {dados_cliente['credito_usd']}")
         print()
 
     def excluir(self):
