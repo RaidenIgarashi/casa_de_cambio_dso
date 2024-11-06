@@ -37,12 +37,12 @@ class ControladorEmprestimo(Controlador):
                     print(f'A moeda "{e}" não está registrada')
                 print()
                 return
-            emp = Emprestimo(dados['id'], cliente, emprestador, moeda, dados['quantia'], 
+            emp = Emprestimo(dados['id'], cliente, emprestador, moeda, dados['quantia_repassada'], 
                              dados['data_do_repasse'], dados['data_pretendida'], dados['juros_normal'], 
                              dados['juros_mensal_atraso'], dados['devolvido'], dados['data_devolvida'])
             self.__emprestimos.append(emp)
-            emp.cliente.emprestimos_pedidos = emp
-            emp.emprestador.emprestimos_concedidos = emp
+            emp.cliente.emprestimos_pedidos.append(emp)
+            emp.emprestador.emprestimos_concedidos.append(emp)
 
 
     def calcula_juros(self):
@@ -93,7 +93,7 @@ class ControladorEmprestimo(Controlador):
         else:
 
             self.__tela.mostrar_dados({'id':emp.id, 'cliente_id':emp.cliente.id, 'emprestador_id':emp.emprestador.id, 
-                                       'moeda':emp.moeda, 'quantia':emp.quantia_repassada, 'data_do_repasse':emp.data_do_repasse, 
+                                       'moeda':emp.moeda, 'quantia_repassada':emp.quantia_repassada, 'data_do_repasse':emp.data_do_repasse, 
                                        'data_devolvida':emp.data_devolvida, 'data_pretendida':emp.data_pretendida, 
                                        'juros_normal':emp.juros_normal, 'juros_mensal_atraso':emp.juros_mensal_atraso, 'devolvido': emp.devolvido})
 
@@ -109,8 +109,8 @@ class ControladorEmprestimo(Controlador):
         emprestimo = self.pega_objeto(id)
         if emprestimo != None:
             self.__emprestimos.remove(emprestimo)
-            emprestimo.cliente.emprestimos_pedidos_remove(emprestimo)
-            emprestimo.emprestador.emprestimos_concedidos_remove(emprestimo)
+            emprestimo.cliente.emprestimos_pedidos.remove(emprestimo)
+            emprestimo.emprestador.emprestimos_concedidos.remove(emprestimo)
             
         else:
             print()
@@ -122,7 +122,7 @@ class ControladorEmprestimo(Controlador):
         emp = self.pega_objeto(id)
         if emp != None:
             novos_dados = self.__tela.cadastrar_dados()
-            nomes = ['id', 'cliente_id', 'emprestador_id', 'moeda', 'quantia', 'data_do_repasse', 
+            nomes = ['id', 'cliente', 'emprestador', 'moeda', 'quantia_repassada', 'data_do_repasse', 
                      'data_devolvida', 'data_pretendida', 'juros_normal', 'juros_mensal_atraso', 'devolvido']
 
             dados_alterar = [emp.id, emp.cliente.id, emp.emprestador.id, emp.moeda, emp.quantia_repassada, emp.data_do_repasse, 
@@ -143,7 +143,7 @@ class ControladorEmprestimo(Controlador):
         else:
             for emp in self.__emprestimos:
                 self.__tela.mostrar_dados({'id':emp.id, 'cliente_id':emp.cliente.id, 'emprestador_id':emp.emprestador.id, 
-                                       'moeda':emp.moeda, 'quantia':emp.quantia_repassada, 'data_do_repasse':emp.data_do_repasse, 
+                                       'moeda':emp.moeda, 'quantia_repassada':emp.quantia_repassada, 'data_do_repasse':emp.data_do_repasse, 
                                        'data_devolvida':emp.data_devolvida, 'data_pretendida':emp.data_pretendida, 
                                        'juros_normal':emp.juros_normal, 'juros_mensal_atraso':emp.juros_mensal_atraso, 'devolvido': emp.devolvido})
     

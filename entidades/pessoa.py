@@ -8,7 +8,6 @@ class Pessoa(Cliente):
         self.__emprestimos_pedidos = []
         self.__emprestimos_concedidos = []
         self.__trocas_feitas = []
-        self.__id = id
 
     @property
     def idade(self):
@@ -24,14 +23,6 @@ class Pessoa(Cliente):
     @trocas_feitas.setter
     def trocas_feitas(self, trocas):
         self.__trocas_feitas.append(trocas)
-
-    @property
-    def id(self):
-        return self.__id
-
-    @id.setter
-    def id(self, id):
-        self.__id = id
 
     @property
     def emprestimos_pedidos(self):
