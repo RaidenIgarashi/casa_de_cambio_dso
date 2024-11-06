@@ -67,5 +67,4 @@ class TelaMoeda(Tela):
     def mostrar_msg(self, msg):
         print(msg)
 
-    def mostrar_trocas(self):
-        pass
+
