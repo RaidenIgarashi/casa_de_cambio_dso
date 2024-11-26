@@ -10,12 +10,12 @@ class TelaEmprestimo(Tela):
         print('4 - Alterar empréstimo')
         print('5 - Registrar devolução de empréstimo')
         print('6 - Listar todos empréstimos')
-        print('7 - Calcular valor de juros de um empréstimo')
+        #print('7 - Calcular valor de juros de um empréstimo')
         print('0 - Retornar')
 
         try:
             opcao = int(input("Escolha uma opção: "))
-            if 0 <= opcao <= 7:
+            if 0 <= opcao <= 6:
                 print()
                 return opcao
             else:
@@ -38,7 +38,7 @@ class TelaEmprestimo(Tela):
         emprestador_id = input('Digite o cpf/cnpj do cliente que concedeu: ')
         moeda = input('Digite o nome da moeda utilizada: ')
         try:
-            quantia = float(input('Digite a quantia repassada nesta moeda: '))
+            quantia_repassada = float(input('Digite a quantia repassada nesta moeda: '))
         except:
             print()
             print('## O valor digitado não é uma quantia ##')
@@ -65,7 +65,7 @@ class TelaEmprestimo(Tela):
             
         else:
             print("## opcao errada ##")
-        return {'id':id, 'cliente_id':cliente_id, 'emprestador_id':emprestador_id, 'moeda':moeda, 'quantia':quantia, 
+        return {'id':id, 'cliente_id':cliente_id, 'emprestador_id':emprestador_id, 'moeda':moeda, 'quantia_repassada':quantia_repassada, 
                 'data_do_repasse':data_do_repasse, 'data_devolvida':data_devolvida, 'data_pretendida':data_pretendida, 
                 'juros_normal':juros_normal, 'juros_mensal_atraso':juros_mensal_atraso, 'devolvido': devolvido}
 
@@ -74,10 +74,10 @@ class TelaEmprestimo(Tela):
         print(f'ID: {dados_emprestimo["id"]}')
         print(f'CLIENTE: {dados_emprestimo["cliente_id"]}')
         print(f'EMPRESTADOR: {dados_emprestimo["emprestador_id"]}')
-        print(f'VALOR: {dados_emprestimo["quantia"]} em "{dados_emprestimo["moeda"].nome}"')
+        print(f'VALOR: {dados_emprestimo["quantia_repassada"]} em "{dados_emprestimo["moeda"].nome}"')
         print(f'DATAS: Repassado dia {dados_emprestimo["data_do_repasse"]}, com prazo até {dados_emprestimo["data_pretendida"]}.')
         print(f'JUROS: {dados_emprestimo["juros_normal"]}% + {dados_emprestimo["juros_mensal_atraso"]}% por mês em caso de atraso.')
-        if dados_emprestimo['devolvido']:
+        if dados_emprestimo['devolvido'] == True:
             print(f'SITUAÇÃO: DEVOLVIDO no dia {dados_emprestimo["data_devolvida"]}')
         else:
             print('SITUAÇÃO: NÃO devolvido')

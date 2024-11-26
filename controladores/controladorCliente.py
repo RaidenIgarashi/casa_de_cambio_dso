@@ -13,7 +13,7 @@ class ControladorCliente(Controlador):
         self.__tela_emprestimo = TelaEmprestimo()
         self.__tela_troca = TelaTroca()
         self.__pessoas = [Pessoa('Yan', "333", 19), Pessoa('Raiden', "123", 20)]
-        self.__organizacoes = [Organizacao('IAR', "11111"), Organizacao('McDonalds', "22222")]
+        self.__organizacoes = [Organizacao('UFSC', "11111"), Organizacao('McDonalds', "54321")]
 
     def abre_tela(self):
         opcoes = {1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.altera, 
@@ -49,9 +49,9 @@ class ControladorCliente(Controlador):
         dados_cliente = self.__tela_cliente.cadastrar_dados()
         if dados_cliente is not None:
             if eh_pessoa(dados_cliente['id']) and 'idade' in dados_cliente: 
-                self.__pessoas.append(Pessoa(dados_cliente['nome'], dados_cliente['id'], 0, dados_cliente['idade']))
+                self.__pessoas.append(Pessoa(dados_cliente['nome'], dados_cliente['id'], dados_cliente['idade']))
             elif not eh_pessoa(dados_cliente['id']):
-                self.__organizacoes.append(Organizacao(dados_cliente['nome'], dados_cliente['id'], 0))
+                self.__organizacoes.append(Organizacao(dados_cliente['nome'], dados_cliente['id']))
             else:
                 print('\n## Dados incorretos para o tipo de cliente ##\n')
 
@@ -114,33 +114,30 @@ class ControladorCliente(Controlador):
         if existente:
             if len(cliente.emprestimos_pedidos) > 0:
                 print('\n- EMPRESTIMOS PEDIDOS: \n')
-                for emps in cliente.emprestimos_pedidos:
-                    for t in emps:
-                        self.__tela_emprestimo.mostrar_dados({'id':t.id, 'cliente':cliente.id, 'emprestador':t.emprestador.id, 'moeda':t.moeda.nome, 'quantia':t.quantia, 
-                                                            'data_do_repasse':t.data_do_repasse, 'data_devolvida':t.data_devolvida, 'data_pretendida':t.data_pretendida, 
-                                                            'juros_normal':t.juros_normal, 'juros_mensal_atraso':t.juros_mensal_atraso})
+                for t in cliente.emprestimos_pedidos:
+                    self.__tela_emprestimo.mostrar_dados({'id':t.id, 'cliente_id':t.cliente.id, 'emprestador_id':t.emprestador.id, 'moeda':t.moeda, 'quantia_repassada':t.quantia_repassada, 
+                                                         'data_do_repasse':t.data_do_repasse, 'devolvido':t.devolvido, 'data_devolvida':t.data_devolvida, 'data_pretendida':t.data_pretendida, 
+                                                         'juros_normal':t.juros_normal, 'juros_mensal_atraso':t.juros_mensal_atraso})
             else:
                 print('\nEste cliente não pediu nenhum empréstimo. \n')
 
             if len(cliente.emprestimos_concedidos) > 0:
                 print('\n- EMPRESTIMOS CONCEDIDOS: \n')
-                for emps in cliente.emprestimos_concedidos:
-                    for t in emps:
-                        self.__tela_emprestimo.mostrar_dados({'id':t.id, 'cliente':cliente.id, 'emprestador':t.emprestador.id, 'moeda':t.moeda.nome, 'quantia':t.quantia, 
-                                                            'data_do_repasse':t.data_do_repasse, 'data_devolvida':t.data_devolvida, 'data_pretendida':t.data_pretendida, 
-                                                            'juros_normal':t.juros_normal, 'juros_mensal_atraso':t.juros_mensal_atraso})
+                for t in cliente.emprestimos_concedidos:
+                    self.__tela_emprestimo.mostrar_dados({'id':t.id, 'cliente_id':t.cliente.id, 'emprestador_id':t.emprestador.id, 'moeda':t.moeda, 'quantia_repassada':t.quantia_repassada, 
+                                                         'data_do_repasse':t.data_do_repasse, 'devolvido':t.devolvido, 'data_devolvida':t.data_devolvida, 'data_pretendida':t.data_pretendida, 
+                                                         'juros_normal':t.juros_normal, 'juros_mensal_atraso':t.juros_mensal_atraso})
             else:
                 print('\nEste cliente não concedeu empréstimos a ninguém. \n')
 
             if eh_pes:
                 if len(cliente.trocas_feitas) > 0:
                     print('\n- TROCAS CAMBIAIS FEITAS: \n')
-                    for trocas in cliente.trocas_feitas:
-                        for t in trocas:
-                            self.__tela_troca.mostrar_dados({'id': t.id, 'id_pessoa':cliente.id, 'data': t.data, 
-                                                            'moeda_entrada': t.moeda_entrada.nome, 'moeda_saida': t.moeda_saida.nome, 
-                                                            'quantidade_entrada': t.quantidade_entrada, 'quantidade_saida': t.quantidade_saida, 
-                                                            'juros': t.porcentagem_juros})   
+                    for t in cliente.trocas_feitas:
+                        self.__tela_troca.mostrar_dados({'id': t.id, 'id_pessoa':cliente.id, 'data': t.data, 
+                                                        'moeda_entrada': t.moeda_entrada, 'moeda_saida': t.moeda_saida, 
+                                                        'quantidade_entrada': t.quantidade_entrada, 'quantidade_saida': t.quantidade_saida, 
+                                                        'juros': t.porcentagem_juros})   
                 else:
                     print('\nEste cliente não fez nenhuma troca cambial. \n')
         elif eh_pes != None:
