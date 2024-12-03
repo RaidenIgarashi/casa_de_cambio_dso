@@ -23,7 +23,7 @@ class InicializadorSistema():
 
     def abre_tela(self):
         opcoes = {1: self.cadastra_cliente, 2: self.cadastra_moeda, 3: self.cadastra_troca, 
-                  4: self.cadastra_emprestimo, 0:self.encerra_sistema}   
+                  4: self.cadastra_emprestimo, 5: self.gera_relatorio, 0:self.encerra_sistema}   
 
         while True:
             opcao_escolhida = self.__tela_inicializador.tela_opcoes()
@@ -50,3 +50,5 @@ class InicializadorSistema():
     def cadastra_moeda(self):
         self.__controlador_moeda.abre_tela()
     
+    def gera_relatorio(self):
+        pass

@@ -4,7 +4,7 @@ from telas.telaEmprestimo import TelaEmprestimo
 from telas.telaTroca import TelaTroca
 from entidades.organizacao import Organizacao
 from entidades.pessoa import Pessoa
-from controladores.funcoes import eh_pessoa
+from funcoes import eh_pessoa
 
 class ControladorCliente(Controlador):
     def __init__(self, controlador_sistema):
@@ -16,8 +16,8 @@ class ControladorCliente(Controlador):
         self.__organizacoes = [Organizacao('UFSC', "11111"), Organizacao('McDonalds', "54321")]
 
     def abre_tela(self):
-        opcoes = {1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.altera, 
-                  5: self.mostra_todas, 6: self.mostra_transacoes, 0: self.voltar_tela}
+        opcoes = {1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 
+                  5: self.altera, 6: self.mostra_transacoes, 0: self.voltar_tela}
         while True:
             opcao_escolhida = self.__tela_cliente.tela_opcoes()
             if opcao_escolhida == None:

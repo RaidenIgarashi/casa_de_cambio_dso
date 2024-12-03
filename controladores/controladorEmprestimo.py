@@ -1,7 +1,7 @@
 from telas.telaEmprestimo import TelaEmprestimo
 from entidades.emprestimo import Emprestimo
 from abstratas.absControlador import Controlador
-from controladores.funcoes import eh_pessoa
+from funcoes import eh_pessoa
 from datetime import datetime
 
 class ControladorEmprestimo(Controlador):

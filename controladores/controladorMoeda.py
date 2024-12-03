@@ -65,7 +65,7 @@ class ControladorMoeda(Controlador):
     def abre_tela(self):
         opcoes = {0: self.voltar_tela, 1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 5: self.altera}
         while True:
-            opcao_escolhida = self.__tela.tela_opcoes()
+            opcao_escolhida = self.__tela.init_opcoes()
             if opcao_escolhida == None:
                 pass
             else:
