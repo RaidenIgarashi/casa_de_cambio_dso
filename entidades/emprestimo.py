@@ -18,8 +18,6 @@ class Emprestimo:
         self.__juros_normal = juros_normal
         self.__juros_mensal_atraso = juros_mensal_atraso
         self.__devolvido = devolvido
-        self.__devolucao = Devolucao(data_do_repasse, data_pretendida, juros_normal, juros_mensal_atraso, 
-                                     devolvido, data_devolvida, quantia_repassada)
 
     @property
     def id(self):
