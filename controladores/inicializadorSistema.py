@@ -33,9 +33,6 @@ class InicializadorSistema():
                 opcoes[opcao_escolhida]()  
 
     def encerra_sistema(self):
-        print('***')
-        print('Sistema desligando...')
-        print('***')
         quit()
 
     def cadastra_cliente(self):

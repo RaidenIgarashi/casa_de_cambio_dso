@@ -2,12 +2,14 @@ from abstratas.absControlador import Controlador
 from entidades.moeda import Moeda
 from telas.telaMoeda import TelaMoeda
 from DAOs.moeda_dao import MoedaDAO
+from datetime import datetime as dt
 
 class ControladorMoeda(Controlador):
-    def __init__(self, controlador_sistema):
+    def __init__(self, controlador_sistema, registrador):
         self.__moeda_DAO = MoedaDAO()
         self.__tela = TelaMoeda()
         self.__controlador_sistema = controlador_sistema
+        self.__registrador = registrador
 
     def inclui(self):
         dados = self.__tela.cadastrar_dados()
@@ -22,6 +24,8 @@ class ControladorMoeda(Controlador):
                 print()
                 return
             self.__moeda_DAO.add(Moeda(dados['nome'], dados['regioes'], dados['cifra'], dados['valor']))
+            self.__registrador.add_operacao('inclusao', f"Inclusao da Moeda -{dados['nome']}-, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+            
 
     def exclui(self):
         nome = self.__tela.excluir()

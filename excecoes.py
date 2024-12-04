@@ -3,9 +3,9 @@ class OpcaoDigitadaIncorretamente(Exception):
         self.msg = 'Opção digitada incorretamente. Tente Novamente'
         super().__init__(self.msg)
 
-class ValorNaoNumerico(Exception):
-    def __init__(self):
-        self.msg = 'O valor digitado não é numérico'
+class NaoNumericoGeral(Exception):
+    def __init__(self, variavel):
+        self.msg = f"O valor de '{variavel}' digitado não é numérico"
         super().__init__(self.msg)
 
 class NomeComDigito(Exception):
@@ -13,12 +13,18 @@ class NomeComDigito(Exception):
         self.msg = f'Não pode haver números ou dígitos no nome'
         super().__init__(self.msg)
 
-class ComCaractere(Exception):
-    def __init__(self, tipo_correto):
-        self.msg = f'Só pode haver {tipo_correto} na identidade do Cliente'
+class IdNaoNumerico(Exception):
+    def __init__(self):
+        self.msg = f'Não pode haver caracteres não numéricos na identidade do Clientes'
         super().__init__(self.msg)
 
 class NaoInteiro(Exception):
-    def __init__(self, var):
-        self.msg = f'O valor de {var} não é um número, ou não é um Inteiro'
+    def __init__(self, variavel):
+        self.msg = f"O valor de '{variavel}' precisa ser um Número e ser Inteiro"
         super().__init__(self.msg)
+
+class NenhumClienteRegistrado(Exception):
+    def __init__(self):
+        self.msg = "\n## Nenhum cliente registrado com esta identidade ##\n"
+        super().__init__(self.msg)
+        

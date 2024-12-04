@@ -9,6 +9,11 @@ class TelaCliente(Tela):
     def __init__(self):
         self.__window = None
         self.init_opcoes()
+    def close(self):
+        self.__window.Close()
+    def open(self):
+        botao, valores = self.__window.Read()
+        return botao, valores
         
     def init_opcoes(self):
         sg.change_look_and_feel('DarkPurple')
@@ -45,6 +50,18 @@ class TelaCliente(Tela):
         self.close()
         return opcao
 
+    def ver_dados(self):
+        sg.change_look_and_feel('Purple')
+        layout = [
+            [sg.Text('Digite o cpf/cnpj do cliente que deseja achar: '), sg.InputText('', key='id')],
+            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
+        ]
+        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
+        botao, valores = self.open()
+        self.close()
+        if eh_numerico(valores['id'], "identidade"):
+            return valores['id']
+    
 
     def cadastrar_dados(self):
         layout = [ 
@@ -56,7 +73,7 @@ class TelaCliente(Tela):
         
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
-        nome, id = valores['nome'], valores['id']
+        self.close()
 
         layout = [
             [sg.Text(f'NOME: '), sg.InputText('', key='nome')],
@@ -66,32 +83,39 @@ class TelaCliente(Tela):
         if valores['1']:
             layout.append([sg.Text(f'IDADE: '), sg.InputText('', key='idade')])
             pessoa = True
+        layout.append([sg.Cancel('Voltar'), sg.Button('Confirmar')])
 
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
+        self.close()
+        
         nome, id = valores['nome'], valores['id']
         if pessoa:
             idade = valores['idade']
-        self.close()
 
         corretos = True
-        for char in nome:
+        for char in nome:      # nome precisa ser só letras
             if char.isnumeric() and pessoa:
                 corretos = False
-                raise NomeComNumero('pessoa')
-        for char in id:
+                raise NomeComDigito()
+        for char in id:       # id precisa ser só numeros
             if not char.isnumeric():
                 corretos = False
-                raise ComCaractere('identidade')
-        if pessoa and not isinstance(idade, int):
-            corretos = False
-            raise NaoInteiro('idade')
+                raise IdNaoNumerico
+        if pessoa:
+            try:   # idade precisa ser inteiro
+                int(idade) 
+            except:
+                corretos = False
+                raise NaoInteiro('idade')
+        
         if corretos:
             lista = {"nome": nome, "id": id}
             if pessoa:
                 lista["idade"] = idade
             return lista 
-
+        else:
+            return None        # se algo estiver errado retorna None
 
     def alterar_dados(self):
         sg.change_look_and_feel('DarkYellow')
@@ -102,7 +126,7 @@ class TelaCliente(Tela):
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
         self.close()
-        if eh_numerico(valores['id']):
+        if eh_numerico(valores['id'], "identidade"):
             return valores['id']
     
     def mostrar_dados(self, dados_cliente):
@@ -125,7 +149,7 @@ ID: {dados_cliente["id"]}
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
         self.close()
-        if eh_numerico(valores['id']):
+        if eh_numerico(valores['id'], "identidade"):
             return valores['id']
     
     def ver_transacoes(self):
@@ -137,27 +161,8 @@ ID: {dados_cliente["id"]}
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
         self.close()
-        if eh_numerico(valores['id']):
+        if eh_numerico(valores['id'], "identidade"):
             return valores['id']
 
-    def ver_dados(self):
-        sg.change_look_and_feel('DarkPurple')
-        layout = [
-            [sg.Text('Digite o cpf/cnpj do cliente que deseja achar: '), sg.InputText('', key='id')],
-            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
-        ]
-        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
-        botao, valores = self.open()
-        self.close()
-        if eh_numerico(valores['id']):
-            return valores['id']
-    
     def mostrar_msg(self, msg):
         super().mostrar_msg(msg)
-    
-    def close(self):
-        self.__window.Close()
-
-    def open(self):
-        botao, valores = self.__window.Read()
-        return botao, valores

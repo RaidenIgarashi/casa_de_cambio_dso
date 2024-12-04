@@ -6,6 +6,11 @@ class TelaMoeda(Tela):
     def __init__(self):
         self.__window = None
         self.init_opcoes()
+    def close(self):
+        self.__window.Close()
+    def open(self):
+        botao, valores = self.__window.Read()
+        return botao, valores
 
     def init_opcoes(self):
         sg.change_look_and_feel('DarkPurple')
@@ -59,7 +64,7 @@ class TelaMoeda(Tela):
         for char in nome:
             if char.isnumeric():
                 corretos = False
-                raise NaoExisteComNumero('moeda')
+                raise NomeComDigito()
         try:
             if '.' not in valor:
                 valor = int(valor)
@@ -115,10 +120,3 @@ class TelaMoeda(Tela):
 
     def mostrar_msg(self, msg):
         sg.Popup(msg)
-
-    def close(self):
-        self.__window.Close()
-
-    def open(self):
-        botao, valores = self.__window.Read()
-        return botao, valores

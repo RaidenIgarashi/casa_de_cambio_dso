@@ -1,6 +1,5 @@
 from abstratas.absCliente import Cliente
 from entidades.moeda import Moeda
-from entidades.devolucao import Devolucao
 from datetime import date
 
 

@@ -2,15 +2,16 @@ from telas.telaEmprestimo import TelaEmprestimo
 from entidades.emprestimo import Emprestimo
 from abstratas.absControlador import Controlador
 from funcoes import eh_pessoa
-from datetime import datetime
+from datetime import datetime as dt
 
 class ControladorEmprestimo(Controlador):
-    def __init__(self, controlador_sistema, controlador_moeda, controlador_cliente):
+    def __init__(self, controlador_sistema, controlador_moeda, controlador_cliente, registrador):
         self.__controlador_sistema = controlador_sistema
         self.__emprestimos = []
         self.__tela = TelaEmprestimo()
         self.__moeda = controlador_moeda
         self.__cliente = controlador_cliente
+        self.__registrador = registrador
         
 
     def inclui(self):

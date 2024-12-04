@@ -1,6 +1,6 @@
 from entidades.pessoa import Pessoa
 from entidades.organizacao import Organizacao
-from excecoes import ComCaractere, NomeComDigito, ValorNaoNumerico
+from excecoes import *
 
 
 def eh_pessoa(info): # funcao para facilitar de ver se é pessoa ou organizacao (por id ou por objeto msm)
@@ -14,26 +14,25 @@ def eh_pessoa(info): # funcao para facilitar de ver se é pessoa ou organizacao 
             elif len(info) == 5:
                 return False
             else: 
-                print('\n## a quantidade de números não é a de uma identidade ##\n')
                 return None
         elif isinstance(info, Pessoa):
             return True
         elif isinstance(info, Organizacao):
             return False
         else:
-            print('\n## erro interno: id em formato inválido ##\n') 
+            print('\n## erro interno: o objeto não é uma identidade. ##\n')
 
-def eh_numerico(x):
+def eh_numerico(valor, variavel):
     numerico = True
     try:
-        for c in x:
+        for c in valor:
             if not c.isnumeric():
                 numerico = False
         if not numerico:
-            raise ComCaractere('números')
+            raise NaoNumericoGeral(variavel)
         return numerico
     except:
-        raise ComCaractere('números')
+        raise NaoNumericoGeral(variavel)
 
 def eh_alpha(x):
     alpha = True
