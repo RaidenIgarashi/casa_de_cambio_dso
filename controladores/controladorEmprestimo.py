@@ -2,16 +2,17 @@ from telas.telaEmprestimo import TelaEmprestimo
 from entidades.emprestimo import Emprestimo
 from abstratas.absControlador import Controlador
 from funcoes import eh_pessoa
+from excecoes import *
 from datetime import datetime as dt
 
 class ControladorEmprestimo(Controlador):
-    def __init__(self, controlador_sistema, controlador_moeda, controlador_cliente, registrador):
+    def __init__(self, controlador_sistema, controlador_moeda, controlador_cliente, relatorio):
         self.__controlador_sistema = controlador_sistema
+        self.__relatorio = relatorio
         self.__emprestimos = []
         self.__tela = TelaEmprestimo()
         self.__moeda = controlador_moeda
         self.__cliente = controlador_cliente
-        self.__registrador = registrador
         
 
     def inclui(self):
@@ -31,39 +32,38 @@ class ControladorEmprestimo(Controlador):
                 if moeda is None:
                     raise ValueError(dados['moeda'])
             except ValueError as e:
-                print()
+                self.__tela.mostrar_dados()
                 if is_cliente:
-                    print(f'Não existe cliente com identidade "{e}" registrado')
+                    raise NaoFoiEncontradoComEsteId('cliente')
                 else:
-                    print(f'A moeda "{e}" não está registrada')
-                print()
-                return
+                    raise MoedaNaoEncontrada
             emp = Emprestimo(dados['id'], cliente, emprestador, moeda, dados['quantia_repassada'], 
                              dados['data_do_repasse'], dados['data_pretendida'], dados['juros_normal'], 
                              dados['juros_mensal_atraso'], dados['devolvido'], dados['data_devolvida'])
             self.__emprestimos.append(emp)
             emp.cliente.emprestimos_pedidos.append(emp)
             emp.emprestador.emprestimos_concedidos.append(emp)
+            self.__tela.mostrar_msg(f'Emprestimo de id {dados['id']} adicionado com sucesso')
+            self.__relatorio.add_operacao('inclusao', f"Inclusao do Emprestimo de id '{dados['id']}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
 
 
     def calcula_juros(self):
-        id = self.__tela.ver_juros()
-        emp = self.pega_objeto(id)
-        if emp is None:
-            print()
-            print('## não foi encontrado empréstimo com esse ID ##')
-            print()
-        else:
-            if emp.devolvido == True:
-                data = emp.data_devolvida
-                info = ['(Empréstimo já devolvido)', 'tinha']
-            else:
-                data = self.__tela.escolher_data()
-                data = datetime.strptime(data, '%d/%m/%Y')
-                info = ['(Data escolhida)', 'teria']
-            juros = emp.devolucao.calcula_juros(data)
-            return(f'Na data {data}, o empréstimo de id {id} {info[1]} um acúmulo \
-                   total de {emp.moeda.cifra}{juros} em juros | {info[0]}')
+        pass
+    #     id = self.__tela.ver_juros()
+    #     emp = self.pega_objeto(id)
+    #     if emp is None:
+    #         raise NaoFoiEncontradoComEsteId('emprestimo')
+    #     else:
+    #         if emp.devolvido == True:
+    #             data = emp.data_devolvida
+    #             info = ['(Empréstimo já devolvido)', 'tinha']
+    #         else:
+    #             data = self.__tela.escolher_data()
+    #             data = dt.strptime(data, '%d/%m/%Y')
+    #             info = ['(Data escolhida)', 'teria']
+    #         juros = emp.devolucao.calcula_juros(data)
+    #         return(f'Na data {data}, o empréstimo de id {id} {info[1]} um acúmulo \
+    #                total de {emp.moeda.cifra}{juros} em juros | {info[0]}')
         
 
     def emprestimo_devolvido(self):
@@ -74,36 +74,32 @@ class ControladorEmprestimo(Controlador):
         for emp in self.__emprestimos:
             if id == emp.id:
                 if emp.devolvido == True:
-                    print(f'## empréstimo já devolvido em {emp.data_devolvida}##')
+                    self.__tela.mostrar_dados(f'## empréstimo já devolvido em {emp.data_devolvida}##')
                 else:
                     emp.devolvido = True
                     emp.data_devolvida = data
+                    self.__relatorio.add_operacao('alteracao', f"Emprestimo de id '{emp.id}' registrado como devolvido na data {emp.data_devolvida}; registro feito {dt.now().strftime('dia %d/%m/%Y, às %H:%M')}")
                 existe = True
         if not existe:
-            print()
-            print('## não foi encontrado empréstimo com esse ID ##')
-            print()
+            raise NaoFoiEncontradoComEsteId('emprestimo')
 
     def mostra_dados(self):
         id = self.__tela.ver_dados()
         emp = self.pega_objeto(id)
         if emp is None:
-            print()
-            print('## não foi encontrado empréstimo com esse ID ##')
-            print()
+            raise NaoFoiEncontradoComEsteId('emprestimo')
         else:
-
             self.__tela.mostrar_dados({'id':emp.id, 'cliente_id':emp.cliente.id, 'emprestador_id':emp.emprestador.id, 
                                        'moeda':emp.moeda, 'quantia_repassada':emp.quantia_repassada, 'data_do_repasse':emp.data_do_repasse, 
                                        'data_devolvida':emp.data_devolvida, 'data_pretendida':emp.data_pretendida, 
                                        'juros_normal':emp.juros_normal, 'juros_mensal_atraso':emp.juros_mensal_atraso, 'devolvido': emp.devolvido})
+            self.__relatorio.add_operacao('mostragem', f"Mostragem de dados do Empréstimo '{emp.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
 
     def pega_objeto(self, id):
         for emp in self.__emprestimos:
             if id == emp.id:
                 return emp
         return None
-        
 
     def exclui(self):
         id = self.__tela.excluir()
@@ -112,11 +108,10 @@ class ControladorEmprestimo(Controlador):
             self.__emprestimos.remove(emprestimo)
             emprestimo.cliente.emprestimos_pedidos.remove(emprestimo)
             emprestimo.emprestador.emprestimos_concedidos.remove(emprestimo)
-            
+            self.__relatorio.add_operacao('exclusao', f"Exclusão do Empréstimo '{emprestimo.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+            self.__tela.mostrar_msg(f"\n# Exclusão do empréstimo {emprestimo.nome} feita com sucesso #\n")
         else:
-            print()
-            print('## não foi encontrado empréstimo com esse ID ##')
-            print()
+            raise NaoFoiEncontradoComEsteId('emprestimo')
 
     def altera(self):
         id = self.__tela.alterar_dados()
@@ -130,23 +125,20 @@ class ControladorEmprestimo(Controlador):
                      emp.data_devolvida, emp.data_pretendida, emp.juros_normal, emp.juros_mensal_atraso, emp.devolvido]
             for d in range(len(dados_alterar)):
                 dados_alterar[d] = novos_dados[nomes[d]]
-
+            self.__relatorio.add_operacao('alteracao', f"Alteracao de dados do Empréstimo '{emp.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
         else:
-            print()
-            print('## não foi encontrado empréstimo com esse ID ##')
-            print()
+            raise NaoFoiEncontradoComEsteId('emprestimo')
 
     def mostra_todas(self):
         if len(self.__emprestimos) == 0:
-            print()
-            print('## Nenhum empréstimo registrado ##')
-            print()
+            raise NenhumRegistrado('empréstimo')
         else:
             for emp in self.__emprestimos:
                 self.__tela.mostrar_dados({'id':emp.id, 'cliente_id':emp.cliente.id, 'emprestador_id':emp.emprestador.id, 
                                        'moeda':emp.moeda, 'quantia_repassada':emp.quantia_repassada, 'data_do_repasse':emp.data_do_repasse, 
                                        'data_devolvida':emp.data_devolvida, 'data_pretendida':emp.data_pretendida, 
                                        'juros_normal':emp.juros_normal, 'juros_mensal_atraso':emp.juros_mensal_atraso, 'devolvido': emp.devolvido})
+            self.__relatorio.add_operacao('mostragem', f"Mostragem de todos os empréstimos registrados, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
     
     def abre_tela(self):
         opcoes = {0: self.volta_tela, 1: self.inclui, 2: self.mostra_dados, 3: self.exclui, 

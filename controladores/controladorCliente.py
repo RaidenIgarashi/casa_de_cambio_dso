@@ -9,10 +9,10 @@ from excecoes import *
 from datetime import datetime as dt
 
 class ControladorCliente(Controlador):
-    def __init__(self, controlador_sistema, registrador):
+    def __init__(self, controlador_sistema, relatorio):
         self.__controlador_sistema = controlador_sistema
-        self.__registrador = registrador
-        self.__tela_cliente = TelaCliente()
+        self.__relatorio = relatorio
+        self.__tela = TelaCliente()
         self.__tela_emprestimo = TelaEmprestimo()
         self.__tela_troca = TelaTroca()
         self.__pessoas = [Pessoa('Yan', "333", 19), Pessoa('Raiden', "123", 20)]
@@ -22,39 +22,43 @@ class ControladorCliente(Controlador):
         opcoes = {1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 
                   5: self.altera, 6: self.mostra_transacoes, 0: self.voltar_tela}
         while True:
-            opcao_escolhida = self.__tela_cliente.tela_opcoes()
+            opcao_escolhida = self.__tela.tela_opcoes()
             if opcao_escolhida == None:
                 pass
             else:
                 opcoes[opcao_escolhida]()  
                 
     def inclui(self):
-        dados_cliente = self.__tela_cliente.cadastrar_dados()
+        dados_cliente = self.__tela.cadastrar_dados()
         if dados_cliente is not None:   # se nada for digitado incorretamente
             if 'idade' in dados_cliente: 
                 self.__pessoas.append(Pessoa(dados_cliente['nome'], dados_cliente['id'], dados_cliente['idade']))
             else:
                 self.__organizacoes.append(Organizacao(dados_cliente['nome'], dados_cliente['id']))
+            self.__tela.mostrar_msg(f"Cliente '{dados_cliente['nome']}' adicionado com sucesso")
+            self.__relatorio.add_operacao('inclusao', f"Inclusao do Cliente '{dados_cliente['nome']}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
                 
 
     def mostra_dados(self):
-        id = self.__tela_cliente.ver_dados()
+        id = self.__tela.ver_dados()
         existente = False
         if id != None:  # se o id nao for digitado incorretamente
             for pessoa in self.__pessoas:
                 if pessoa.id == id:
-                    self.__tela_cliente.mostrar_dados({'nome': pessoa.nome, 'id': pessoa.id, 'idade':pessoa.idade})
+                    self.__tela.mostrar_dados({'nome': pessoa.nome, 'id': pessoa.id, 'idade':pessoa.idade})
                     existente = True
+                    self.__relatorio.add_operacao('mostragem', f"Mostragem de dados do Cliente '{pessoa.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             for org in self.__organizacoes:
                 if org.id == id:
-                    self.__tela_cliente.mostrar_dados({'nome': org.nome, 'id': org.id})
+                    self.__tela.mostrar_dados({'nome': org.nome, 'id': org.id})
                     existente = True
+                    self.__relatorio.add_operacao('mostragem', f"Mostragem de dados do Cliente '{org.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             if not existente:
-                self.__tela_cliente.mostrar_msg("\n## Nenhum cliente registrado com esta identidade ##\n")
+                raise NaoFoiEncontradoComEsteId('cliente')
 
 
     def exclui(self):
-        id = self.__tela_cliente.excluir()
+        id = self.__tela.excluir()
         cliente = self.pega_objeto(id)
         if id != None:   # se o id nao for digitado incorretamente
             if cliente != None: # se o cliente existir
@@ -62,43 +66,46 @@ class ControladorCliente(Controlador):
                     self.__pessoas.remove(cliente)
                 else:
                     self.__organizacoes.remove(cliente)
-                self.__tela_cliente.mostrar_msg(f'Cliente "{cliente.nome}" excluído.')
+                self.__tela.mostrar_msg(f'Cliente "{cliente.nome}" excluído.')
+                self.__relatorio.add_operacao('exclusao', f"Exclusão do Cliente '{cliente.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
-                self.__tela_cliente.mostrar_msg('\n## Nenhum cliente cadastrado com esta identidade ##\n')
+                raise NaoFoiEncontradoComEsteId('cliente')
 
     def mostra_todas(self):
         if len(self.__organizacoes) > 0:
             for org in self.__organizacoes:
-                self.__tela_cliente.mostrar_dados({'nome': org.nome, 'id': org.id})
+                self.__tela.mostrar_dados({'nome': org.nome, 'id': org.id})
         else:
-            self.__tela_cliente.mostrar_msg("Nenhuma Organização cadastrada.\n")
+            self.__tela.mostrar_msg("Nenhuma Organização cadastrada.\n")
 
         if len(self.__pessoas) > 0:
             for pessoa in self.__pessoas:
-                self.__tela_cliente.mostrar_dados({'nome': pessoa.nome, 'id': pessoa.id, 'idade': pessoa.idade})
+                self.__tela.mostrar_dados({'nome': pessoa.nome, 'id': pessoa.id, 'idade': pessoa.idade})
         else:
-            self.__tela_cliente.mostrar_msg("Nenhuma Pessoa cadastrada.\n")
+            self.__tela.mostrar_msg("Nenhuma Pessoa cadastrada.\n")
+        self.__relatorio.add_operacao('mostragem', f"Mostragem de todos as Pessoas e Organizacoes registradas, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
         
 
     def altera(self):
-        id = self.__tela_cliente.alterar_dados()
+        id = self.__tela.alterar_dados()
         id_a_alterar = self.pega_objeto(id)
         if id != None:   # se o id nao for digitado incorretamente
             if id_a_alterar != None:  # se o id estiver registrado
                 lista = self.__pessoas if eh_pessoa(id) else self.__organizacoes
                 for cliente in lista:
                     if cliente.id == id_a_alterar.id:
-                        novo_cliente = self.__tela_cliente.cadastrar_dados()
+                        novo_cliente = self.__tela.cadastrar_dados()
                         cliente.nome = novo_cliente['nome']
                         cliente.id = novo_cliente['id']
                         if len(id) == 3:
                             cliente.idade = novo_cliente['idade']
+                self.__relatorio.add_operacao('alteracao', f"Alteracao dos dados do Cliente '{cliente.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
-                self.__tela_cliente.mostrar_msg('\n## Cliente não existe ##\n')
+                raise NaoFoiEncontradoComEsteId('cliente')
             
     
     def mostra_transacoes(self):
-        id = self.__tela_cliente.ver_dados()
+        id = self.__tela.ver_dados()
         existente = False
         eh_pes = eh_pessoa(id)
         if eh_pes == True: # se for cpf
@@ -140,8 +147,9 @@ class ControladorCliente(Controlador):
                                                         'juros': t.porcentagem_juros})   
                 else:
                     self.__tela_emprestimo.mostrar_dados('\nEste cliente não fez nenhuma troca cambial. \n')
+            self.__relatorio.add_operacao('mostragem', f"Mostragem de todas as transações do cliente '{cliente.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
         elif eh_pes != None:
-            raise NenhumClienteRegistrado()
+            raise NenhumRegistrado('cliente')
             
     def pega_objeto(self, id):  # funcao interna
         for cli in self.__pessoas + self.__organizacoes:

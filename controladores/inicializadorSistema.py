@@ -2,16 +2,18 @@ from controladores.controladorCliente import ControladorCliente
 from controladores.controladorTroca import ControladorTroca
 from controladores.controladorEmprestimo import ControladorEmprestimo
 from controladores.controladorMoeda import ControladorMoeda
+from controladores.relatorio import Relatorio
 from telas.telaInicializador import TelaInicializador
 
 
 class InicializadorSistema():
     def __init__(self):
+        self.__relatorio = Relatorio()
         self.__tela_inicializador = TelaInicializador()
-        self.__controlador_cliente = ControladorCliente(self)
-        self.__controlador_moeda = ControladorMoeda(self) 
-        self.__controlador_troca = ControladorTroca(self, self.__controlador_moeda, self.__controlador_cliente)
-        self.__controlador_emprestimo = ControladorEmprestimo(self, self.__controlador_moeda, self.__controlador_cliente)
+        self.__controlador_cliente = ControladorCliente(self, self.__relatorio)
+        self.__controlador_moeda = ControladorMoeda(self, self.__relatorio) 
+        self.__controlador_troca = ControladorTroca(self, self.__controlador_moeda, self.__controlador_cliente, self.__relatorio)
+        self.__controlador_emprestimo = ControladorEmprestimo(self, self.__controlador_moeda, self.__controlador_cliente, self.__relatorio)
        
 
     @property
@@ -48,4 +50,4 @@ class InicializadorSistema():
         self.__controlador_moeda.abre_tela()
     
     def gera_relatorio(self):
-        pass
+        self.__relatorio.gera_relatorio()
