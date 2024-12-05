@@ -71,7 +71,7 @@ class TelaMoeda(Tela):
             valor = float(valor)
         except:
             corretos = False
-            raise ValorNaoNumerico
+            raise NaoNumericoGeral('Valor')
         
         if corretos:
             return {"nome": nome, "regioes": regioes, "cifra": cifra, "valor": valor}

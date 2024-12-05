@@ -130,16 +130,21 @@ class TelaCliente(Tela):
             return valores['id']
     
     def mostrar_dados(self, dados_cliente):
-        infos = f"""--------INFORMAÇÕES DO CLIENTE--------
-NOME: {dados_cliente["nome"]}
-ID: {dados_cliente["id"]}
-"""
-        if "idade" in dados_cliente:
-            infos += f'IDADE: {dados_cliente["idade"]}'
-        infos += '\n'
-
-        sg.Popup(infos)
-
+        print(dados_cliente.values())
+        print(dados_cliente.keys())
+        layout = [
+            [sg.Text("INFORMAÇÕES DO CLIENTE")],
+            [sg.Table(values = list(list(dados_cliente.values())),
+                      headings = list(dados_cliente.keys()))],
+            [sg.Button("OK")]
+        ]
+        window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS", layout)
+        
+        while True:
+            event, values = window.read()
+            if event in (sg.WINDOW_CLOSED, "OK"):
+                break
+    
     def excluir(self):
         sg.change_look_and_feel('DarkRed')
         layout = [
@@ -165,4 +170,4 @@ ID: {dados_cliente["id"]}
             return valores['id']
 
     def mostrar_msg(self, msg):
-        super().mostrar_msg(msg)
+        sg.Popup(msg)

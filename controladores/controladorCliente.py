@@ -74,7 +74,7 @@ class ControladorCliente(Controlador):
     def mostra_todas(self):
         if len(self.__organizacoes) > 0:
             for org in self.__organizacoes:
-                self.__tela.mostrar_dados({'nome': org.nome, 'id': org.id})
+                self.__tela.mostrar_dados({'nome': org.nome, 'id': org.id, 'idade': ''})
         else:
             self.__tela.mostrar_msg("Nenhuma Organização cadastrada.\n")
 
@@ -120,22 +120,22 @@ class ControladorCliente(Controlador):
                     existente = True
         if existente:
             if len(cliente.emprestimos_pedidos) > 0:
-                self.__tela_emprestimo.mostrar_dados('\n- EMPRESTIMOS PEDIDOS: \n')
+                self.__tela_emprestimo.mostrar_msg('\n- EMPRESTIMOS PEDIDOS: \n')
                 for t in cliente.emprestimos_pedidos:
                     self.__tela_emprestimo.mostrar_dados({'id':t.id, 'cliente_id':t.cliente.id, 'emprestador_id':t.emprestador.id, 'moeda':t.moeda, 'quantia_repassada':t.quantia_repassada, 
                                                          'data_do_repasse':t.data_do_repasse, 'devolvido':t.devolvido, 'data_devolvida':t.data_devolvida, 'data_pretendida':t.data_pretendida, 
                                                          'juros_normal':t.juros_normal, 'juros_mensal_atraso':t.juros_mensal_atraso})
             else:
-                self.__tela_emprestimo.mostrar_dados('\nEste cliente não pediu nenhum empréstimo. \n')
+                self.__tela_emprestimo.mostrar_msg('\nEste cliente não pediu nenhum empréstimo. \n')
 
             if len(cliente.emprestimos_concedidos) > 0:
-                self.__tela_emprestimo.mostrar_dados('\n- EMPRESTIMOS CONCEDIDOS: \n')
+                self.__tela_emprestimo.mostrar_msg('\n- EMPRESTIMOS CONCEDIDOS: \n')
                 for t in cliente.emprestimos_concedidos:
                     self.__tela_emprestimo.mostrar_dados({'id':t.id, 'cliente_id':t.cliente.id, 'emprestador_id':t.emprestador.id, 'moeda':t.moeda, 'quantia_repassada':t.quantia_repassada, 
                                                          'data_do_repasse':t.data_do_repasse, 'devolvido':t.devolvido, 'data_devolvida':t.data_devolvida, 'data_pretendida':t.data_pretendida, 
                                                          'juros_normal':t.juros_normal, 'juros_mensal_atraso':t.juros_mensal_atraso})
             else:
-                self.__tela_emprestimo.mostrar_dados('\nEste cliente não concedeu empréstimos a ninguém. \n')
+                self.__tela_emprestimo.mostrar_msg('\nEste cliente não concedeu empréstimos a ninguém. \n')
 
             if eh_pes:
                 if len(cliente.trocas_feitas) > 0:
@@ -146,7 +146,7 @@ class ControladorCliente(Controlador):
                                                         'quantidade_entrada': t.quantidade_entrada, 'quantidade_saida': t.quantidade_saida, 
                                                         'juros': t.porcentagem_juros})   
                 else:
-                    self.__tela_emprestimo.mostrar_dados('\nEste cliente não fez nenhuma troca cambial. \n')
+                    self.__tela_emprestimo.mostrar_msg('\nEste cliente não fez nenhuma troca cambial. \n')
             self.__relatorio.add_operacao('mostragem', f"Mostragem de todas as transações do cliente '{cliente.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
         elif eh_pes != None:
             raise NenhumRegistrado('cliente')

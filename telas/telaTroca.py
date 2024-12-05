@@ -1,4 +1,5 @@
 from abstratas.absTela import Tela
+import PySimpleGUI as sg
 
 
 class TelaTroca(Tela):
@@ -117,4 +118,6 @@ class TelaTroca(Tela):
             print()
             return
 
+    def mostra_msg(self, msg):
+        sg.Popup(msg)
 
