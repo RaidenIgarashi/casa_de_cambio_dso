@@ -22,7 +22,7 @@ class ControladorCliente(Controlador):
         opcoes = {1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 
                   5: self.altera, 6: self.mostra_transacoes, 0: self.voltar_tela}
         while True:
-            opcao_escolhida = self.__tela.tela_opcoes()
+            opcao_escolhida = self.__tela.init_opcoes()
             if opcao_escolhida == None:
                 pass
             else:

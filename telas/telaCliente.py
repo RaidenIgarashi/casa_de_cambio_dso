@@ -1,50 +1,41 @@
 from abstratas.absTela import Tela
 from funcoes import *
 from excecoes import *
+from funcoes import *
 import PySimpleGUI as sg
 
-from funcoes import eh_numerico
 
 class TelaCliente(Tela):
     def __init__(self):
         self.__window = None
-        self.init_opcoes()
+        self.tela_opcoes()
     def close(self):
         self.__window.Close()
     def open(self):
         botao, valores = self.__window.Read()
         return botao, valores
         
-    def init_opcoes(self):
+    def tela_opcoes(self):
         sg.change_look_and_feel('DarkPurple')
         layout = [
-            [sg.Radio("1 - Ver dados de um Cliente", "RD_cliente", key='1')],
-            [sg.Radio("2 - Adicionar Cliente", "RD_cliente", key='2')],
-            [sg.Radio("3 - Excluir Cliente", "RD_cliente", key='3')],
-            [sg.Radio("4 - Listar todos Clientes", "RD_cliente", key='4')],
-            [sg.Radio("5 - Alterar Cliente", "RD_cliente", key='5')],
-            [sg.Radio("6 - Ver Transações de um Cliente", "RD_cliente", key='6')],
+            [sg.Radio("1 - Ver dados de um Cliente", "RDC", key='1')],
+            [sg.Radio("2 - Adicionar Cliente", "RDC", key='2')],
+            [sg.Radio("3 - Excluir Cliente", "RDC", key='3')],
+            [sg.Radio("4 - Listar todos Clientes", "RDC", key='4')],
+            [sg.Radio("5 - Alterar Cliente", "RDC", key='5')],
+            [sg.Radio("6 - Ver Transações de um Cliente", "RDC", key='6')],
             [sg.Cancel('Voltar'), sg.Button('Confirmar')]
         ]
         self.__window = sg.Window("CLIENTES").Layout(layout)
 
     
-    def tela_opcoes(self):
-        self.init_opcoes()
+    def init_opcoes(self):
+        self.tela_opcoes()
         botao, valores = self.open()
         opcao = 0
-        if valores['1']:
-            opcao = 1
-        if valores['2']:
-            opcao = 2
-        if valores['3']:
-            opcao = 3
-        if valores['4']:
-            opcao = 4
-        if valores['5']:
-            opcao = 5
-        if valores['6']:
-            opcao = 6
+        for x in range(1, 7):
+            if valores[f'{x}']:
+                opcao = x
         if botao in (None, 'Voltar'):
             opcao = 0
         self.close()

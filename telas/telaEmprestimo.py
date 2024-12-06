@@ -1,29 +1,43 @@
 from abstratas.absTela import Tela
 from datetime import datetime
+import PySimpleGUI as sg
+
 
 class TelaEmprestimo(Tela):
+    def __init__(self):
+        self.__window = None
+        self.tela_opcoes()
+    def close(self):
+        self.__window.Close()
+    def open(self):
+        botao, valores = self.__window.Read()
+        return botao, valores
+    
     def tela_opcoes(self):
-        print('-------EMPRESTIMO-------')
-        print('1 - Registrar empréstimo')
-        print('2 - Ver empréstimo registrado')
-        print('3 - Excluir empréstimo')
-        print('4 - Alterar empréstimo')
-        print('5 - Registrar devolução de empréstimo')
-        print('6 - Listar todos empréstimos')
-        #print('7 - Calcular valor de juros de um empréstimo')
-        print('0 - Retornar')
-
-        try:
-            opcao = int(input("Escolha uma opção: "))
-            if 0 <= opcao <= 6:
-                print()
-                return opcao
-            else:
-                print("\n## Digite um número de 0 a 7. ##\n")
-                return None
-        except:
-            print("\n## Opção digitada incorretamente. Tente novamente. ##\n")
-            return None
+        sg.change_look_and_feel('DarkPurple')
+        layout = [
+            [sg.Radio("1 - Ver empréstimo registrado", "RDE", key='1')],
+            [sg.Radio("2 - Registrar empréstimo", "RDE", key='2')],
+            [sg.Radio("3 - Excluir empréstimo", "RDE", key='3')],
+            [sg.Radio("4 - Listar todos empréstimos", "RDE", key='4')],
+            [sg.Radio("5 - Alterar empréstimo", "RDE", key='5')],
+            [sg.Radio("6 - Registrar devolução de empréstimo", "RDE", key='6')],
+            # [sg.Radio("7 - Calcular valor de juros de um empréstimo", "RDE", key='7')],
+            [sg.Cancel('Voltar'), sg.Button('Confirmar')]
+        ]
+        self.__window = sg.Window("EMPRESTIMOS").Layout(layout)
+        
+    def init_opcoes(self):
+        self.tela_opcoes()
+        botao, valores = self.open()
+        opcao = 0
+        for x in range(1, 8):
+            if valores[f'{x}']:
+                opcao = x
+        if botao in (None, 'Voltar'):
+            opcao = 0
+        self.close()
+        return opcao
 
     def cadastrar_dados(self):
         print('-------REGISTRANDO EMPRÉSTIMO--------')

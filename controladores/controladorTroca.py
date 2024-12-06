@@ -12,6 +12,16 @@ class ControladorTroca(Controlador):
         self.__tela = TelaTroca()
         self.__moeda = controlador_moeda
         self.__cliente = controlador_cliente
+        
+    def abre_tela(self):
+        opcoes = {0: self.volta_tela, 1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 5: self.altera}
+        
+        while True:
+            opcao_escolhida = self.__tela.init_opcoes()
+            if opcao_escolhida == None:
+                pass
+            else:
+                opcoes[opcao_escolhida]()  
 
     def inclui(self):
         dados = self.__tela.cadastrar_dados()
@@ -116,16 +126,6 @@ class ControladorTroca(Controlador):
             if id == troca.id:
                 return troca
         return None
-
-    def abre_tela(self):
-        opcoes = {0: self.volta_tela, 1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 5: self.altera}
-        
-        while True:
-            opcao_escolhida = self.__tela.tela_opcoes()
-            if opcao_escolhida == None:
-                pass
-            else:
-                opcoes[opcao_escolhida]()  
 
     def volta_tela(self):
         self.__controlador_sistema.abre_tela()

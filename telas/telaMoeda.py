@@ -12,33 +12,26 @@ class TelaMoeda(Tela):
         botao, valores = self.__window.Read()
         return botao, valores
 
-    def init_opcoes(self):
+    def tela_opcoes(self):
         sg.change_look_and_feel('DarkPurple')
         layout = [
-            [sg.Radio("1 - Ver dados Moeda", "RD1", key='1')],
-            [sg.Radio("2 - Inclui Moeda", "RD1", key='2')],
-            [sg.Radio("3 - Excluir Moeda", "RD1", key='3')],
-            [sg.Radio("4 - Listar Moeda", "RD1", key='4')],
-            [sg.Radio("5 - Alterar Moeda", "RD1", key='5')],
-            [sg.Radio("0 - Encerrar :(", "RD1", key='0')],
-            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+            [sg.Radio("1 - Ver dados Moeda", "RDM", key='1')],
+            [sg.Radio("2 - Inclui Moeda", "RDM", key='2')],
+            [sg.Radio("3 - Excluir Moeda", "RDM", key='3')],
+            [sg.Radio("4 - Listar todas as Moedas", "RDM", key='4')],
+            [sg.Radio("5 - Alterar Moeda", "RDM", key='5')],
+            [sg.Cancel('Voltar'), sg.Button('Confirmar')]
         ]
         self.__window = sg.Window("MOEDAS").Layout(layout)
 
-
-    def tela_opcoes(self):
-        self.init_opcoes()
+    def init_opcoes(self):
+        self.tela_opcoes()
         botao, valores = self.open()
         opcao = 0
-        if valores['1']:
-            opcao = 1
-        if valores['2']:
-            opcao = 2
-        if valores['3']:
-            opcao = 3
-        if valores['4']:
-            opcao = 4
-        if valores['0'] or botao in (None, 'Cancelar'):
+        for x in range(1, 6):
+            if valores[f'{x}']:
+                opcao = x
+        if botao in (None, 'Voltar'):
             opcao = 0
         self.close()
         return opcao

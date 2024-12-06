@@ -13,7 +13,16 @@ class ControladorEmprestimo(Controlador):
         self.__tela = TelaEmprestimo()
         self.__moeda = controlador_moeda
         self.__cliente = controlador_cliente
-        
+    
+    def abre_tela(self):
+        opcoes = {0: self.volta_tela, 1: self.inclui, 2: self.mostra_dados, 3: self.exclui, 
+                      4: self.altera, 5: self.emprestimo_devolvido, 6: self.mostra_todas, 7: self.calcula_juros}
+        while True:
+            opcao_escolhida = self.__tela.init_opcoes()
+            if opcao_escolhida == None:
+                pass
+            else:
+                opcoes[opcao_escolhida]()  
 
     def inclui(self):
         dados = self.__tela.cadastrar_dados()
@@ -139,17 +148,6 @@ class ControladorEmprestimo(Controlador):
                                        'data_devolvida':emp.data_devolvida, 'data_pretendida':emp.data_pretendida, 
                                        'juros_normal':emp.juros_normal, 'juros_mensal_atraso':emp.juros_mensal_atraso, 'devolvido': emp.devolvido})
             self.__relatorio.add_operacao('mostragem', f"Mostragem de todos os empréstimos registrados, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
-    
-    def abre_tela(self):
-        opcoes = {0: self.volta_tela, 1: self.inclui, 2: self.mostra_dados, 3: self.exclui, 
-                      4: self.altera, 5: self.emprestimo_devolvido, 6: self.mostra_todas, 7: self.calcula_juros}
-        
-        while True:
-            opcao_escolhida = self.__tela.tela_opcoes()
-            if opcao_escolhida == None:
-                pass
-            else:
-                opcoes[opcao_escolhida]()  
 
     def volta_tela(self):
         self.__controlador_sistema.abre_tela()

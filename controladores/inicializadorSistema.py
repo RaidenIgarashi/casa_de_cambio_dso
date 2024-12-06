@@ -28,7 +28,7 @@ class InicializadorSistema():
                   4: self.cadastra_emprestimo, 5: self.gera_relatorio, 0:self.encerra_sistema}   
 
         while True:
-            opcao_escolhida = self.__tela_inicializador.tela_opcoes()
+            opcao_escolhida = self.__tela_inicializador.init_opcoes()
             if opcao_escolhida == None:
                 pass
             else:

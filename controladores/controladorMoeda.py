@@ -11,6 +11,15 @@ class ControladorMoeda(Controlador):
         self.__tela = TelaMoeda()
         self.__controlador_sistema = controlador_sistema
         self.__relatorio = relatorio
+        
+    def abre_tela(self):
+        opcoes = {0: self.voltar_tela, 1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 5: self.altera}
+        while True:
+            opcao_escolhida = self.__tela.init_opcoes()
+            if opcao_escolhida == None:
+                pass
+            else:
+                opcoes[opcao_escolhida]()  
 
     def inclui(self):
         dados = self.__tela.cadastrar_dados()
@@ -69,14 +78,6 @@ class ControladorMoeda(Controlador):
     def voltar_tela(self):
         self.__controlador_sistema.abre_tela()
 
-    def abre_tela(self):
-        opcoes = {0: self.voltar_tela, 1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 5: self.altera}
-        while True:
-            opcao_escolhida = self.__tela.init_opcoes()
-            if opcao_escolhida == None:
-                pass
-            else:
-                opcoes[opcao_escolhida]()  
 
     def mostra_dados(self):
         print('mostraDados')

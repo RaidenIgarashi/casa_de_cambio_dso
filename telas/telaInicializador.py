@@ -5,7 +5,7 @@ class TelaInicializador():
         self.__window = None
         self.init_components()
 
-    def tela_opcoes(self):
+    def init_opcoes(self):
         self.init_components()
         botao, valores = self.__window.Read()
         opcao = 0
