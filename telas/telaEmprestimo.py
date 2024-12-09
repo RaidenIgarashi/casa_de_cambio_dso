@@ -31,7 +31,7 @@ class TelaEmprestimo(Tela):
         self.tela_opcoes()
         botao, valores = self.open()
         opcao = 0
-        for x in range(1, 8):
+        for x in range(1, 7):
             if valores[f'{x}']:
                 opcao = x
         if botao in (None, 'Voltar'):
@@ -40,89 +40,195 @@ class TelaEmprestimo(Tela):
         return opcao
 
     def cadastrar_dados(self):
-        print('-------REGISTRANDO EMPRÉSTIMO--------')
-        try:
-            id = input('Digite um id novo para a transação: ')
-        except:
-            print()
-            print('## O ID deve ser um número ##')
-            print()
-            return
-        cliente_id = input('Digite o cpf/cnpj do cliente que pediu o empréstimo: ')
-        emprestador_id = input('Digite o cpf/cnpj do cliente que concedeu: ')
-        moeda = input('Digite o nome da moeda utilizada: ')
-        try:
-            quantia_repassada = float(input('Digite a quantia repassada nesta moeda: '))
-        except:
-            print()
-            print('## O valor digitado não é uma quantia ##')
-            print()
-        data_do_repasse = input('Digite a data em que foi feito o repasse [dd/mm/aaaa]: ')
-        data_do_repasse = datetime.strptime(data_do_repasse, '%d/%m/%Y')
-        data_pretendida = input('Digite a data máxima combinada para devolução [dd/mm/aaaa]: ')
-        data_pretendida = datetime.strptime(data_pretendida, '%d/%m/%Y')
-        try:
-            juros_normal = float(input('Digite a quantidade de juros normal (em %) que será aplicado: '))
-            juros_mensal_atraso = float(input('Digite a quantidade de juros (%) que será aplicado mensalmente em caso de atraso: '))
-        except:
-            print()
-            print('## Valor digitado não corresponde a juros ##')
-            print()
-        dev = int(input('O empréstimo já foi devolvido e está sendo apenas registrado? 0- não, 1- sim: '))
-        if dev == 1:
+        layout = [ 
+            [sg.Text('--------INFORMAÇÕES DA MOEDA--------')],
+            [sg.Text(f'ID DO EMPRESTIMO: '), sg.InputText('', key='id')],
+            [sg.Text(f'ID DO CLIENTE: '), sg.InputText('', key='id_cliente')],
+            [sg.Text(f'ID DO EMPRESTADOR: '), sg.InputText('', key='id_emprestador')],
+            [sg.Text(f'MOEDA: '), sg.InputText('', key='moeda')],
+            [sg.Text(f'QUANTIDADE PEDIDA: '), sg.InputText('', key='quantia_repassada')],
+            [sg.Text(f'DATA REPASSADA: '), sg.InputText('', key='data_repasse')],
+            [sg.Text(f'DATA DEVOLVIDA: '), sg.InputText('', key='data_devolvida')],
+            [sg.Text(f'DATA PRETENDIDA: '), sg.InputText('', key='data_pretendida')],         
+            [sg.Text(f'JUROS: '), sg.InputText('', key='juros')],
+            [sg.Text(f'JUROS DE ATRASO: '), sg.InputText('', key='juros_atraso')],
+            [sg.Text(f'DEVOLVIDO'), sg.Radio("SIM", "DEVOLVIDO", key="sim"),  sg.Radio("NÃO", "DEVOLVIDO", key="nao", default=True)],     
+            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
+        botao, valores = self.open()
+        id = valores['id']
+        id_cliente = valores['id_cliente']
+        id_emprestador = valores['id_emprestador']
+        moeda = valores['moeda']
+        quantia_repassada = float(valores['quantia_repassada'])
+        data_do_repasse = valores['data_repasse']
+        data_devolvida = valores['data_devolvida']
+        data_pretendida = valores['data_devolvida']
+        juros_normal = float(valores['juros'])
+        juros_mensal_atraso = float(valores['juros_atraso'])
+        if valores['sim']:
             devolvido = True
-            data_devolvida = input('Digite a data em que o empréstimo foi devolvido [dd/mm/aaaa]: ')
-            data_devolvida = datetime.strptime(data_devolvida, '%d/%m/%Y')
-        elif dev == 0:
-            devolvido = False
-            data_devolvida = None
-            
         else:
-            print("## opcao errada ##")
-        return {'id':id, 'cliente_id':cliente_id, 'emprestador_id':emprestador_id, 'moeda':moeda, 'quantia_repassada':quantia_repassada, 
-                'data_do_repasse':data_do_repasse, 'data_devolvida':data_devolvida, 'data_pretendida':data_pretendida, 
-                'juros_normal':juros_normal, 'juros_mensal_atraso':juros_mensal_atraso, 'devolvido': devolvido}
+            devolvido = False
+        self.close()
+        return {'id':id, 'cliente_id':id_cliente, 'emprestador_id':id_emprestador, 'moeda':moeda, 'quantia_repassada':quantia_repassada, 
+                 'data_do_repasse':data_do_repasse, 'data_devolvida':data_devolvida, 'data_pretendida':data_pretendida, 
+                 'juros_normal':juros_normal, 'juros_mensal_atraso':juros_mensal_atraso, 'devolvido': devolvido}
+        # print('-------REGISTRANDO EMPRÉSTIMO--------')
+        # try:
+        #     id = input('Digite um id novo para a transação: ')
+        # except:
+        #     print()
+        #     print('## O ID deve ser um número ##')
+        #     print()
+        #     return
+        # cliente_id = input('Digite o cpf/cnpj do cliente que pediu o empréstimo: ')
+        # emprestador_id = input('Digite o cpf/cnpj do cliente que concedeu: ')
+        # moeda = input('Digite o nome da moeda utilizada: ')
+        # try:
+        #     quantia_repassada = float(input('Digite a quantia repassada nesta moeda: '))
+        # except:
+        #     print()
+        #     print('## O valor digitado não é uma quantia ##')
+        #     print()
+        # data_do_repasse = input('Digite a data em que foi feito o repasse [dd/mm/aaaa]: ')
+        # data_do_repasse = datetime.strptime(data_do_repasse, '%d/%m/%Y')
+        # data_pretendida = input('Digite a data máxima combinada para devolução [dd/mm/aaaa]: ')
+        # data_pretendida = datetime.strptime(data_pretendida, '%d/%m/%Y')
+        # try:
+        #     juros_normal = float(input('Digite a quantidade de juros normal (em %) que será aplicado: '))
+        #     juros_mensal_atraso = float(input('Digite a quantidade de juros (%) que será aplicado mensalmente em caso de atraso: '))
+        # except:
+        #     print()
+        #     print('## Valor digitado não corresponde a juros ##')
+        #     print()
+        # dev = int(input('O empréstimo já foi devolvido e está sendo apenas registrado? 0- não, 1- sim: '))
+        # if dev == 1:
+        #     devolvido = True
+        #     data_devolvida = input('Digite a data em que o empréstimo foi devolvido [dd/mm/aaaa]: ')
+        #     data_devolvida = datetime.strptime(data_devolvida, '%d/%m/%Y')
+        # elif dev == 0:
+        #     devolvido = False
+        #     data_devolvida = None
+            
+        # else:
+        #     print("## opcao errada ##")
+        # return {'id':id, 'cliente_id':cliente_id, 'emprestador_id':emprestador_id, 'moeda':moeda, 'quantia_repassada':quantia_repassada, 
+        #         'data_do_repasse':data_do_repasse, 'data_devolvida':data_devolvida, 'data_pretendida':data_pretendida, 
+        #         'juros_normal':juros_normal, 'juros_mensal_atraso':juros_mensal_atraso, 'devolvido': devolvido}
 
     def mostrar_dados(self, dados_emprestimo):
-        print('--------INFORMAÇÕES DO EMPRÉSTIMO--------')
-        print(f'ID: {dados_emprestimo["id"]}')
-        print(f'CLIENTE: {dados_emprestimo["cliente_id"]}')
-        print(f'EMPRESTADOR: {dados_emprestimo["emprestador_id"]}')
-        print(f'VALOR: {dados_emprestimo["quantia_repassada"]} em "{dados_emprestimo["moeda"].nome}"')
-        print(f'DATAS: Repassado dia {dados_emprestimo["data_do_repasse"]}, com prazo até {dados_emprestimo["data_pretendida"]}.')
-        print(f'JUROS: {dados_emprestimo["juros_normal"]}% + {dados_emprestimo["juros_mensal_atraso"]}% por mês em caso de atraso.')
-        if dados_emprestimo['devolvido'] == True:
-            print(f'SITUAÇÃO: DEVOLVIDO no dia {dados_emprestimo["data_devolvida"]}')
-        else:
-            print('SITUAÇÃO: NÃO devolvido')
-        print('\n')
+        # print('--------INFORMAÇÕES DO EMPRÉSTIMO--------')
+        # print(f'ID: {dados_emprestimo["id"]}')
+        # print(f'CLIENTE: {dados_emprestimo["cliente_id"]}')
+        # print(f'EMPRESTADOR: {dados_emprestimo["emprestador_id"]}')
+        # print(f'VALOR: {dados_emprestimo["quantia_repassada"]} em "{dados_emprestimo["moeda"].nome}"')
+        # print(f'DATAS: Repassado dia {dados_emprestimo["data_do_repasse"]}, com prazo até {dados_emprestimo["data_pretendida"]}.')
+        # print(f'JUROS: {dados_emprestimo["juros_normal"]}% + {dados_emprestimo["juros_mensal_atraso"]}% por mês em caso de atraso.')
+        # if dados_emprestimo['devolvido'] == True:
+        #     print(f'SITUAÇÃO: DEVOLVIDO no dia {dados_emprestimo["data_devolvida"]}')
+        # else:
+        #     print('SITUAÇÃO: NÃO devolvido')
+        # print('\n')
+
+        emprestimo = []
+        keys = ['id', 'cliente_id', 'emprestador_id', 'moeda', 'quantia_repassada', 
+                'data_do_repasse', 'data_devolvida', 'data_pretendida', 
+                'juros_normal', 'juros_mensal_atraso', 'devolvido']
+        for e in dados_emprestimo:
+            emprestimo.append(list(e.values()))
+        layout = [
+            [sg.Text("INFORMAÇÕES DOS EMPRESTIMOS")],
+            [sg.Table(values =emprestimo,
+                    headings =keys,
+                    auto_size_columns= True,
+                    justification='center',
+                    expand_x=True,
+                    expand_y=True,
+                    vertical_scroll_only=False,
+                    num_rows= len(dados_emprestimo))],
+            [sg.Button("OK")]
+        ]
+        window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS", layout, size=(700, 350))
+        
+        while True:
+            event, values = window.read()
+            if event in (sg.WINDOW_CLOSED, "OK"):
+                window.close()
+                break
+
 
     def ver_juros(self):
-        id = input('Escreva o id do empréstimo a qual deseja ver o valor do juros: ')
-        return id
+        sg.change_look_and_feel('DarkRed')
+        layout = [
+            [sg.Text('Escreva o id do empréstimo a qual deseja ver o valor do juros: '), sg.InputText('', key='id')],
+            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
+        botao, valores = self.open()
+        self.close()
+        return valores['id']
+
     def escolher_data(self):
-        data = input('Escreva a data em qual se quer ver o possível valor acumulado: ')
-        data = datetime.strptime(data, '%d/%m/%Y')
+        sg.change_look_and_feel('DarkRed')
+        layout = [
+            [sg.Text('Escreva a data em qual se quer ver o possível valor acumulado: '), sg.InputText('', key='data')],
+            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
+        botao, valores = self.open()
+        self.close()
+        data = datetime.strptime(valores[data], '%d/%m/%Y')
         return data
         
     def emprestimo_devolvido(self):
-        id = input('Escreva o id do empréstimo a qual se deseja registrar devolução: ')
-        data = input('Escreva a data em que o dinheiro foi devolvido: ')
-        data = datetime.strptime(data, '%d/%m/%Y')
+        sg.change_look_and_feel('DarkRed')
+        layout = [
+            [sg.Text('Escreva o id do empréstimo a qual se deseja registrar devolução: '), sg.InputText('', key='id')], 
+            [sg.Text('Escreva a data em que o dinheiro foi devolvido: '), sg.InputText('', key='data')],          
+            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
+        botao, valores = self.open()
+        self.close()
+        id = valores['id']
+        data = datetime.strptime(valores['data'], '%d/%m/%Y')
         return {'id':id, 'data':data}
 
 
     def excluir(self):
-        id = input('Escreva o id do empréstimo que deseja excluir: ')
-        return id 
+        sg.change_look_and_feel('DarkRed')
+        layout = [
+            [sg.Text('Escreva o id do emprestimo que deseja excluir: '), sg.InputText('', key='id')],           
+            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
+        botao, valores = self.open()
+        self.close()
+        return valores['id']
 
     def alterar_dados(self):
-        id = input('Escreva o id do empréstimo que deseja alterar: ')
-        return id
+        sg.change_look_and_feel('DarkRed')
+        layout = [
+            [sg.Text('Escreva o id do emprestimo que deseja alterar: '), sg.InputText('', key='id')],           
+            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
+        botao, valores = self.open()
+        self.close()
+        return valores['id']
 
     def ver_dados(self):
-        id = input('Escreva o id do empréstimo que deseja ver: ')
-        return id
+        sg.change_look_and_feel('DarkRed')
+        layout = [
+            [sg.Text('Escreva o id do emprestimo que deseja ver: '), sg.InputText('', key='id')],           
+            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
+        botao, valores = self.open()
+        self.close()
+        return valores['id']
 
     def mostrar_msg(self, msg):
         print(msg)

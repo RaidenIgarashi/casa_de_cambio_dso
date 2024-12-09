@@ -15,8 +15,8 @@ class ControladorEmprestimo(Controlador):
         self.__cliente = controlador_cliente
     
     def abre_tela(self):
-        opcoes = {0: self.volta_tela, 1: self.inclui, 2: self.mostra_dados, 3: self.exclui, 
-                      4: self.altera, 5: self.emprestimo_devolvido, 6: self.mostra_todas, 7: self.calcula_juros}
+        opcoes = {0: self.volta_tela, 1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 
+                      4: self.mostra_todas, 5: self.altera, 6: self.emprestimo_devolvido, 7: self.calcula_juros}
         while True:
             opcao_escolhida = self.__tela.init_opcoes()
             if opcao_escolhida == None:
