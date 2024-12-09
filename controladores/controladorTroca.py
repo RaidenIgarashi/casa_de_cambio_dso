@@ -95,22 +95,24 @@ class ControladorTroca(Controlador):
         if troca is None:
             raise NaoFoiEncontradoComEsteId('troca')
         else:
-            self.__tela.mostrar_dados({'id': troca.id, 'id_pessoa':troca.pessoa.id, 'data': troca.data, 
+            self.__tela.mostrar_dados([{'id': troca.id, 'id_pessoa':troca.pessoa.id, 'data': troca.data, 
                                        'moeda_entrada': troca.moeda_entrada.nome, 'moeda_saida': troca.moeda_saida.nome, 
                                        'quantidade_entrada': troca.quantidade_entrada, 'quantidade_saida': troca.quantidade_saida, 
-                                       'juros': troca.porcentagem_juros })
+                                       'juros': troca.porcentagem_juros }])
             self.__relatorio.add_operacao('mostragem', f"Mostragem de dados da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
 
     def mostra_todas(self):
+        dados_trocas = []
         if len(self.__trocas) == 0:
             NenhumRegistrado('troca')
         else:
             for troca in self.__trocas:
-                self.__tela.mostrar_dados({'id': troca.id, 'id_pessoa':troca.pessoa.id, 'data': troca.data, 
-                                        'moeda_entrada': troca.moeda_entrada.nome, 'moeda_saida': troca.moeda_saida.nome, 
-                                        'quantidade_entrada': troca.quantidade_entrada, 'quantidade_saida': troca.quantidade_saida, 
-                                        'juros': troca.porcentagem_juros })
-                self.__relatorio.add_operacao('mostragem', f"Mostragem dos dados de todas as trocas, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+                dados_trocas.append({'id': troca.id, 'id_pessoa':troca.pessoa.id, 'data': troca.data, 
+                                      'moeda_entrada': troca.moeda_entrada.nome, 'moeda_saida': troca.moeda_saida.nome, 
+                                      'quantidade_entrada': troca.quantidade_entrada, 'quantidade_saida': troca.quantidade_saida, 
+                                      'juros': troca.porcentagem_juros })
+            self.__tela.mostrar_dados(dados_trocas)
+            self.__relatorio.add_operacao('mostragem', f"Mostragem dos dados de todas as trocas, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
 
     def calculo_moeda_saida(self, moeda1_nome, moeda2_nome, quantidade_entrada, juros):
         valor_entrada = self.__moeda.pega_objeto(moeda1_nome).valor_usd

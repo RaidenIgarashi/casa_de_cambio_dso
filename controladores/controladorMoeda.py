@@ -34,7 +34,7 @@ class ControladorMoeda(Controlador):
                 print()
                 return
             self.__moeda_DAO.add(Moeda(dados['nome'], dados['regioes'], dados['cifra'], dados['valor']))
-            self.__tela.mostrar_msg(f'Moeda {moeda.nome} adicionada com sucesso')
+            self.__tela.mostrar_msg(f'Moeda {dados['nome']} adicionada com sucesso')
             self.__relatorio.add_operacao('inclusao', f"Inclusao da Moeda '{dados['nome']}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             
 
@@ -67,11 +67,12 @@ class ControladorMoeda(Controlador):
             raise MoedaNaoEncontrada
             
     def mostra_todas(self):
+        dados_moedas = []
         try:
             for moeda in self.__moeda_DAO.get_all():
-                print('oi')
-                self.__tela.mostrar_dados({'nome':moeda.nome, 'regioes':moeda.regioes, 'cifra':moeda.cifra, 'valor':moeda.valor_usd})
-                self.__relatorio.add_operacao('mostragem', f"Mostragem de todas as moedas registradas, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+                dados_moedas.append({'nome':moeda.nome, 'regioes':moeda.regioes, 'cifra':moeda.cifra, 'valor':moeda.valor_usd})
+            self.__tela.mostrar_dados(dados_moedas)
+            self.__relatorio.add_operacao('mostragem', f"Mostragem de todas as moedas registradas, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
         except FileNotFoundError:
             raise NenhumRegistrado('moeda')
         
@@ -84,6 +85,6 @@ class ControladorMoeda(Controlador):
         nome = self.__tela.ver_dados()
         for moeda in self.__moeda_DAO.get_all():
             if nome.lower() == moeda.nome.lower():
-                self.__tela.mostrar_dados({'nome': moeda.nome, 'regioes': moeda.regioes, 'cifra': moeda.cifra, 'valor': moeda.valor_usd})
+                self.__tela.mostrar_dados([{'nome': moeda.nome, 'regioes': moeda.regioes, 'cifra': moeda.cifra, 'valor': moeda.valor_usd}])
                 self.__relatorio.add_operacao('mostragem', f"Mostragem de dados da moeda '{moeda.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
 

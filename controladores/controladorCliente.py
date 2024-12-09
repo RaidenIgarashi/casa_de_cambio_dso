@@ -45,12 +45,12 @@ class ControladorCliente(Controlador):
         if id != None:  # se o id nao for digitado incorretamente
             for pessoa in self.__pessoas:
                 if pessoa.id == id:
-                    self.__tela.mostrar_dados({'nome': pessoa.nome, 'id': pessoa.id, 'idade':pessoa.idade})
+                    self.__tela.mostrar_dados([{'nome': pessoa.nome, 'id': pessoa.id, 'idade':pessoa.idade}], 1)
                     existente = True
                     self.__relatorio.add_operacao('mostragem', f"Mostragem de dados do Cliente '{pessoa.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             for org in self.__organizacoes:
                 if org.id == id:
-                    self.__tela.mostrar_dados({'nome': org.nome, 'id': org.id})
+                    self.__tela.mostrar_dados([{'nome': org.nome, 'id': org.id}], 0)
                     existente = True
                     self.__relatorio.add_operacao('mostragem', f"Mostragem de dados do Cliente '{org.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             if not existente:
@@ -72,15 +72,19 @@ class ControladorCliente(Controlador):
                 raise NaoFoiEncontradoComEsteId('cliente')
 
     def mostra_todas(self):
+        dados_pessoa = []
+        dados_org = []
         if len(self.__organizacoes) > 0:
             for org in self.__organizacoes:
-                self.__tela.mostrar_dados({'nome': org.nome, 'id': org.id, 'idade': ''})
+                dados_org.append({'nome': org.nome, 'id': org.id, 'idade': ''})
+            self.__tela.mostrar_dados(dados_org, 0)
         else:
             self.__tela.mostrar_msg("Nenhuma Organização cadastrada.\n")
 
         if len(self.__pessoas) > 0:
             for pessoa in self.__pessoas:
-                self.__tela.mostrar_dados({'nome': pessoa.nome, 'id': pessoa.id, 'idade': pessoa.idade})
+                dados_pessoa.append({'nome': pessoa.nome, 'id': pessoa.id, 'idade': pessoa.idade})
+            self.__tela.mostrar_dados(dados_pessoa, 1)
         else:
             self.__tela.mostrar_msg("Nenhuma Pessoa cadastrada.\n")
         self.__relatorio.add_operacao('mostragem', f"Mostragem de todos as Pessoas e Organizacoes registradas, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")

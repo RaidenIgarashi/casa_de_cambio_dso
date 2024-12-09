@@ -70,13 +70,28 @@ class TelaMoeda(Tela):
             return {"nome": nome, "regioes": regioes, "cifra": cifra, "valor": valor}
 
     def mostrar_dados(self, dados_moeda):
-        sg.Popup(
-        '--------INFORMAÇÕES DA MOEDA--------',
-        f'NOME: {dados_moeda["nome"]}',
-        f'REGIOES: {dados_moeda["regioes"]}',
-        f'CIFRA: {dados_moeda["cifra"]}',
-        f'VALOR: {dados_moeda["valor"]}',
-        '\n')
+        moeda = []
+        keys = ['nome', 'regiao', 'cifra', 'valor_usd']
+        for m in dados_moeda:
+            moeda.append(list(m.values()))
+        layout = [
+            [sg.Text("INFORMAÇÕES DAS MOEDAS")],
+            [sg.Table(values =moeda,
+                    headings =keys,
+                    auto_size_columns= True,
+                    justification='center',
+                    expand_x=True,
+                    expand_y=True,
+                    num_rows= len(dados_moeda))],
+            [sg.Button("OK")]
+        ]
+        window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS", layout, size=(350, 450))
+        
+        while True:
+            event, values = window.read()
+            if event in (sg.WINDOW_CLOSED, "OK"):
+                window.close()
+                break
 
     def excluir(self):
         sg.change_look_and_feel('DarkRed')

@@ -111,7 +111,7 @@ class TelaCliente(Tela):
     def alterar_dados(self):
         sg.change_look_and_feel('DarkYellow')
         layout = [
-            [sg.Text('Escreva o CPF/CNPJ do cliente que deseja alterar: '), sg.InputText('', key='nome')],
+            [sg.Text('Escreva o CPF/CNPJ do cliente que deseja alterar: '), sg.InputText('', key='id')],
             [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
         ]
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
@@ -120,20 +120,34 @@ class TelaCliente(Tela):
         if eh_numerico(valores['id'], "identidade"):
             return valores['id']
     
-    def mostrar_dados(self, dados_cliente):
-        print(dados_cliente.values())
-        print(dados_cliente.keys())
+    def mostrar_dados(self, dados_cliente, tipo):
+        client = []
+        keys = []
+        if tipo == 0:
+            keys = ["nome", "cnpj"]
+            titulo_tipo_cliente = "ORGANIZAÇÕES"
+        elif tipo == 1:
+            keys = ["nome", "cpf", "idade"]
+            titulo_tipo_cliente = "PESSOAS"
+        for d in dados_cliente:
+            client.append(list(d.values()))
         layout = [
-            [sg.Text("INFORMAÇÕES DO CLIENTE")],
-            [sg.Table(values = list(list(dados_cliente.values())),
-                      headings = list(dados_cliente.keys()))],
+            [sg.Text("INFORMAÇÕES DOS CLIENTES:" + titulo_tipo_cliente)],
+            [sg.Table(values =client,
+                    headings =keys,
+                    auto_size_columns= True,
+                    justification='center',
+                    expand_x=True,
+                    expand_y=True,
+                    num_rows= len(dados_cliente))],
             [sg.Button("OK")]
         ]
-        window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS", layout)
+        window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS", layout, size=(350, 450))
         
         while True:
             event, values = window.read()
             if event in (sg.WINDOW_CLOSED, "OK"):
+                window.close()
                 break
     
     def excluir(self):
