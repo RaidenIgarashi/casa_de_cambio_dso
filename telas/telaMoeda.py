@@ -2,6 +2,7 @@ from abstratas.absTela import Tela
 from excecoes import *
 import PySimpleGUI as sg
 
+
 class TelaMoeda(Tela):
     def __init__(self):
         self.__window = None

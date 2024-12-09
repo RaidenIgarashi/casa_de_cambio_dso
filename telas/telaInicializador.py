@@ -19,7 +19,7 @@ class TelaInicializador():
             opcao = 4
         if valores['5']:
             opcao = 5
-        if botao in (None, 'ENCERRAR'):
+        if botao in (None, 'X'):
             opcao = 0
         self.__window.Close()
         return opcao
@@ -33,7 +33,7 @@ class TelaInicializador():
             [sg.Radio("3 - Trocas", "RD_init", key='3')],
             [sg.Radio("4 - Empréstimos", "RD_init", key='4')],
             [sg.Radio("5 - Gerar Relatório", "RD_init", key='5')],
-            [sg.Cancel('ENCERRAR'), sg.Button('Confirmar')]
+            [sg.Cancel('X'), sg.Button('Confirmar')]
         ]
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)        
         

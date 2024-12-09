@@ -13,7 +13,7 @@ class ControladorMoeda(Controlador):
         self.__relatorio = relatorio
         
     def abre_tela(self):
-        opcoes = {0: self.voltar_tela, 1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 5: self.altera}
+        opcoes = {1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 5: self.altera, 0: self.voltar_tela}
         while True:
             opcao_escolhida = self.__tela.init_opcoes()
             if opcao_escolhida == None:
@@ -29,9 +29,7 @@ class ControladorMoeda(Controlador):
                     if dados['nome'].lower() == moeda.nome.lower():
                         raise ValueError
             except:
-                print()
-                print(f'## a moeda {moeda.nome} já está registrada ##')
-                print()
+                self.__tela.mostrar_msg(f'\n## a moeda {moeda.nome} já está registrada ##\n')
                 return
             self.__moeda_DAO.add(Moeda(dados['nome'], dados['regioes'], dados['cifra'], dados['valor']))
             self.__tela.mostrar_msg(f'Moeda {dados['nome']} adicionada com sucesso')
@@ -81,10 +79,9 @@ class ControladorMoeda(Controlador):
 
 
     def mostra_dados(self):
-        print('mostraDados')
+        print('mostra_dados')
         nome = self.__tela.ver_dados()
         for moeda in self.__moeda_DAO.get_all():
             if nome.lower() == moeda.nome.lower():
                 self.__tela.mostrar_dados([{'nome': moeda.nome, 'regioes': moeda.regioes, 'cifra': moeda.cifra, 'valor': moeda.valor_usd}])
                 self.__relatorio.add_operacao('mostragem', f"Mostragem de dados da moeda '{moeda.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
-
