@@ -17,5 +17,5 @@ class MoedaDAO(DAO):
     def get(self, key:str):
             return super().get(key)
 
-    def remove(selfself, key:str):
+    def remove(self, key:str):
             return super().remove(key)
