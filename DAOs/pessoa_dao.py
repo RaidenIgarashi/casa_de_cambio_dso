@@ -3,8 +3,7 @@ from entidades.pessoa import Pessoa
 
 class PessoaDAO(DAO):
     def __init__(self):
-        super().__init__('cliente.pkl')
-
+        super().__init__('pessoa.pkl')
 
     def add(self, pessoa: Pessoa):
         if((pessoa is not None) and isinstance(pessoa, Pessoa)):

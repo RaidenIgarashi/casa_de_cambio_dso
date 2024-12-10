@@ -18,3 +18,4 @@ class EmprestimoDAO(DAO):
 
     def remove(self, key:str):
             return super().remove(key)
+    

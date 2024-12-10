@@ -12,6 +12,21 @@ class TelaEmprestimo(Tela):
     def open(self):
         botao, valores = self.__window.Read()
         return botao, valores
+    def mostrar_msg(self, msg):
+        sg.Popup(msg)
+        
+    
+    def init_opcoes(self):
+        self.tela_opcoes()
+        botao, valores = self.open()
+        opcao = 0
+        for x in range(1, 7):
+            if valores[f'{x}']:
+                opcao = x
+        if botao in (None, 'Voltar'):
+            opcao = 0
+        self.close()
+        return opcao
     
     def tela_opcoes(self):
         sg.change_look_and_feel('DarkPurple')
@@ -25,19 +40,21 @@ class TelaEmprestimo(Tela):
             # [sg.Radio("7 - Calcular valor de juros de um empréstimo", "RDE", key='7')],
             [sg.Cancel('Voltar'), sg.Button('Confirmar')]
         ]
-        self.__window = sg.Window("EMPRESTIMOS").Layout(layout)
+        self.__window = sg.Window("EMPRESTIMOS").Layout(layout)        
         
-    def init_opcoes(self):
-        self.tela_opcoes()
+        
+    def ver_dados(self):
+        sg.change_look_and_feel('DarkRed')
+        layout = [
+            [sg.Text('Escreva o id do emprestimo que deseja ver: '), sg.InputText('', key='id')],           
+            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
+        ]
+        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
-        opcao = 0
-        for x in range(1, 7):
-            if valores[f'{x}']:
-                opcao = x
-        if botao in (None, 'Voltar'):
-            opcao = 0
         self.close()
-        return opcao
+        if botao not in (None, 'Cancelar'):
+            return valores['id']
+    
 
     def cadastrar_dados(self):
         layout = [ 
@@ -53,28 +70,30 @@ class TelaEmprestimo(Tela):
             [sg.Text(f'JUROS: '), sg.InputText('', key='juros')],
             [sg.Text(f'JUROS DE ATRASO: '), sg.InputText('', key='juros_atraso')],
             [sg.Text(f'DEVOLVIDO'), sg.Radio("SIM", "DEVOLVIDO", key="sim"),  sg.Radio("NÃO", "DEVOLVIDO", key="nao", default=True)],     
-            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
         ]
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
-        id = valores['id']
-        id_cliente = valores['id_cliente']
-        id_emprestador = valores['id_emprestador']
-        moeda = valores['moeda']
-        quantia_repassada = float(valores['quantia_repassada'])
-        data_do_repasse = valores['data_repasse']
-        data_devolvida = valores['data_devolvida']
-        data_pretendida = valores['data_devolvida']
-        juros_normal = float(valores['juros'])
-        juros_mensal_atraso = float(valores['juros_atraso'])
-        if valores['sim']:
-            devolvido = True
-        else:
-            devolvido = False
         self.close()
-        return {'id':id, 'cliente_id':id_cliente, 'emprestador_id':id_emprestador, 'moeda':moeda, 'quantia_repassada':quantia_repassada, 
-                 'data_do_repasse':data_do_repasse, 'data_devolvida':data_devolvida, 'data_pretendida':data_pretendida, 
-                 'juros_normal':juros_normal, 'juros_mensal_atraso':juros_mensal_atraso, 'devolvido': devolvido}
+        if botao not in (None, 'Cancelar'):
+            id = valores['id']
+            id_cliente = valores['id_cliente']
+            id_emprestador = valores['id_emprestador']
+            moeda = valores['moeda']
+            quantia_repassada = float(valores['quantia_repassada'])
+            data_do_repasse = valores['data_repasse']
+            data_devolvida = valores['data_devolvida']
+            data_pretendida = valores['data_devolvida']
+            juros_normal = float(valores['juros'])
+            juros_mensal_atraso = float(valores['juros_atraso'])
+            if valores['sim']:
+                devolvido = True
+            else:
+                devolvido = False
+            self.close()
+            return {'id':id, 'cliente_id':id_cliente, 'emprestador_id':id_emprestador, 'moeda':moeda, 'quantia_repassada':quantia_repassada, 
+                    'data_do_repasse':data_do_repasse, 'data_devolvida':data_devolvida, 'data_pretendida':data_pretendida, 
+                    'juros_normal':juros_normal, 'juros_mensal_atraso':juros_mensal_atraso, 'devolvido': devolvido}
         # print('-------REGISTRANDO EMPRÉSTIMO--------')
         # try:
         #     id = input('Digite um id novo para a transação: ')
@@ -117,21 +136,35 @@ class TelaEmprestimo(Tela):
         # return {'id':id, 'cliente_id':cliente_id, 'emprestador_id':emprestador_id, 'moeda':moeda, 'quantia_repassada':quantia_repassada, 
         #         'data_do_repasse':data_do_repasse, 'data_devolvida':data_devolvida, 'data_pretendida':data_pretendida, 
         #         'juros_normal':juros_normal, 'juros_mensal_atraso':juros_mensal_atraso, 'devolvido': devolvido}
+    
+    
+    def excluir(self):
+        sg.change_look_and_feel('DarkRed')
+        layout = [
+            [sg.Text('Escreva o id do emprestimo que deseja excluir: '), sg.InputText('', key='id')],           
+            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
+        ]
+        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
+        botao, valores = self.open()
+        self.close()
+        if botao not in (None, 'Cancelar'):
+            return valores['id'] 
 
-    def mostrar_dados(self, dados_emprestimo):
-        # print('--------INFORMAÇÕES DO EMPRÉSTIMO--------')
-        # print(f'ID: {dados_emprestimo["id"]}')
-        # print(f'CLIENTE: {dados_emprestimo["cliente_id"]}')
-        # print(f'EMPRESTADOR: {dados_emprestimo["emprestador_id"]}')
-        # print(f'VALOR: {dados_emprestimo["quantia_repassada"]} em "{dados_emprestimo["moeda"].nome}"')
-        # print(f'DATAS: Repassado dia {dados_emprestimo["data_do_repasse"]}, com prazo até {dados_emprestimo["data_pretendida"]}.')
-        # print(f'JUROS: {dados_emprestimo["juros_normal"]}% + {dados_emprestimo["juros_mensal_atraso"]}% por mês em caso de atraso.')
-        # if dados_emprestimo['devolvido'] == True:
-        #     print(f'SITUAÇÃO: DEVOLVIDO no dia {dados_emprestimo["data_devolvida"]}')
-        # else:
-        #     print('SITUAÇÃO: NÃO devolvido')
-        # print('\n')
 
+    def alterar_dados(self):
+        sg.change_look_and_feel('DarkRed')
+        layout = [
+            [sg.Text('Escreva o id do emprestimo que deseja alterar: '), sg.InputText('', key='id')],           
+            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
+        ]
+        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
+        botao, valores = self.open()
+        self.close()
+        if botao not in (None, 'Cancelar'):
+            return valores['id'] 
+
+
+    def mostrar_tabela(self, dados_emprestimo):
         emprestimo = []
         keys = ['id', 'cliente_id', 'emprestador_id', 'moeda', 'quantia_repassada', 
                 'data_do_repasse', 'data_devolvida', 'data_pretendida', 
@@ -163,72 +196,28 @@ class TelaEmprestimo(Tela):
         sg.change_look_and_feel('DarkRed')
         layout = [
             [sg.Text('Escreva o id do empréstimo a qual deseja ver o valor do juros: '), sg.InputText('', key='id')],
-            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
         ]
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
         self.close()
-        return valores['id']
-
-    def escolher_data(self):
-        sg.change_look_and_feel('DarkRed')
-        layout = [
-            [sg.Text('Escreva a data em qual se quer ver o possível valor acumulado: '), sg.InputText('', key='data')],
-            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
-        ]
-        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
-        botao, valores = self.open()
-        self.close()
-        data = datetime.strptime(valores[data], '%d/%m/%Y')
-        return data
+        if botao not in (None, 'Cancelar'):
+            return valores['id'] 
+        
         
     def emprestimo_devolvido(self):
         sg.change_look_and_feel('DarkRed')
         layout = [
             [sg.Text('Escreva o id do empréstimo a qual se deseja registrar devolução: '), sg.InputText('', key='id')], 
             [sg.Text('Escreva a data em que o dinheiro foi devolvido: '), sg.InputText('', key='data')],          
-            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
         ]
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
         self.close()
-        id = valores['id']
-        data = datetime.strptime(valores['data'], '%d/%m/%Y')
-        return {'id':id, 'data':data}
+        if botao not in (None, 'Cancelar'):
+            id = valores['id']
+            data = datetime.strptime(valores['data'], '%d/%m/%Y')
+            return {'id':id, 'data':data}   
 
 
-    def excluir(self):
-        sg.change_look_and_feel('DarkRed')
-        layout = [
-            [sg.Text('Escreva o id do emprestimo que deseja excluir: '), sg.InputText('', key='id')],           
-            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
-        ]
-        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
-        botao, valores = self.open()
-        self.close()
-        return valores['id']
-
-    def alterar_dados(self):
-        sg.change_look_and_feel('DarkRed')
-        layout = [
-            [sg.Text('Escreva o id do emprestimo que deseja alterar: '), sg.InputText('', key='id')],           
-            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
-        ]
-        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
-        botao, valores = self.open()
-        self.close()
-        return valores['id']
-
-    def ver_dados(self):
-        sg.change_look_and_feel('DarkRed')
-        layout = [
-            [sg.Text('Escreva o id do emprestimo que deseja ver: '), sg.InputText('', key='id')],           
-            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
-        ]
-        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
-        botao, valores = self.open()
-        self.close()
-        return valores['id']
-
-    def mostrar_msg(self, msg):
-        sg.Popup(msg)

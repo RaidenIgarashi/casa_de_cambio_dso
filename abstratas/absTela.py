@@ -1,6 +1,22 @@
 from abc import abstractmethod, ABC;
 
 class Tela(ABC):
+    @abstractmethod
+    def __init__(self):
+        pass
+    
+    @abstractmethod
+    def close(self):
+        pass
+        
+    @abstractmethod
+    def mostrar_msg(self, msg):
+        pass
+    
+    @abstractmethod
+    def open(self):
+        botao, valores = self.__window.Read()
+        return botao, valores
 
     @abstractmethod
     def tela_opcoes(self):
@@ -15,7 +31,7 @@ class Tela(ABC):
         pass
 
     @abstractmethod
-    def mostrar_dados(self):
+    def mostrar_tabela(self):
         pass
 
     @abstractmethod
@@ -26,7 +42,4 @@ class Tela(ABC):
     def ver_dados(self):
         pass
 
-    @abstractmethod
-    def mostrar_msg(self, msg):
-        print(msg)
-        print()
+    

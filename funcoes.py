@@ -19,17 +19,18 @@ def eh_pessoa(info): # funcao para facilitar de ver se é pessoa ou organizacao 
             return True
         elif isinstance(info, Organizacao):
             return False
-        else:
-            print('\n## erro interno: o objeto não é uma identidade. ##\n')
 
 def eh_numerico(valor, variavel):
     numerico = True
     try:
-        for c in valor:
-            if not c.isnumeric():
-                numerico = False
-        if not numerico:
-            raise NaoNumericoGeral(variavel)
+        if valor == '' or valor == None:
+            numerico = False
+        else:
+            for c in valor:
+                if not c.isnumeric():
+                    numerico = False
+            if not numerico:
+                raise NaoNumericoGeral(variavel)
         return numerico
     except:
         raise NaoNumericoGeral(variavel)

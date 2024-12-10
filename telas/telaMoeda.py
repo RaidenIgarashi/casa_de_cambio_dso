@@ -11,18 +11,9 @@ class TelaMoeda(Tela):
     def open(self):
         botao, valores = self.__window.Read()
         return botao, valores
-
-    def tela_opcoes(self):
-        sg.change_look_and_feel('DarkPurple')
-        layout = [
-            [sg.Radio("1 - Ver dados Moeda", "RDM", key='1')],
-            [sg.Radio("2 - Inclui Moeda", "RDM", key='2')],
-            [sg.Radio("3 - Excluir Moeda", "RDM", key='3')],
-            [sg.Radio("4 - Listar todas as Moedas", "RDM", key='4')],
-            [sg.Radio("5 - Alterar Moeda", "RDM", key='5')],
-            [sg.Cancel('Voltar'), sg.Button('Confirmar')]
-        ]
-        self.__window = sg.Window("MOEDAS").Layout(layout)
+    def mostrar_msg(self, msg):
+        sg.Popup(msg)
+        
 
     def init_opcoes(self):
         self.tela_opcoes()
@@ -35,6 +26,31 @@ class TelaMoeda(Tela):
             opcao = 0
         self.close()
         return opcao
+    
+    def tela_opcoes(self):
+        sg.change_look_and_feel('DarkPurple')
+        layout = [
+            [sg.Radio("1 - Ver dados Moeda", "RDM", key='1')],
+            [sg.Radio("2 - Adicionar Moeda", "RDM", key='2')],
+            [sg.Radio("3 - Excluir Moeda", "RDM", key='3')],
+            [sg.Radio("4 - Listar todas as Moedas", "RDM", key='4')],
+            [sg.Radio("5 - Alterar Moeda", "RDM", key='5')],
+            [sg.Cancel('Voltar'), sg.Button('Confirmar')]
+        ]
+        self.__window = sg.Window("MOEDAS").Layout(layout)
+    
+    
+    def ver_dados(self):
+        sg.change_look_and_feel('DarkPurple')
+        layout = [
+            [sg.Text('Escreva o nome da moeda que deseja achar: '), sg.InputText('', key='nome')],
+            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
+        ]
+        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
+        botao, valores = self.open()
+        self.close()
+        return valores['nome']
+    
 
     def cadastrar_dados(self):
         layout = [ 
@@ -43,7 +59,7 @@ class TelaMoeda(Tela):
             [sg.Text(f'REGIOES: '), sg.InputText('', key='regioes')],
             [sg.Text(f'CIFRA: '), sg.InputText('', key='cifra')],
             [sg.Text(f'VALOR EM U$D: '), sg.InputText('', key='valor')],
-            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
         ]
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
@@ -53,23 +69,51 @@ class TelaMoeda(Tela):
         valor = valores['valor']
         self.close()
 
-        corretos = True
-        for char in nome:
-            if char.isnumeric():
+        if botao not in (None, 'Cancelar'):
+            corretos = True
+            for char in nome:
+                if char.isnumeric():
+                    corretos = False
+                    raise NomeComDigito()
+            try:
+                if '.' not in valor:
+                    valor = int(valor)
+                valor = float(valor)
+            except:
                 corretos = False
-                raise NomeComDigito()
-        try:
-            if '.' not in valor:
-                valor = int(valor)
-            valor = float(valor)
-        except:
-            corretos = False
-            raise NaoNumericoGeral('Valor')
+                raise NaoNumericoGeral('Valor')
+            
+            if corretos:
+                return {"nome": nome, "regioes": regioes, "cifra": cifra, "valor": valor}
         
-        if corretos:
-            return {"nome": nome, "regioes": regioes, "cifra": cifra, "valor": valor}
 
-    def mostrar_dados(self, dados_moeda):
+    def excluir(self):
+        sg.change_look_and_feel('DarkRed')
+        layout = [
+            [sg.Text('Escreva o nome da moeda que deseja excluir: '), sg.InputText('', key='nome')],           
+            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
+        ]
+        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
+        botao, valores = self.open()
+        self.close()
+        if botao not in (None, 'Cancelar'):
+            return valores['nome']
+    
+
+    def alterar_dados(self):
+        sg.change_look_and_feel('LightBrown')
+        layout = [
+            [sg.Text('Escreva o nome da moeda que deseja alterar: '), sg.InputText('', key='nome')],
+            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
+        ]
+        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
+        botao, valores = self.open()
+        self.close()
+        if botao not in (None, 'Cancelar'):
+            return valores['nome']
+    
+    
+    def mostrar_tabela(self, dados_moeda):
         moeda = []
         keys = ['nome', 'regiao', 'cifra', 'valor_usd']
         for m in dados_moeda:
@@ -92,39 +136,4 @@ class TelaMoeda(Tela):
             if event in (sg.WINDOW_CLOSED, "OK"):
                 window.close()
                 break
-
-    def excluir(self):
-        sg.change_look_and_feel('DarkRed')
-        layout = [
-            [sg.Text('Escreva o nome da moeda que deseja excluir: '), sg.InputText('', key='nome')],           
-            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
-        ]
-        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
-        botao, valores = self.open()
-        self.close()
-        return valores['nome']
-
-    def alterar_dados(self):
-        sg.change_look_and_feel('DarkYellow')
-        layout = [
-            [sg.Text('Escreva o nome da moeda que deseja alterar: '), sg.InputText('', key='nome')],
-            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
-        ]
-        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
-        botao, valores = self.open()
-        self.close()
-        return valores['nome']
-
-    def ver_dados(self):
-        sg.change_look_and_feel('DarkPurple')
-        layout = [
-            [sg.Text('Escreva o nome da moeda que deseja achar: '), sg.InputText('', key='nome')],
-            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
-        ]
-        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
-        botao, valores = self.open()
-        self.close()
-        return valores['nome']
-
-    def mostrar_msg(self, msg):
-        sg.Popup(msg)
+    

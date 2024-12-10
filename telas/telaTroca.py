@@ -1,5 +1,6 @@
 from abstratas.absTela import Tela
 import PySimpleGUI as sg
+from funcoes import *
 
 
 class TelaTroca(Tela):
@@ -11,18 +12,9 @@ class TelaTroca(Tela):
     def open(self):
         botao, valores = self.__window.Read()
         return botao, valores
+    def mostrar_msg(self, msg):
+        sg.Popup(msg)
     
-    def tela_opcoes(self):
-        sg.change_look_and_feel('DarkPurple')
-        layout = [
-            [sg.Radio("1 - Ver dados de uma Troca", "RDT", key='1')],
-            [sg.Radio("2 - Adicionar Troca", "RDT", key='2')],
-            [sg.Radio("3 - Excluir Troca", "RDT", key='3')],
-            [sg.Radio("4 - Listar todas as Trocas", "RDT", key='4')],
-            [sg.Radio("5 - Alterar dados de uma Troca", "RDT", key='5')],
-            [sg.Cancel('Voltar'), sg.Button('Confirmar')]
-        ]
-        self.__window = sg.Window("TROCAS").Layout(layout)
         
     def init_opcoes(self):
         self.tela_opcoes()
@@ -36,9 +28,35 @@ class TelaTroca(Tela):
         self.close()
         return opcao
 
+    def tela_opcoes(self):
+        sg.change_look_and_feel('DarkPurple')
+        layout = [
+            [sg.Radio("1 - Ver dados de uma Troca", "RDT", key='1')],
+            [sg.Radio("2 - Adicionar Troca", "RDT", key='2')],
+            [sg.Radio("3 - Excluir Troca", "RDT", key='3')],
+            [sg.Radio("4 - Listar todas as Trocas", "RDT", key='4')],
+            [sg.Radio("5 - Alterar dados de uma Troca", "RDT", key='5')],
+            [sg.Cancel('Voltar'), sg.Button('Confirmar')]
+        ]
+        self.__window = sg.Window("TROCAS").Layout(layout)
+        
+        
+    def ver_dados(self):
+        sg.change_look_and_feel('DarkPurple')
+        layout = [
+            [sg.Text('Escreva o id da troca que deseja achar: '), sg.InputText('', key='id')],
+            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
+        ]
+        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
+        botao, valores = self.open()
+        self.close()
+        if botao not in (None, 'Cancelar'):
+            return valores['id']    
+        
+    
     def cadastrar_dados(self):
         layout = [ 
-            [sg.Text('--------INFORMAÇÕES DA MOEDA--------')],
+            [sg.Text('--------INFORMAÇÕES DA TROCA--------')],
             [sg.Text(f'ID DA TROCA: '), sg.InputText('', key='id')],
             [sg.Text(f'CPF DA PESSOA: '), sg.InputText('', key='cpf')],
             [sg.Text(f'MOEDA ENTRADA: '), sg.InputText('', key='moeda_entrada')],
@@ -46,19 +64,21 @@ class TelaTroca(Tela):
             [sg.Text(f'QUANTIDADE ENTRADA: '), sg.InputText('', key='quantidade_entrada')],
             [sg.Text(f'JUROS: '), sg.InputText('', key='juros')],
             [sg.Text(f'DATA: '), sg.InputText('', key='data')],
-            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
         ]
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
-        id = valores['id']
-        cpf = valores['cpf']
-        moeda_entrada = valores['moeda_entrada']
-        moeda_saida = valores['moeda_saida']
-        quantidade_entrada = float(valores['quantidade_entrada'])
-        juros = float(valores['juros'])
-        data = valores['data']
         self.close()
-        return {'id': id, 'id_pessoa': cpf, 'quantidade_entrada': quantidade_entrada, 'quantidade_saida': 0, 'moeda_entrada': moeda_entrada, 'moeda_saida': moeda_saida, 'juros': juros, 'data':data}
+        if botao not in (None, 'Cancelar'):
+            id = valores['id']
+            cpf = valores['cpf']
+            moeda_entrada = valores['moeda_entrada']
+            moeda_saida = valores['moeda_saida']
+            quantidade_entrada = float(valores['quantidade_entrada'])
+            juros = float(valores['juros'])
+            data = valores['data']
+            self.close()
+            return {'id': id, 'id_pessoa': cpf, 'quantidade_entrada': quantidade_entrada, 'quantidade_saida': 0, 'moeda_entrada': moeda_entrada, 'moeda_saida': moeda_saida, 'juros': juros, 'data':data}
         # try:
         #     id = int(input('Digite o id da troca: '))
         # except(ValueError):
@@ -107,18 +127,35 @@ class TelaTroca(Tela):
         #     return
 
         #return {'id': id, 'id_pessoa': id_pessoa, 'quantidade_entrada': quantidade_entrada, 'quantidade_saida': 0, 'moeda_entrada': moeda_entrada, 'moeda_saida': moeda_saida, 'juros': juros, 'data':data}
+    
+    
+    def excluir(self):
+        sg.change_look_and_feel('DarkRed')
+        layout = [
+            [sg.Text('Escreva o id da troca que deseja excluir: '), sg.InputText('', key='id')],           
+            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
+        ]
+        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
+        botao, valores = self.open()
+        self.close()
+        if botao not in (None, 'Cancelar') and eh_numerico(valores['id']):
+            return valores['id'] 
 
-    def mostrar_dados(self, dados_troca):
-        # print('--------INFORMAÇÕES DA TROCA--------')
-        # print(f'ID: {dados_troca["id"]}')
-        # print(f'CPF DO CLIENTE: {dados_troca["id_pessoa"]}')
-        # print(f'MOEDA ENTREGUE: {dados_troca["moeda_entrada"]}')
-        # print(f'MOEDA RECEBIDA: {dados_troca["moeda_saida"]}')
-        # print(f'QUANTIA DA MOEDA DE ENTRADA {dados_troca["moeda_entrada"]} = {dados_troca["quantidade_entrada"]:.2f}')
-        # print(f'QUANTIA DA MOEDA DE SAIDA {dados_troca["moeda_saida"]} = {dados_troca["quantidade_saida"]:.2f}')       
-        # print(f'JUROS: {dados_troca["juros"]*100}%')
-        # print('\n')
 
+    def alterar_dados(self):
+        sg.change_look_and_feel('LightBrown')
+        layout = [
+            [sg.Text('Escreva o id da troca que deseja alterar: '), sg.InputText('', key='id')],
+            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
+        ]
+        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
+        botao, valores = self.open()
+        self.close()
+        if botao not in (None, 'Cancelar'):
+            return valores['id'] 
+    
+    
+    def mostrar_tabela(self, dados_troca):
         trocas = []
         keys = ['ID', 'CPF', 'Data', 'Moeda Entregue', 'Moeda Recebida', 'Quantidade da Moeda Entregue', 'Quantidade da Moeda Recebida', 'Juros']
         for t in dados_troca:
@@ -143,66 +180,4 @@ class TelaTroca(Tela):
                 window.close()
                 break
 
-    def mostrar_msg(self, msg):
-        print(msg)
-
-    def excluir(self):
-        sg.change_look_and_feel('DarkRed')
-        layout = [
-            [sg.Text('Escreva o id da troca que deseja excluir: '), sg.InputText('', key='id')],           
-            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
-        ]
-        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
-        botao, valores = self.open()
-        self.close()
-        return valores['id']
-        # try:
-        #     id = int(input('Escreva o id da troca que deseja excluir: '))
-        #     print()
-        #     return id 
-        # except:
-        #     print('\n## O ID deve ser apenas numérico ##\n')
-        #     return
-        
-
-    def alterar_dados(self):
-        sg.change_look_and_feel('DarkYellow')
-        layout = [
-            [sg.Text('Escreva o id da troca que deseja alterar: '), sg.InputText('', key='id')],
-            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
-        ]
-        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
-        botao, valores = self.open()
-        self.close()
-        return valores['id']
-        # try:
-        #     id = int(input('Escreva o id da troca que deseja alterar: '))
-        #     print()
-        #     return id 
-        # except:
-        #     print('## O ID deve ser apenas numérico ##')
-        #     print()
-        #     return
-
-    def ver_dados(self):
-        sg.change_look_and_feel('DarkPurple')
-        layout = [
-            [sg.Text('Escreva o id da troca que deseja achar: '), sg.InputText('', key='id')],
-            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
-        ]
-        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
-        botao, valores = self.open()
-        self.close()
-        return valores['id']
-        # try:
-        #     id = int(input('Escreva o id da troca que deseja ver: '))
-        #     print()
-        #     return id
-        # except:
-        #     print('## o ID deve ser apenas numérico ##')
-        #     print()
-        #     return
-
-    def mostra_msg(self, msg):
-        sg.Popup(msg)
-
+    

@@ -29,7 +29,8 @@ class Relatorio():
         nome = ('inclusão','alteração','exclusão','mostragem','indefinição',)
         for opr in range(len(lista_operacao)):
             if lista_operacao[opr] == []:
-                self.__tela.mostra_msg(f'\nNenhuma {nome[opr]} foi registrada.\n', titulo[opr])
+                if nome[opr] != 'indefinição':
+                    self.__tela.mostra_msg(f'\nNenhuma {nome[opr]} foi registrada.\n', titulo[opr])
             else:
                 self.__tela.mostra_relatorio(lista_operacao[opr], titulo[opr])
          

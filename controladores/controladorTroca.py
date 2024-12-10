@@ -14,6 +14,7 @@ class ControladorTroca(Controlador):
         self.__moeda = controlador_moeda
         self.__cliente = controlador_cliente
         
+        
     def abre_tela(self):
         opcoes = {0: self.volta_tela, 1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 5: self.altera}
         
@@ -23,6 +24,21 @@ class ControladorTroca(Controlador):
                 pass
             else:
                 opcoes[opcao_escolhida]()  
+                
+                
+    def mostra_dados(self):
+        id = self.__tela.ver_dados()
+        if id != None:
+            troca = self.pega_objeto(id)
+            if troca is None:
+                raise NaoFoiEncontradoComEsteId('troca')
+            else:
+                self.__tela.mostrar_tabela([{'id': troca.id, 'id_pessoa':troca.pessoa.id, 'data': troca.data, 
+                                        'moeda_entrada': troca.moeda_entrada.nome, 'moeda_saida': troca.moeda_saida.nome, 
+                                        'quantidade_entrada': troca.quantidade_entrada, 'quantidade_saida': troca.quantidade_saida, 
+                                        'juros': troca.porcentagem_juros }])
+                self.__relatorio.add_operacao('mostragem', f"Mostragem de dados da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")  
+                      
 
     def inclui(self):
         dados = self.__tela.cadastrar_dados()
@@ -62,45 +78,35 @@ class ControladorTroca(Controlador):
 
     def exclui(self):
         id = self.__tela.excluir()
-        troca = self.pega_objeto(id)
-        if troca != None:
-            self.__trocas.remove(troca.id)
-            troca.pessoa.trocas_feitas.remove(troca)
-            self.__tela.mostrar_msg(f"Troca de id '{id}' exluida com sucesso")
-            self.__relatorio.add_operacao('exclusao', f"Exclusao da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
-        else:
-            raise NaoFoiEncontradoComEsteId('troca')
+        if id != None:
+            troca = self.pega_objeto(id)
+            if troca != None:
+                self.__trocas.remove(troca.id)
+                troca.pessoa.trocas_feitas.remove(troca)
+                self.__tela.mostrar_msg(f"Troca de id '{id}' exluida com sucesso")
+                self.__relatorio.add_operacao('exclusao', f"Exclusao da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+            else:
+                raise NaoFoiEncontradoComEsteId('troca')
 
     def altera(self):
         id = self.__tela.alterar_dados()
-        troca = self.pega_objeto(id)
-        if troca != None:
-            new_dados = self.__tela.cadastrar_dados()
-            troca.id = new_dados['id']
-            troca.pessoa = self.__cliente.pega_objeto(new_dados['id_pessoa'])
-            troca.quantidade_entrada = new_dados['quantidade_entrada']
-            troca.quantidade_saida = self.calculo_moeda_saida(new_dados['moeda_entrada'], new_dados['moeda_saida'], 
-                                                              new_dados['quantidade_entrada'], new_dados['juros'])
-            troca.data = new_dados['data']
-            troca.moeda_entrada = self.__moeda.pega_objeto(new_dados['moeda_entrada'])
-            troca.moeda_saida = self.__moeda.pega_objeto(new_dados['moeda_saida'])
-            troca.porcentagem_juros = new_dados['juros']
-            self.__relatorio.add_operacao('alteracao', f"Alteracao de dados da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
-        else:
-            raise NaoFoiEncontradoComEsteId('troca')
-
-
-    def mostra_dados(self):
-        id = self.__tela.ver_dados()
-        troca = self.pega_objeto(id)
-        if troca is None:
-            raise NaoFoiEncontradoComEsteId('troca')
-        else:
-            self.__tela.mostrar_dados([{'id': troca.id, 'id_pessoa':troca.pessoa.id, 'data': troca.data, 
-                                       'moeda_entrada': troca.moeda_entrada.nome, 'moeda_saida': troca.moeda_saida.nome, 
-                                       'quantidade_entrada': troca.quantidade_entrada, 'quantidade_saida': troca.quantidade_saida, 
-                                       'juros': troca.porcentagem_juros }])
-            self.__relatorio.add_operacao('mostragem', f"Mostragem de dados da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+        if id != None:
+            troca = self.pega_objeto(id)
+            if troca != None:
+                new_dados = self.__tela.cadastrar_dados()
+                troca.id = new_dados['id']
+                troca.pessoa = self.__cliente.pega_objeto(new_dados['id_pessoa'])
+                troca.quantidade_entrada = new_dados['quantidade_entrada']
+                troca.quantidade_saida = self.calculo_moeda_saida(new_dados['moeda_entrada'], new_dados['moeda_saida'], 
+                                                                new_dados['quantidade_entrada'], new_dados['juros'])
+                troca.data = new_dados['data']
+                troca.moeda_entrada = self.__moeda.pega_objeto(new_dados['moeda_entrada'])
+                troca.moeda_saida = self.__moeda.pega_objeto(new_dados['moeda_saida'])
+                troca.porcentagem_juros = new_dados['juros']
+                self.__relatorio.add_operacao('alteracao', f"Alteracao de dados da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+            else:
+                raise NaoFoiEncontradoComEsteId('troca')
+    
 
     def mostra_todas(self):
         dados_trocas = []
@@ -112,8 +118,9 @@ class ControladorTroca(Controlador):
                                       'moeda_entrada': troca.moeda_entrada.nome, 'moeda_saida': troca.moeda_saida.nome, 
                                       'quantidade_entrada': troca.quantidade_entrada, 'quantidade_saida': troca.quantidade_saida, 
                                       'juros': troca.porcentagem_juros })
-            self.__tela.mostrar_dados(dados_trocas)
+            self.__tela.mostrar_tabela(dados_trocas)
             self.__relatorio.add_operacao('mostragem', f"Mostragem dos dados de todas as trocas, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+            
 
     def calculo_moeda_saida(self, moeda1_nome, moeda2_nome, quantidade_entrada, juros):
         valor_entrada = self.__moeda.pega_objeto(moeda1_nome).valor_usd
@@ -123,12 +130,15 @@ class ControladorTroca(Controlador):
         valor_total = quantidade_entrada * valor_entrada_convertido
         valor_total -= valor_total* juros
         return round(valor_total/valor_saida_convertido, 2)
+    
 
     def pega_objeto(self, id):
-        for troca in self.__trocas.get_all():
-            if id == troca.id:
-                return troca
-        return None
+        if id != None:
+            for troca in self.__trocas.get_all():
+                if id == troca.id:
+                    return troca
+            return None
+        
 
     def volta_tela(self):
         self.__controlador_sistema.abre_tela()

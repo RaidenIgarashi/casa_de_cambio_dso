@@ -38,38 +38,42 @@ class ControladorMoeda(Controlador):
 
     def exclui(self):
         nome = self.__tela.excluir()
-        moeda = self.pega_objeto(nome)
-        if moeda is not None:
-            self.__moeda_DAO.remove(moeda.nome)
-            self.__tela.mostrar_msg(f'A moeda {moeda.nome} foi excluida com sucesso')
-            self.__relatorio.add_operacao('exclusao', f"Exclusao da Moeda '{moeda.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
-        else:
-            raise MoedaNaoEncontrada
+        if nome != None:
+            moeda = self.pega_objeto(nome)
+            if moeda != None:
+                self.__moeda_DAO.remove(moeda.nome)
+                self.__tela.mostrar_msg(f'A moeda {moeda.nome} foi excluida com sucesso')
+                self.__relatorio.add_operacao('exclusao', f"Exclusao da Moeda '{moeda.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+            else:
+                raise MoedaNaoEncontrada
 
     def pega_objeto(self, nome):
-        for moeda in self.__moeda_DAO.get_all():
-            if nome.lower() == moeda.nome.lower():
-                return moeda        
+        if nome != None:
+            for moeda in self.__moeda_DAO.get_all():
+                if nome.lower() == moeda.nome.lower():
+                    return moeda     
+            return None   
 
     def altera(self):
         nome = self.__tela.alterar_dados()
-        moeda = self.pega_objeto(nome)
-        if moeda is not None:
-            new_moeda = self.__tela.cadastrar_dados()
-            moeda.nome = new_moeda['nome']
-            moeda.regioes = new_moeda['regioes']
-            moeda.cifra = new_moeda['cifra']
-            moeda.valor_usd = new_moeda['valor']
-            self.__relatorio.add_operacao('alteracao', f"Alteracao da Moeda '{moeda.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
-        else:
-            raise MoedaNaoEncontrada
+        if nome != None:
+            moeda = self.pega_objeto(nome)
+            if moeda is not None:
+                new_moeda = self.__tela.cadastrar_dados()
+                moeda.nome = new_moeda['nome']
+                moeda.regioes = new_moeda['regioes']
+                moeda.cifra = new_moeda['cifra']
+                moeda.valor_usd = new_moeda['valor']
+                self.__relatorio.add_operacao('alteracao', f"Alteracao da Moeda '{moeda.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+            else:
+                raise MoedaNaoEncontrada
             
     def mostra_todas(self):
         dados_moedas = []
         try:
             for moeda in self.__moeda_DAO.get_all():
                 dados_moedas.append({'nome':moeda.nome, 'regioes':moeda.regioes, 'cifra':moeda.cifra, 'valor':moeda.valor_usd})
-            self.__tela.mostrar_dados(dados_moedas)
+            self.__tela.mostrar_tabela(dados_moedas)
             self.__relatorio.add_operacao('mostragem', f"Mostragem de todas as moedas registradas, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
         except FileNotFoundError:
             raise NenhumRegistrado('moeda')
@@ -79,9 +83,8 @@ class ControladorMoeda(Controlador):
 
 
     def mostra_dados(self):
-        print('mostra_dados')
         nome = self.__tela.ver_dados()
         for moeda in self.__moeda_DAO.get_all():
             if nome.lower() == moeda.nome.lower():
-                self.__tela.mostrar_dados([{'nome': moeda.nome, 'regioes': moeda.regioes, 'cifra': moeda.cifra, 'valor': moeda.valor_usd}])
+                self.__tela.mostrar_tabela([{'nome': moeda.nome, 'regioes': moeda.regioes, 'cifra': moeda.cifra, 'valor': moeda.valor_usd}])
                 self.__relatorio.add_operacao('mostragem', f"Mostragem de dados da moeda '{moeda.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")

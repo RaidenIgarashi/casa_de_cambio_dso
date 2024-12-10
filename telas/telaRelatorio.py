@@ -5,7 +5,7 @@ class TelaRelatorio():
     def mostra_relatorio(self, msg_lst, titulo):
         soma_de_msg = ''
         for msg in msg_lst:
-            soma_de_msg = soma_de_msg + msg + '\n'
+            soma_de_msg = soma_de_msg + msg + '\n\n'
 
         sg.Popup(f'-------- {titulo} ----------', soma_de_msg)
 
