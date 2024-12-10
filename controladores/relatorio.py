@@ -1,3 +1,6 @@
+from abstratas.absTela import Tela
+from telas.telaRelatorio import TelaRelatorio
+
 class Relatorio():
     def __init__(self):
         self.__inclusoes = []
@@ -5,6 +8,7 @@ class Relatorio():
         self.__exclusoes = []
         self.__mostragens = []
         self.__indefinidos = []
+        self.__tela = TelaRelatorio()
         
     def add_operacao(self, tipo: str, info: str):
         if tipo == 'inclusao':
@@ -24,10 +28,9 @@ class Relatorio():
         titulo = ('INCLUSOES: ','ALTERACOES: ','EXCLUSOES: ','MOSTRAGENS: ','INDEFINIDOS: ',)
         nome = ('inclusão','alteração','exclusão','mostragem','indefinição',)
         for opr in range(len(lista_operacao)):
-            print('\n', titulo[opr])
             if lista_operacao[opr] == []:
-                print(f'\nNenhuma {nome[opr]} foi registrada.\n')
+                self.__tela.mostra_msg(f'\nNenhuma {nome[opr]} foi registrada.\n', titulo[opr])
             else:
-                for reg in lista_operacao[opr]:
-                    print('\n', reg, '\n')
+                self.__tela.mostra_relatorio(lista_operacao[opr], titulo[opr])
+         
 

@@ -3,10 +3,11 @@ from abstratas.absControlador import Controlador
 from entidades.troca import Troca
 from datetime import datetime as dt
 from excecoes import *
+from DAOs.troca_dao import TrocaDAO
 
 class ControladorTroca(Controlador):
     def __init__(self, controlador_sistema, controlador_moeda, controlador_cliente, relatorio):
-        self.__trocas = []
+        self.__trocas = TrocaDAO()
         self.__controlador_sistema = controlador_sistema
         self.__relatorio = relatorio
         self.__tela = TelaTroca()
@@ -52,7 +53,7 @@ class ControladorTroca(Controlador):
                         dados['quantidade_entrada'], dados['quantidade_saida'], 
                         dados['data'], self.__moeda.pega_objeto(dados['moeda_entrada']), 
                         self.__moeda.pega_objeto(dados['moeda_saida']), dados['juros'])
-            self.__trocas.append(trc)
+            self.__trocas.add(trc)
             pessoa = self.__cliente.pega_objeto(dados['id_pessoa'])
             pessoa.trocas_feitas.append(trc)
             self.__relatorio.add_operacao('inclusao', f"Inclusao da Troca de id '{dados['id']}', realizada por '{pessoa.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
@@ -63,7 +64,7 @@ class ControladorTroca(Controlador):
         id = self.__tela.excluir()
         troca = self.pega_objeto(id)
         if troca != None:
-            self.__trocas.remove(troca)
+            self.__trocas.remove(troca.id)
             troca.pessoa.trocas_feitas.remove(troca)
             self.__tela.mostrar_msg(f"Troca de id '{id}' exluida com sucesso")
             self.__relatorio.add_operacao('exclusao', f"Exclusao da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
@@ -103,10 +104,10 @@ class ControladorTroca(Controlador):
 
     def mostra_todas(self):
         dados_trocas = []
-        if len(self.__trocas) == 0:
+        if len(self.__trocas.get_all()) == 0:
             NenhumRegistrado('troca')
         else:
-            for troca in self.__trocas:
+            for troca in self.__trocas.get_all():
                 dados_trocas.append({'id': troca.id, 'id_pessoa':troca.pessoa.id, 'data': troca.data, 
                                       'moeda_entrada': troca.moeda_entrada.nome, 'moeda_saida': troca.moeda_saida.nome, 
                                       'quantidade_entrada': troca.quantidade_entrada, 'quantidade_saida': troca.quantidade_saida, 
@@ -121,10 +122,10 @@ class ControladorTroca(Controlador):
         valor_saida_convertido = 1/valor_saida
         valor_total = quantidade_entrada * valor_entrada_convertido
         valor_total -= valor_total* juros
-        return valor_total/valor_saida_convertido
+        return round(valor_total/valor_saida_convertido, 2)
 
     def pega_objeto(self, id):
-        for troca in self.__trocas:
+        for troca in self.__trocas.get_all():
             if id == troca.id:
                 return troca
         return None

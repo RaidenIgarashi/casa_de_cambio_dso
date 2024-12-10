@@ -7,6 +7,8 @@ from entidades.pessoa import Pessoa
 from funcoes import eh_pessoa
 from excecoes import *
 from datetime import datetime as dt
+from DAOs.pessoa_dao import PessoaDAO
+from DAOs.organizacao_dao import OrganizacaoDAO
 
 class ControladorCliente(Controlador):
     def __init__(self, controlador_sistema, relatorio):
@@ -15,8 +17,8 @@ class ControladorCliente(Controlador):
         self.__tela = TelaCliente()
         self.__tela_emprestimo = TelaEmprestimo()
         self.__tela_troca = TelaTroca()
-        self.__pessoas = [Pessoa('Yan', "333", 19), Pessoa('Raiden', "123", 20)]
-        self.__organizacoes = [Organizacao('UFSC', "11111"), Organizacao('McDonalds', "54321")]
+        self.__pessoas = PessoaDAO()
+        self.__organizacoes = OrganizacaoDAO()
 
     def abre_tela(self):
         opcoes = {1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 
@@ -32,9 +34,10 @@ class ControladorCliente(Controlador):
         dados_cliente = self.__tela.cadastrar_dados()
         if dados_cliente is not None:   # se nada for digitado incorretamente
             if 'idade' in dados_cliente: 
-                self.__pessoas.append(Pessoa(dados_cliente['nome'], dados_cliente['id'], dados_cliente['idade']))
+                self.__pessoas.add(Pessoa(dados_cliente['nome'], dados_cliente['id'], dados_cliente['idade']))
+                #self.__pessoas.append(Pessoa(dados_cliente['nome'], dados_cliente['id'], dados_cliente['idade']))
             else:
-                self.__organizacoes.append(Organizacao(dados_cliente['nome'], dados_cliente['id']))
+                self.__organizacoes.add(Organizacao(dados_cliente['nome'], dados_cliente['id']))
             self.__tela.mostrar_msg(f"Cliente '{dados_cliente['nome']}' adicionado com sucesso")
             self.__relatorio.add_operacao('inclusao', f"Inclusao do Cliente '{dados_cliente['nome']}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
                 
@@ -43,12 +46,12 @@ class ControladorCliente(Controlador):
         id = self.__tela.ver_dados()
         existente = False
         if id != None:  # se o id nao for digitado incorretamente
-            for pessoa in self.__pessoas:
+            for pessoa in self.__pessoas.get_all():
                 if pessoa.id == id:
                     self.__tela.mostrar_dados([{'nome': pessoa.nome, 'id': pessoa.id, 'idade':pessoa.idade}], 1)
                     existente = True
                     self.__relatorio.add_operacao('mostragem', f"Mostragem de dados do Cliente '{pessoa.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
-            for org in self.__organizacoes:
+            for org in self.__organizacoes.get_all():
                 if org.id == id:
                     self.__tela.mostrar_dados([{'nome': org.nome, 'id': org.id}], 0)
                     existente = True
@@ -63,9 +66,9 @@ class ControladorCliente(Controlador):
         if id != None:   # se o id nao for digitado incorretamente
             if cliente != None: # se o cliente existir
                 if eh_pessoa(id):
-                    self.__pessoas.remove(cliente)
+                    self.__pessoas.remove(cliente.id)
                 else:
-                    self.__organizacoes.remove(cliente)
+                    self.__organizacoes.remove(cliente.id)
                 self.__tela.mostrar_msg(f'Cliente "{cliente.nome}" excluído.')
                 self.__relatorio.add_operacao('exclusao', f"Exclusão do Cliente '{cliente.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
@@ -74,15 +77,15 @@ class ControladorCliente(Controlador):
     def mostra_todas(self):
         dados_pessoa = []
         dados_org = []
-        if len(self.__organizacoes) > 0:
-            for org in self.__organizacoes:
+        if len(self.__organizacoes.get_all()) > 0:
+            for org in self.__organizacoes.get_all():
                 dados_org.append({'nome': org.nome, 'id': org.id, 'idade': ''})
             self.__tela.mostrar_dados(dados_org, 0)
         else:
             self.__tela.mostrar_msg("Nenhuma Organização cadastrada.\n")
 
-        if len(self.__pessoas) > 0:
-            for pessoa in self.__pessoas:
+        if len(self.__pessoas.get_all()) > 0:
+            for pessoa in self.__pessoas.get_all():
                 dados_pessoa.append({'nome': pessoa.nome, 'id': pessoa.id, 'idade': pessoa.idade})
             self.__tela.mostrar_dados(dados_pessoa, 1)
         else:
@@ -95,7 +98,7 @@ class ControladorCliente(Controlador):
         id_a_alterar = self.pega_objeto(id)
         if id != None:   # se o id nao for digitado incorretamente
             if id_a_alterar != None:  # se o id estiver registrado
-                lista = self.__pessoas if eh_pessoa(id) else self.__organizacoes
+                lista = self.__pessoas.get_all() if eh_pessoa(id) else self.__organizacoes.get_all()
                 for cliente in lista:
                     if cliente.id == id_a_alterar.id:
                         novo_cliente = self.__tela.cadastrar_dados()
@@ -113,12 +116,12 @@ class ControladorCliente(Controlador):
         existente = False
         eh_pes = eh_pessoa(id)
         if eh_pes == True: # se for cpf
-            for pessoa in self.__pessoas:
+            for pessoa in self.__pessoas.get_all():
                 if pessoa.id == id:
                     cliente = pessoa
                     existente = True
         elif eh_pes == False: # se for cnpj
-            for org in self.__organizacoes:
+            for org in self.__organizacoes.get_all():
                 if org.id == id:
                     cliente = org
                     existente = True
@@ -156,9 +159,12 @@ class ControladorCliente(Controlador):
             raise NenhumRegistrado('cliente')
             
     def pega_objeto(self, id):  # funcao interna
-        for cli in self.__pessoas + self.__organizacoes:
+        for cli in self.__pessoas.get_all():
             if cli.id == id:
                 return cli 
+        for cli in self.__organizacoes.get_all():
+            if cli.id == id:
+                return cli
 
 
     def voltar_tela(self):
