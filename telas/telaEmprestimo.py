@@ -231,4 +231,4 @@ class TelaEmprestimo(Tela):
         return valores['id']
 
     def mostrar_msg(self, msg):
-        print(msg)
+        sg.Popup(msg)

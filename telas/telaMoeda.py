@@ -6,7 +6,6 @@ import PySimpleGUI as sg
 class TelaMoeda(Tela):
     def __init__(self):
         self.__window = None
-        self.init_opcoes()
     def close(self):
         self.__window.Close()
     def open(self):
