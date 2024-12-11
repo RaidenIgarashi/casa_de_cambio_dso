@@ -54,7 +54,7 @@ class TelaCliente(Tela):
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
         self.close()
-        if eh_numerico(valores['id'], "identidade"):
+        if botao not in (None, 'Cancelar') and eh_numerico(valores['id'], "identidade"):
             return valores['id']
     
 
@@ -69,6 +69,7 @@ class TelaCliente(Tela):
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
         self.close()
+
         if botao not in (None, 'Cancelar'):
             layout = [
                 [sg.Text(f'NOME: '), sg.InputText('', key='nome')],
@@ -90,28 +91,35 @@ class TelaCliente(Tela):
                 idade = valores['idade']
 
             corretos = True
-            for char in nome:      # nome precisa ser só letras
-                if char.isnumeric() and pessoa:
-                    corretos = False
-                    raise NomeComDigito()
-            for char in id:       # id precisa ser só numeros
-                if not char.isnumeric():
-                    corretos = False
-                    raise IdNaoNumerico
+            if not eh_numerico(id, 'cpf/cnpj'):
+                corretos = False
+            elif ('idade' in valores and len(id) != 3) or len(id) != 5: # cpf deve ter 3 digitos e cnpj 5
+                corretos = False
+                TamanhoErradoId()
+
+            if nome == '':
+                NomeVazio()
+            elif pessoa:
+                for char in nome:      # nome de pessoa precisa ser só letras
+                    if char.isnumeric():
+                        corretos = False
+                        NomeComDigito()
+                        break
             if pessoa:
                 try:   # idade precisa ser inteiro
-                    int(idade) 
+                    x = idade == int(idade) 
+                    if x == False:
+                        corretos = False
+                        NaoInteiro('idade')
                 except:
                     corretos = False
-                    raise NaoInteiro('idade')
+                    NaoInteiro('idade')
             
-            if corretos:
+            if corretos:         # se algo estiver errado retorna None
                 lista = {"nome": nome, "id": id}
                 if pessoa:
                     lista["idade"] = idade
-                return lista 
-            else:
-                return None        # se algo estiver errado retorna None
+                return lista             
     
     
     def excluir(self):
@@ -123,7 +131,7 @@ class TelaCliente(Tela):
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
         self.close()
-        if eh_numerico(valores['id'], "identidade"):
+        if botao not in (None, 'Cancelar') and eh_numerico(valores['id'], "cpf/cnpj"):
             return valores['id']        
         
 
@@ -136,7 +144,7 @@ class TelaCliente(Tela):
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
         self.close()
-        if eh_numerico(valores['id'], "identidade"):
+        if botao not in (None, 'Cancelar') and eh_numerico(valores['id'], "cpf/cnpj"):
             return valores['id']
         
     
@@ -145,14 +153,14 @@ class TelaCliente(Tela):
         keys = []
         if tipo == 0:
             keys = ["nome", "cnpj"]
-            titulo_tipo_cliente = "ORGANIZAÇÕES"
+            tipo_cliente = "ORGANIZAÇÕES"
         elif tipo == 1:
             keys = ["nome", "cpf", "idade"]
-            titulo_tipo_cliente = "PESSOAS"
+            tipo_cliente = "PESSOAS"
         for d in dados_cliente:
             client.append(list(d.values()))
         layout = [
-            [sg.Text("INFORMAÇÕES DOS CLIENTES:" + titulo_tipo_cliente)],
+            [sg.Text(f"{tipo_cliente} REGISTRADAS")],
             [sg.Table(values =client,
                     headings =keys,
                     auto_size_columns= True,
@@ -181,6 +189,6 @@ class TelaCliente(Tela):
         botao, valores = self.open()
         self.close()
         
-        if botao not in (None, 'Cancelar') and eh_numerico(valores['id'], "identidade"):
+        if botao not in (None, 'Cancelar') and eh_numerico(valores['id'], "cpf/cnpj"):
             return valores['id']
         

@@ -74,14 +74,14 @@ class TelaMoeda(Tela):
             for char in nome:
                 if char.isnumeric():
                     corretos = False
-                    raise NomeComDigito()
+                    NomeComDigito()
             try:
                 if '.' not in valor:
                     valor = int(valor)
                 valor = float(valor)
             except:
                 corretos = False
-                raise NaoNumericoGeral('Valor')
+                NaoNumericoGeral('Valor')
             
             if corretos:
                 return {"nome": nome, "regioes": regioes, "cifra": cifra, "valor": valor}
@@ -119,7 +119,7 @@ class TelaMoeda(Tela):
         for m in dados_moeda:
             moeda.append(list(m.values()))
         layout = [
-            [sg.Text("INFORMAÇÕES DAS MOEDAS")],
+            [sg.Text("MOEDAS REGISTRADAS")],
             [sg.Table(values =moeda,
                     headings =keys,
                     auto_size_columns= True,

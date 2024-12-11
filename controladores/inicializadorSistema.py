@@ -2,7 +2,7 @@ from controladores.controladorCliente import ControladorCliente
 from controladores.controladorTroca import ControladorTroca
 from controladores.controladorEmprestimo import ControladorEmprestimo
 from controladores.controladorMoeda import ControladorMoeda
-from controladores.relatorio import Relatorio
+from controladores.controladorRelatorio import Relatorio
 from telas.telaInicializador import TelaInicializador
 
 

@@ -161,7 +161,7 @@ class TelaTroca(Tela):
         for t in dados_troca:
             trocas.append(list(t.values()))
         layout = [
-            [sg.Text("INFORMAÇÕES DAS TROCAS")],
+            [sg.Text("TROCAS REGISTRADAS")],
             [sg.Table(values =trocas,
                     headings =keys,
                     auto_size_columns= True,

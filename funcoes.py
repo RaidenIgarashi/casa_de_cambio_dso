@@ -30,10 +30,10 @@ def eh_numerico(valor, variavel):
                 if not c.isnumeric():
                     numerico = False
             if not numerico:
-                raise NaoNumericoGeral(variavel)
+                NaoNumericoGeral(variavel)
         return numerico
     except:
-        raise NaoNumericoGeral(variavel)
+        NaoNumericoGeral(variavel)
 
 def eh_alpha(x):
     alpha = True
@@ -42,8 +42,8 @@ def eh_alpha(x):
             if not c.isalpha():
                 alpha = False
         if not alpha:
-            raise NomeComDigito()
+            NomeComDigito()
         return alpha
     except:
-        raise NomeComDigito()
+        NomeComDigito()
 

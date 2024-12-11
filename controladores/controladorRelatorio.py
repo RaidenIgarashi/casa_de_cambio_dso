@@ -25,13 +25,6 @@ class Relatorio():
     def gera_relatorio(self):
         lista_operacao = (self.__inclusoes, self.__alteracoes, self.__exclusoes,
                   self.__mostragens, self.__indefinidos)
-        titulo = ('INCLUSOES: ','ALTERACOES: ','EXCLUSOES: ','MOSTRAGENS: ','INDEFINIDOS: ',)
-        nome = ('inclusão','alteração','exclusão','mostragem','indefinição',)
-        for opr in range(len(lista_operacao)):
-            if lista_operacao[opr] == []:
-                if nome[opr] != 'indefinição':
-                    self.__tela.mostra_msg(f'\nNenhuma {nome[opr]} foi registrada.\n', titulo[opr])
-            else:
-                self.__tela.mostra_relatorio(lista_operacao[opr], titulo[opr])
+        self.__tela.gera_relatorio(lista_operacao)
          
 

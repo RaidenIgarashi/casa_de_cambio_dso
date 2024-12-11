@@ -42,7 +42,7 @@ class ControladorEmprestimo(Controlador):
         if id != None:
             emp = self.pega_objeto(id)
             if emp is None:
-                raise NaoFoiEncontradoComEsteId('emprestimo')
+                NaoFoiEncontradoComEsteId('emprestimo')
             else:
                 self.__tela.mostrar_tabela([{'id':emp.id, 'cliente_id':emp.cliente.id, 'emprestador_id':emp.emprestador.id, 
                                         'moeda':emp.moeda, 'quantia_repassada':emp.quantia_repassada, 'data_do_repasse':emp.data_do_repasse, 
@@ -61,18 +61,18 @@ class ControladorEmprestimo(Controlador):
                 moeda = self.__moeda.pega_objeto(dados['moeda'])
                 if cliente is None:
                     is_cliente = True
-                    raise ValueError(dados['cliente_id'])
+                    ValueError(dados['cliente_id'])
                 if emprestador is None:
                     is_cliente = True
-                    raise ValueError(dados['emprestador_id'])
+                    ValueError(dados['emprestador_id'])
                 if moeda is None:
-                    raise ValueError(dados['moeda'])
+                    ValueError(dados['moeda'])
             except ValueError as e:
                 self.__tela.mostrar_tabela()
                 if is_cliente:
-                    raise NaoFoiEncontradoComEsteId('cliente')
+                    NaoFoiEncontradoComEsteId('cliente')
                 else:
-                    raise MoedaNaoEncontrada
+                    MoedaNaoEncontrada
             emp = Emprestimo(dados['id'], cliente, emprestador, moeda, dados['quantia_repassada'], 
                              dados['data_do_repasse'], dados['data_pretendida'], dados['juros_normal'], 
                              dados['juros_mensal_atraso'], dados['devolvido'], dados['data_devolvida'])
@@ -94,7 +94,7 @@ class ControladorEmprestimo(Controlador):
                 self.__relatorio.add_operacao('exclusao', f"Exclusão do Empréstimo '{emprestimo.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
                 self.__tela.mostrar_msg(f"\n# Exclusão do empréstimo {emprestimo.nome} feita com sucesso #\n")
             else:
-                raise NaoFoiEncontradoComEsteId('emprestimo')
+                NaoFoiEncontradoComEsteId('emprestimo')
             
 
     def altera(self):
@@ -112,12 +112,12 @@ class ControladorEmprestimo(Controlador):
                     dados_alterar[d] = novos_dados[nomes[d]]
                 self.__relatorio.add_operacao('alteracao', f"Alteracao de dados do Empréstimo '{emp.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
-                raise NaoFoiEncontradoComEsteId('emprestimo')
+                NaoFoiEncontradoComEsteId('emprestimo')
     
     
     def mostra_todas(self):
         if len(self.__emprestimos.get_all()) == 0:
-            raise NenhumRegistrado('empréstimo')
+            NenhumRegistrado('empréstimo')
         else:
             for emp in self.__emprestimos.get_all():
                 self.__tela.mostrar_tabela([{'id':emp.id, 'cliente_id':emp.cliente.id, 'emprestador_id':emp.emprestador.id, 
@@ -132,7 +132,7 @@ class ControladorEmprestimo(Controlador):
     #     id = self.__tela.ver_juros()
     #     emp = self.pega_objeto(id)
     #     if emp is None:
-    #         raise NaoFoiEncontradoComEsteId('emprestimo')
+    #         NaoFoiEncontradoComEsteId('emprestimo')
     #     else:
     #         if emp.devolvido == True:
     #             data = emp.data_devolvida
@@ -162,5 +162,5 @@ class ControladorEmprestimo(Controlador):
                         self.__relatorio.add_operacao('alteracao', f"Emprestimo de id '{emp.id}' registrado como devolvido na data {emp.data_devolvida}; registro feito {dt.now().strftime('dia %d/%m/%Y, às %H:%M')}")
                     existe = True
             if not existe:
-                raise NaoFoiEncontradoComEsteId('emprestimo')
+                NaoFoiEncontradoComEsteId('emprestimo')
 

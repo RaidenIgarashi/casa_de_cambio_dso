@@ -27,7 +27,7 @@ class ControladorMoeda(Controlador):
             try:
                 for moeda in self.__moeda_DAO.get_all():
                     if dados['nome'].lower() == moeda.nome.lower():
-                        raise ValueError
+                        ValueError
             except:
                 self.__tela.mostrar_msg(f'\n## a moeda {moeda.nome} já está registrada ##\n')
                 return
@@ -45,7 +45,7 @@ class ControladorMoeda(Controlador):
                 self.__tela.mostrar_msg(f'A moeda {moeda.nome} foi excluida com sucesso')
                 self.__relatorio.add_operacao('exclusao', f"Exclusao da Moeda '{moeda.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
-                raise MoedaNaoEncontrada
+                MoedaNaoEncontrada
 
     def pega_objeto(self, nome):
         if nome != None:
@@ -66,7 +66,7 @@ class ControladorMoeda(Controlador):
                 moeda.valor_usd = new_moeda['valor']
                 self.__relatorio.add_operacao('alteracao', f"Alteracao da Moeda '{moeda.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
-                raise MoedaNaoEncontrada
+                MoedaNaoEncontrada
             
     def mostra_todas(self):
         dados_moedas = []
@@ -76,7 +76,7 @@ class ControladorMoeda(Controlador):
             self.__tela.mostrar_tabela(dados_moedas)
             self.__relatorio.add_operacao('mostragem', f"Mostragem de todas as moedas registradas, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
         except FileNotFoundError:
-            raise NenhumRegistrado('moeda')
+            NenhumRegistrado('moeda')
         
     def voltar_tela(self):
         self.__controlador_sistema.abre_tela()

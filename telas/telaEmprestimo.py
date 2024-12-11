@@ -52,7 +52,7 @@ class TelaEmprestimo(Tela):
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
         self.close()
-        if botao not in (None, 'Cancelar'):
+        if botao not in (None, 'Cancelar') :
             return valores['id']
     
 
@@ -172,7 +172,7 @@ class TelaEmprestimo(Tela):
         for e in dados_emprestimo:
             emprestimo.append(list(e.values()))
         layout = [
-            [sg.Text("INFORMAÇÕES DOS EMPRESTIMOS")],
+            [sg.Text("EMPRÉSTIMOS REGISTRADOS")],
             [sg.Table(values =emprestimo,
                     headings =keys,
                     auto_size_columns= True,

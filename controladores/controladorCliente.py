@@ -57,7 +57,7 @@ class ControladorCliente(Controlador):
                     existente = True
                     self.__relatorio.add_operacao('mostragem', f"Mostragem de dados do Cliente '{org.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             if not existente:
-                raise NaoFoiEncontradoComEsteId('cliente')
+                NaoFoiEncontradoComEsteId('cliente')
 
 
     def exclui(self):
@@ -72,7 +72,7 @@ class ControladorCliente(Controlador):
                 self.__tela.mostrar_msg(f'Cliente "{cliente.nome}" excluído.')
                 self.__relatorio.add_operacao('exclusao', f"Exclusão do Cliente '{cliente.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
-                raise NaoFoiEncontradoComEsteId('cliente')
+                NaoFoiEncontradoComEsteId('cliente')
             
 
     def mostra_todas(self):
@@ -109,7 +109,7 @@ class ControladorCliente(Controlador):
                             cliente.idade = novo_cliente['idade']
                 self.__relatorio.add_operacao('alteracao', f"Alteracao dos dados do Cliente '{cliente.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
-                raise NaoFoiEncontradoComEsteId('cliente')
+                NaoFoiEncontradoComEsteId('cliente')
             
     
     def mostra_transacoes(self):
@@ -157,7 +157,7 @@ class ControladorCliente(Controlador):
                     self.__tela_emprestimo.mostrar_msg('\nEste cliente não fez nenhuma troca cambial. \n')
             self.__relatorio.add_operacao('mostragem', f"Mostragem de todas as transações do cliente '{cliente.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
         elif eh_pes != None:
-            raise NenhumRegistrado('cliente')
+            NenhumRegistrado('cliente')
             
     def pega_objeto(self, id):  # funcao interna
         if id != None:

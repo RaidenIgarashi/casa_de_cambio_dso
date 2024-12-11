@@ -31,7 +31,7 @@ class ControladorTroca(Controlador):
         if id != None:
             troca = self.pega_objeto(id)
             if troca is None:
-                raise NaoFoiEncontradoComEsteId('troca')
+                NaoFoiEncontradoComEsteId('troca')
             else:
                 self.__tela.mostrar_tabela([{'id': troca.id, 'id_pessoa':troca.pessoa.id, 'data': troca.data, 
                                         'moeda_entrada': troca.moeda_entrada.nome, 'moeda_saida': troca.moeda_saida.nome, 
@@ -50,11 +50,11 @@ class ControladorTroca(Controlador):
                 moeda_saida_verify = self.__moeda.pega_objeto(dados['moeda_saida'])
                 if pessoa_verify is None:
                     is_pessoa = True
-                    raise ValueError(dados['id_pessoa'])
+                    ValueError(dados['id_pessoa'])
                 elif moeda_entrada_verify is None :
-                    raise ValueError(dados['moeda_entrada'])
+                    ValueError(dados['moeda_entrada'])
                 elif moeda_saida_verify is None:
-                    raise ValueError(dados['moeda_saida'])
+                    ValueError(dados['moeda_saida'])
             except ValueError as e:
                 print()
                 if is_pessoa:
@@ -86,7 +86,7 @@ class ControladorTroca(Controlador):
                 self.__tela.mostrar_msg(f"Troca de id '{id}' exluida com sucesso")
                 self.__relatorio.add_operacao('exclusao', f"Exclusao da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
-                raise NaoFoiEncontradoComEsteId('troca')
+                NaoFoiEncontradoComEsteId('troca')
 
     def altera(self):
         id = self.__tela.alterar_dados()
@@ -105,7 +105,7 @@ class ControladorTroca(Controlador):
                 troca.porcentagem_juros = new_dados['juros']
                 self.__relatorio.add_operacao('alteracao', f"Alteracao de dados da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
-                raise NaoFoiEncontradoComEsteId('troca')
+                NaoFoiEncontradoComEsteId('troca')
     
 
     def mostra_todas(self):
