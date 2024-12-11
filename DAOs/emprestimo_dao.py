@@ -3,7 +3,7 @@ from entidades.emprestimo import Emprestimo
 
 class EmprestimoDAO(DAO):
     def __init__(self):
-        super().__init__('emprestimo.pkl')
+        super().__init__('DAOs/pickles/emprestimo.pkl')
 
     def add(self, emprestimo: Emprestimo):
         if((emprestimo is not None) and isinstance(emprestimo, Emprestimo)):

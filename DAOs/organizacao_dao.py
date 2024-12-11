@@ -3,7 +3,7 @@ from entidades.organizacao import Organizacao
 
 class OrganizacaoDAO(DAO):
     def __init__(self):
-        super().__init__('organizacao.pkl')
+        super().__init__('DAOs/pickles/organizacao.pkl')
 
     def add(self, organizacao: Organizacao):
         if((organizacao is not None) and isinstance(organizacao, Organizacao)):

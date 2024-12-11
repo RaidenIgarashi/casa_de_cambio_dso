@@ -3,7 +3,7 @@ from entidades.troca import Troca
 
 class TrocaDAO(DAO):
     def __init__(self):
-        super().__init__('troca.pkl')
+        super().__init__('DAOs/pickles/troca.pkl')
 
     def add(self, troca: Troca):
         if((troca is not None) and isinstance(troca, Troca)):
