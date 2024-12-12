@@ -32,16 +32,16 @@ class ControladorCliente(Controlador):
                 
     def inclui(self):
         dados_cliente = self.__tela.cadastrar_dados()
-        if self.pega_objeto(dados_cliente['id']) == None:
-            if dados_cliente is not None:   # se nada for digitado incorretamente
+        if dados_cliente is not None: 
+            if self.pega_objeto(dados_cliente['id']) == None:  # se nada for digitado incorretamente
                 if 'idade' in dados_cliente: 
                     self.__pessoas.add(Pessoa(dados_cliente['nome'], dados_cliente['id'], dados_cliente['idade']))
                 else:
                     self.__organizacoes.add(Organizacao(dados_cliente['nome'], dados_cliente['id']))
                 self.__tela.mostrar_msg(f"Cliente '{dados_cliente['nome']}' adicionado com sucesso")
                 self.__relatorio.add_operacao('inclusao', f"Inclusao do Cliente '{dados_cliente['nome']}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
-        else:
-            ClienteJaRegistrado()
+            else:
+                ClienteJaRegistrado()
 
     def mostra_dados(self):
         id = self.__tela.ver_dados()
@@ -108,6 +108,9 @@ class ControladorCliente(Controlador):
                         cliente.id = novo_cliente['id']
                         if len(id) == 3:
                             cliente.idade = novo_cliente['idade']
+                            self.__pessoas.update(cliente)
+                        else:
+                            self.__organizacoes.update(cliente)
                 self.__relatorio.add_operacao('alteracao', f"Alteracao dos dados do Cliente '{cliente.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
                 self.__tela.mostrar_msg(f'Cliente "{cliente.nome}" alterado com sucesso.')
             else:

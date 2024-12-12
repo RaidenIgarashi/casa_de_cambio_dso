@@ -31,6 +31,12 @@ class NaoInteiro():
         self.msg = f"\nO valor de {variavel} precisa ser um Número e ser Inteiro\n"
         sg.Popup(self.msg)
 
+class NaoNum():
+    def __init__(self, variavel):
+        sg.change_look_and_feel('DarkRed')
+        self.msg = f"\nO valor de {variavel} precisa ser um Número\n"
+        sg.Popup(self.msg)
+
 class NaoFoiEncontradoComEsteId():
     def __init__(self, tipo):
         sg.change_look_and_feel('DarkRed')

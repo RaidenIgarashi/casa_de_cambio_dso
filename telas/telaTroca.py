@@ -69,65 +69,26 @@ class TelaTroca(Tela):
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
         self.close()
+        condicao = True
         if botao not in (None, 'Cancelar'):
             id = valores['id']
             cpf = valores['cpf']
             moeda_entrada = valores['moeda_entrada']
             moeda_saida = valores['moeda_saida']
-            quantidade_entrada = float(valores['quantidade_entrada'])
-            juros = float(valores['juros'])
+            try:
+                quantidade_entrada = float(valores['quantidade_entrada'])
+            except:
+                NaoNum('quantidade entrada')
+                condicao = False
+            try:
+                juros = float(valores['juros'])
+            except:
+                NaoNum('juros')
+                condicao = False
             data = valores['data']
             self.close()
-            return {'id': id, 'id_pessoa': cpf, 'quantidade_entrada': quantidade_entrada, 'quantidade_saida': 0, 'moeda_entrada': moeda_entrada, 'moeda_saida': moeda_saida, 'juros': juros, 'data':data}
-        # try:
-        #     id = int(input('Digite o id da troca: '))
-        # except(ValueError):
-        #     print()
-        #     print('## O ID precisa ser um número sem vígula ##')
-        #     print()
-        #     return
-        # try:
-        #     id_pessoa = input('Digite o cpf da pessoa: ')
-        #     id_pessoa_verify = id_pessoa.replace('.', '')
-        #     if len(id_pessoa_verify) != 3:
-        #         raise ValueError('## entrada não corresponde a um cpf ##')
-        # except ValueError as e:
-        #     print()
-        #     print(e)
-        #     print()
-        #     return
-        # moeda_entrada = input('Digite o nome da moeda que o cliente tem para trocar: ')
-        # moeda_saida = input('Digite o nome da moeda que o cliente quer receber: ')
-        # try:
-        #     quantidade_entrada = float(input(f'Digite o quanto de "{moeda_entrada}" o cliente quer trocar por "{moeda_saida}": '))
-        # except:
-        #     print()
-        #     print(' ## Isso não e uma quantia ## ')
-        #     print()
-        #     return
-        # try:
-        #     juros = float(input('Digite o juros que será aplicado (em %): ')) / 100
-        #     if juros > 1:
-        #         raise ValueError
-        # except:
-        #     print()
-        #     print('## O valor escrito não é um juros ##')
-        #     print()
-        #     return
-        # try:
-        #     data = input('Digite a data da transação (dd/mm/aaaa): ')
-        #     data_sem_barra = data.replace('/', '')
-        #     if len(data_sem_barra) != 8:
-        #         raise ValueError
-        #     data_sem_barra = int(data_sem_barra)
-        # except:
-        #     print()
-        #     print('## esse valor não é uma data ##')
-        #     print()
-        #     return
-
-        #return {'id': id, 'id_pessoa': id_pessoa, 'quantidade_entrada': quantidade_entrada, 'quantidade_saida': 0, 'moeda_entrada': moeda_entrada, 'moeda_saida': moeda_saida, 'juros': juros, 'data':data}
-    
+            if condicao:
+                return {'id': id, 'id_pessoa': cpf, 'quantidade_entrada': quantidade_entrada, 'quantidade_saida': 0, 'moeda_entrada': moeda_entrada, 'moeda_saida': moeda_saida, 'juros': juros, 'data':data}
     
     def excluir(self):
         sg.change_look_and_feel('DarkRed')
@@ -140,7 +101,6 @@ class TelaTroca(Tela):
         self.close()
         if botao not in (None, 'Cancelar') and eh_numerico(valores['id']):
             return valores['id'] 
-
 
     def alterar_dados(self):
         sg.change_look_and_feel('LightBrown')

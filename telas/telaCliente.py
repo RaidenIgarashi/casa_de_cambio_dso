@@ -108,10 +108,7 @@ class TelaCliente(Tela):
                         break
             if pessoa:
                 try:   # idade precisa ser inteiro
-                    x = idade == int(idade) 
-                    if x == False:
-                        corretos = False
-                        NaoInteiro('idade')
+                    idade = int(idade)
                 except:
                     corretos = False
                     NaoInteiro('idade')
