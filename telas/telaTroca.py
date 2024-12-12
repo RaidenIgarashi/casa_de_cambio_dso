@@ -1,6 +1,7 @@
 from abstratas.absTela import Tela
 import PySimpleGUI as sg
 from funcoes import *
+from datetime import datetime as dt
 
 
 class TelaTroca(Tela):
@@ -59,8 +60,8 @@ class TelaTroca(Tela):
             [sg.Text('--------INFORMAÇÕES DA TROCA--------')],
             [sg.Text(f'ID DA TROCA: '), sg.InputText('', key='id')],
             [sg.Text(f'CPF DA PESSOA: '), sg.InputText('', key='cpf')],
-            [sg.Text(f'MOEDA ENTRADA: '), sg.InputText('', key='moeda_entrada')],
-            [sg.Text(f'MOEDA SAIDA: '), sg.InputText('', key='moeda_saida')],
+            [sg.Text(f'MOEDA ENTRADA: '), sg.InputText('', key='nome_moeda_entrada')],
+            [sg.Text(f'MOEDA SAIDA: '), sg.InputText('', key='nome_moeda_saida')],
             [sg.Text(f'QUANTIDADE ENTRADA: '), sg.InputText('', key='quantidade_entrada')],
             [sg.Text(f'JUROS: '), sg.InputText('', key='juros')],
             [sg.Text(f'DATA: '), sg.InputText('', key='data')],
@@ -69,26 +70,35 @@ class TelaTroca(Tela):
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
         self.close()
-        condicao = True
+        
+        id = valores['id']
+        cpf = valores['cpf']
+        nome_moeda_entrada = valores['nome_moeda_entrada']
+        nome_moeda_saida = valores['nome_moeda_saida']
+        data = valores['data']
+        corretos = True
         if botao not in (None, 'Cancelar'):
-            id = valores['id']
-            cpf = valores['cpf']
-            moeda_entrada = valores['moeda_entrada']
-            moeda_saida = valores['moeda_saida']
+            if id in (None, ''):
+                CampoVazio('id')
+                corretos = False
+                          
             try:
                 quantidade_entrada = float(valores['quantidade_entrada'])
             except:
-                NaoNum('quantidade entrada')
-                condicao = False
+                NaoNumericoGeral("'quantidade entrada'")
+                corretos = False
+                
             try:
                 juros = float(valores['juros'])
+                if juros < 0:
+                    JurosNegativo()
             except:
-                NaoNum('juros')
-                condicao = False
-            data = valores['data']
-            self.close()
-            if condicao:
-                return {'id': id, 'id_pessoa': cpf, 'quantidade_entrada': quantidade_entrada, 'quantidade_saida': 0, 'moeda_entrada': moeda_entrada, 'moeda_saida': moeda_saida, 'juros': juros, 'data':data}
+                NaoNumericoGeral('juros')
+                corretos = False
+                
+            if corretos:
+                return {'id': id, 'id_pessoa': cpf, 'quantidade_entrada': quantidade_entrada, 'quantidade_saida': 0, 
+                        'nome_moeda_entrada': nome_moeda_entrada, 'nome_moeda_saida': nome_moeda_saida, 'juros': juros, 'data':data}
     
     def excluir(self):
         sg.change_look_and_feel('DarkRed')
@@ -99,7 +109,7 @@ class TelaTroca(Tela):
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
         self.close()
-        if botao not in (None, 'Cancelar') and eh_numerico(valores['id']):
+        if botao not in (None, 'Cancelar'):
             return valores['id'] 
 
     def alterar_dados(self):

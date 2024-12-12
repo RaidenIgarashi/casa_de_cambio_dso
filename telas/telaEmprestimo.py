@@ -1,6 +1,8 @@
 from abstratas.absTela import Tela
 from datetime import datetime
 import PySimpleGUI as sg
+from excecoes import *
+from funcoes import *
 
 
 class TelaEmprestimo(Tela):
@@ -65,77 +67,55 @@ class TelaEmprestimo(Tela):
             [sg.Text(f'MOEDA: '), sg.InputText('', key='moeda')],
             [sg.Text(f'QUANTIDADE PEDIDA: '), sg.InputText('', key='quantia_repassada')],
             [sg.Text(f'DATA REPASSADA: '), sg.InputText('', key='data_repasse')],
-            [sg.Text(f'DATA DEVOLVIDA: '), sg.InputText('', key='data_devolvida')],
             [sg.Text(f'DATA PRETENDIDA: '), sg.InputText('', key='data_pretendida')],         
             [sg.Text(f'JUROS: '), sg.InputText('', key='juros')],
             [sg.Text(f'JUROS DE ATRASO: '), sg.InputText('', key='juros_atraso')],
             [sg.Text(f'DEVOLVIDO'), sg.Radio("SIM", "DEVOLVIDO", key="sim"),  sg.Radio("NÃO", "DEVOLVIDO", key="nao", default=True)],     
             [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
-        ]
+        ]  
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
         self.close()
+        if botao not in (None, 'Cancelar') and valores['sim']:
+            layout = [ 
+            [sg.Text(f'DATA DEVOLVIDA: '), sg.InputText('', key='data_devolvida')],
+            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
+            ]
+            self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
+            botao, devolvido = self.open()
+            self.close()
+            
+        
         if botao not in (None, 'Cancelar'):
             id = valores['id']
             id_cliente = valores['id_cliente']
             id_emprestador = valores['id_emprestador']
             moeda = valores['moeda']
-            quantia_repassada = float(valores['quantia_repassada'])
-            data_do_repasse = valores['data_repasse']
-            data_devolvida = valores['data_devolvida']
             data_pretendida = valores['data_devolvida']
+            
             juros_normal = float(valores['juros'])
             juros_mensal_atraso = float(valores['juros_atraso'])
+            data_do_repasse = valores['data_repasse']
+            
+            try:
+                quantia_repassada = float(valores['quantia_repassada'])
+            except:
+                NaoNumericoGeral('quantia repassada')
+                
+            
             if valores['sim']:
                 devolvido = True
+                data_devolvida = devolvido['data_devolvida']
             else:
                 devolvido = False
+                data_devolvida = ''
+            
+
             self.close()
             return {'id':id, 'cliente_id':id_cliente, 'emprestador_id':id_emprestador, 'moeda':moeda, 'quantia_repassada':quantia_repassada, 
                     'data_do_repasse':data_do_repasse, 'data_devolvida':data_devolvida, 'data_pretendida':data_pretendida, 
                     'juros_normal':juros_normal, 'juros_mensal_atraso':juros_mensal_atraso, 'devolvido': devolvido}
-        # print('-------REGISTRANDO EMPRÉSTIMO--------')
-        # try:
-        #     id = input('Digite um id novo para a transação: ')
-        # except:
-        #     print()
-        #     print('## O ID deve ser um número ##')
-        #     print()
-        #     return
-        # cliente_id = input('Digite o cpf/cnpj do cliente que pediu o empréstimo: ')
-        # emprestador_id = input('Digite o cpf/cnpj do cliente que concedeu: ')
-        # moeda = input('Digite o nome da moeda utilizada: ')
-        # try:
-        #     quantia_repassada = float(input('Digite a quantia repassada nesta moeda: '))
-        # except:
-        #     print()
-        #     print('## O valor digitado não é uma quantia ##')
-        #     print()
-        # data_do_repasse = input('Digite a data em que foi feito o repasse [dd/mm/aaaa]: ')
-        # data_do_repasse = datetime.strptime(data_do_repasse, '%d/%m/%Y')
-        # data_pretendida = input('Digite a data máxima combinada para devolução [dd/mm/aaaa]: ')
-        # data_pretendida = datetime.strptime(data_pretendida, '%d/%m/%Y')
-        # try:
-        #     juros_normal = float(input('Digite a quantidade de juros normal (em %) que será aplicado: '))
-        #     juros_mensal_atraso = float(input('Digite a quantidade de juros (%) que será aplicado mensalmente em caso de atraso: '))
-        # except:
-        #     print()
-        #     print('## Valor digitado não corresponde a juros ##')
-        #     print()
-        # dev = int(input('O empréstimo já foi devolvido e está sendo apenas registrado? 0- não, 1- sim: '))
-        # if dev == 1:
-        #     devolvido = True
-        #     data_devolvida = input('Digite a data em que o empréstimo foi devolvido [dd/mm/aaaa]: ')
-        #     data_devolvida = datetime.strptime(data_devolvida, '%d/%m/%Y')
-        # elif dev == 0:
-        #     devolvido = False
-        #     data_devolvida = None
-            
-        # else:
-        #     print("## opcao errada ##")
-        # return {'id':id, 'cliente_id':cliente_id, 'emprestador_id':emprestador_id, 'moeda':moeda, 'quantia_repassada':quantia_repassada, 
-        #         'data_do_repasse':data_do_repasse, 'data_devolvida':data_devolvida, 'data_pretendida':data_pretendida, 
-        #         'juros_normal':juros_normal, 'juros_mensal_atraso':juros_mensal_atraso, 'devolvido': devolvido}
+
     
     
     def excluir(self):
@@ -217,7 +197,6 @@ class TelaEmprestimo(Tela):
         self.close()
         if botao not in (None, 'Cancelar'):
             id = valores['id']
-            data = datetime.strptime(valores['data'], '%d/%m/%Y')
-            return {'id':id, 'data':data}   
+            return {'id':id, 'data':valores['data']}   
 
 

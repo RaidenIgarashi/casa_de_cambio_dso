@@ -10,7 +10,7 @@ class OpcaoDigitadaIncorretamente():
 class NaoNumericoGeral():
     def __init__(self, variavel):
         sg.change_look_and_feel('DarkRed')
-        self.msg = f"\nO valor de {variavel} digitado não é numérico\n"
+        self.msg = f"\nO valor de {variavel} digitado não é numérico ou está no formato incorreto\n"
         sg.Popup(self.msg)
 
 class NomeComDigito():
@@ -31,12 +31,6 @@ class NaoInteiro():
         self.msg = f"\nO valor de {variavel} precisa ser um Número e ser Inteiro\n"
         sg.Popup(self.msg)
 
-class NaoNum():
-    def __init__(self, variavel):
-        sg.change_look_and_feel('DarkRed')
-        self.msg = f"\nO valor de {variavel} precisa ser um Número\n"
-        sg.Popup(self.msg)
-
 class NaoFoiEncontradoComEsteId():
     def __init__(self, tipo):
         sg.change_look_and_feel('DarkRed')
@@ -44,9 +38,9 @@ class NaoFoiEncontradoComEsteId():
         sg.Popup(self.msg)
 
 class MoedaNaoEncontrada():
-    def __init__(self):
+    def __init__(self, nome):
         sg.change_look_and_feel('DarkRed')
-        self.msg = f"\nNao foi encontrada moeda registrada com este nome\n"
+        self.msg = f"\nNao foi encontrada moeda registrada com o nome '{nome}'\n"
         sg.Popup(self.msg)
         
 class NenhumRegistrado():
@@ -95,4 +89,10 @@ class CifraComNumero():
     def __init__(self):
         sg.change_look_and_feel('DarkRed')
         self.msg = f"\nNão pode haver números na cifra da moeda\n"
+        sg.Popup(self.msg)
+        
+class JurosNegativo():
+    def __init__(self):
+        sg.change_look_and_feel('DarkRed')
+        self.msg = f"\nO juros precisa ser maior ou igual a zero\n"
         sg.Popup(self.msg)

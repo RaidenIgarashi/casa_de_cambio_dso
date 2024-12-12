@@ -34,7 +34,7 @@ class ControladorTroca(Controlador):
                 NaoFoiEncontradoComEsteId('troca')
             else:
                 self.__tela.mostrar_tabela([{'id': troca.id, 'id_pessoa':troca.pessoa.id, 'data': troca.data, 
-                                        'moeda_entrada': troca.moeda_entrada.nome, 'moeda_saida': troca.moeda_saida.nome, 
+                                        'nome_moeda_entrada': troca.moeda_entrada.nome, 'nome_moeda_saida': troca.moeda_saida.nome, 
                                         'quantidade_entrada': troca.quantidade_entrada, 'quantidade_saida': troca.quantidade_saida, 
                                         'juros': troca.porcentagem_juros }])
                 self.__relatorio.add_operacao('mostragem', f"Mostragem de dados da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")  
@@ -43,32 +43,27 @@ class ControladorTroca(Controlador):
     def inclui(self):
         dados = self.__tela.cadastrar_dados()
         if dados != None:
-            try:
-                is_pessoa = False
-                pessoa_verify = self.__cliente.pega_objeto(dados['id_pessoa'])
-                moeda_entrada_verify = self.__moeda.pega_objeto(dados['moeda_entrada'])
-                moeda_saida_verify = self.__moeda.pega_objeto(dados['moeda_saida'])
-                if pessoa_verify is None:
-                    is_pessoa = True
-                    ValueError(dados['id_pessoa'])
-                elif moeda_entrada_verify is None :
-                    ValueError(dados['moeda_entrada'])
-                elif moeda_saida_verify is None:
-                    ValueError(dados['moeda_saida'])
-            except ValueError as e:
-                print()
-                if is_pessoa:
-                    print(f'a pessoa de cpf {e} não está registrada')
-                else:
-                    print(f'a moeda {e} não está registrada')
-                print()
+            pessoa_verify = self.__cliente.pega_objeto(dados['id_pessoa'])
+            moeda_entrada_verify = self.__moeda.pega_objeto(dados['nome_moeda_entrada'])
+            moeda_saida_verify = self.__moeda.pega_objeto(dados['nome_moeda_saida'])
+            corretos = True
+            if pessoa_verify == None:
+                NaoFoiEncontradoComEsteId(dados['id_pessoa'])
+                corretos = False
+            if moeda_entrada_verify == None:
+                MoedaNaoEncontrada(dados['nome_moeda_entrada'])
+                corretos = False
+            if moeda_saida_verify == None:
+                MoedaNaoEncontrada(dados['nome_moeda_saida'])
+                corretos = False
+            if not corretos:
                 return
-            dados['quantidade_saida'] = self.calculo_moeda_saida(dados['moeda_entrada'], dados['moeda_saida'], 
+            dados['quantidade_saida'] = self.calculo_moeda_saida(dados['nome_moeda_entrada'], dados['nome_moeda_saida'], 
                                                                  dados['quantidade_entrada'], dados['juros'])
             trc = Troca(dados['id'], self.__cliente.pega_objeto(dados['id_pessoa']), 
                         dados['quantidade_entrada'], dados['quantidade_saida'], 
-                        dados['data'], self.__moeda.pega_objeto(dados['moeda_entrada']), 
-                        self.__moeda.pega_objeto(dados['moeda_saida']), dados['juros'])
+                        dados['data'], self.__moeda.pega_objeto(dados['nome_moeda_entrada']), 
+                        self.__moeda.pega_objeto(dados['nome_moeda_saida']), dados['juros'])
             self.__trocas.add(trc)
             pessoa = self.__cliente.pega_objeto(dados['id_pessoa'])
             pessoa.trocas_feitas.append(trc)
@@ -97,11 +92,11 @@ class ControladorTroca(Controlador):
                 troca.id = new_dados['id']
                 troca.pessoa = self.__cliente.pega_objeto(new_dados['id_pessoa'])
                 troca.quantidade_entrada = new_dados['quantidade_entrada']
-                troca.quantidade_saida = self.calculo_moeda_saida(new_dados['moeda_entrada'], new_dados['moeda_saida'], 
+                troca.quantidade_saida = self.calculo_moeda_saida(new_dados['nome_moeda_entrada'], new_dados['nome_moeda_saida'], 
                                                                 new_dados['quantidade_entrada'], new_dados['juros'])
                 troca.data = new_dados['data']
-                troca.moeda_entrada = self.__moeda.pega_objeto(new_dados['moeda_entrada'])
-                troca.moeda_saida = self.__moeda.pega_objeto(new_dados['moeda_saida'])
+                troca.moeda_entrada = self.__moeda.pega_objeto(new_dados['nome_moeda_entrada'])
+                troca.moeda_saida = self.__moeda.pega_objeto(new_dados['nome_moeda_saida'])
                 troca.porcentagem_juros = new_dados['juros']
                 self.__relatorio.add_operacao('alteracao', f"Alteracao de dados da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
@@ -110,12 +105,12 @@ class ControladorTroca(Controlador):
 
     def mostra_todas(self):
         dados_trocas = []
-        if len(self.__trocas.get_all()) == 0:
+        if self.__trocas.get_all() == []:
             NenhumRegistrado('troca')
         else:
             for troca in self.__trocas.get_all():
                 dados_trocas.append({'id': troca.id, 'id_pessoa':troca.pessoa.id, 'data': troca.data, 
-                                      'moeda_entrada': troca.moeda_entrada.nome, 'moeda_saida': troca.moeda_saida.nome, 
+                                      'nome_moeda_entrada': troca.moeda_entrada.nome, 'nome_moeda_saida': troca.moeda_saida.nome, 
                                       'quantidade_entrada': troca.quantidade_entrada, 'quantidade_saida': troca.quantidade_saida, 
                                       'juros': troca.porcentagem_juros })
             self.__tela.mostrar_tabela(dados_trocas)
@@ -137,7 +132,6 @@ class ControladorTroca(Controlador):
             for troca in self.__trocas.get_all():
                 if id == troca.id:
                     return troca
-            return None
         
 
     def volta_tela(self):
