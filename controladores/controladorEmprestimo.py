@@ -83,6 +83,7 @@ class ControladorEmprestimo(Controlador):
             self.__relatorio.add_operacao('inclusao', f"Inclusao do Emprestimo de id '{dados['id']}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             
             
+            
     def exclui(self):
         id = self.__tela.excluir()
         if id != None:

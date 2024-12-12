@@ -93,12 +93,13 @@ class TelaCliente(Tela):
             corretos = True
             if not eh_numerico(id, 'cpf/cnpj'):
                 corretos = False
-            elif ('idade' in valores and len(id) != 3) or len(id) != 5: # cpf deve ter 3 digitos e cnpj 5
+                IdNaoNumerico()
+            elif (pessoa and len(id) != 3) or (not pessoa and len(id) != 5): # cpf deve ter 3 digitos e cnpj 5
                 corretos = False
                 TamanhoErradoId()
-
             if nome == '':
-                NomeVazio()
+                corretos = False
+                CampoVazio('nome')
             elif pessoa:
                 for char in nome:      # nome de pessoa precisa ser só letras
                     if char.isnumeric():
@@ -132,7 +133,7 @@ class TelaCliente(Tela):
         botao, valores = self.open()
         self.close()
         if botao not in (None, 'Cancelar') and eh_numerico(valores['id'], "cpf/cnpj"):
-            return valores['id']        
+            return valores['id']       
         
 
     def alterar_dados(self):

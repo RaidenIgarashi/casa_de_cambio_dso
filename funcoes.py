@@ -25,24 +25,31 @@ def eh_numerico(valor, variavel):
     try:
         if valor == '' or valor == None:
             numerico = False
+            CampoVazio(variavel)
         else:
             for c in valor:
                 if not c.isnumeric():
                     numerico = False
+                    break
             if not numerico:
                 NaoNumericoGeral(variavel)
         return numerico
     except:
         NaoNumericoGeral(variavel)
 
-def eh_alpha(x):
+def eh_alpha(nome):
     alpha = True
     try:
-        for c in x:
-            if not c.isalpha():
-                alpha = False
-        if not alpha:
-            NomeComDigito()
+        if nome == '' or nome == None:
+            alpha = False
+            CampoVazio('nome')
+        else:
+            for c in nome:
+                if c != ' ' and not c.isalpha():
+                    alpha = False
+                    break
+            if not alpha:
+                NomeComDigito()
         return alpha
     except:
         NomeComDigito()

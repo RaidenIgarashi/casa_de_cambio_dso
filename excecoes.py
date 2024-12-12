@@ -52,11 +52,41 @@ class NenhumRegistrado():
 class TamanhoErradoId():
     def __init__(self):
         sg.change_look_and_feel('DarkRed')
-        self.msg = f"\nId com o tamanho errado: CPF deve ter 3 digitios e CNPJ 5.\n"
+        self.msg = f"\nId com o tamanho errado: CPF deve ter 3 digitios e CNPJ 5\n"
         sg.Popup(self.msg)
 
-class NomeVazio():
+class CampoVazio():
+    def __init__(self, tipo):
+        sg.change_look_and_feel('DarkRed')
+        self.msg = f"\nO campo de {tipo} não pode ser  vazio\n"
+        sg.Popup(self.msg)
+
+class ClienteJaRegistrado():
     def __init__(self):
         sg.change_look_and_feel('DarkRed')
-        self.msg = f"\nNome não pode ser um campo vazio\n"
+        self.msg = f"\nJá existe Cliente registrado com essa identidade\n"
+        sg.Popup(self.msg)
+
+class MoedaJaRegistrada():
+    def __init__(self):
+        sg.change_look_and_feel('DarkRed')
+        self.msg = f"\nJá existe Moeda registrada com este nome\n"
+        sg.Popup(self.msg)
+
+class EmprestimoJaRegistrado():
+    def __init__(self):
+        sg.change_look_and_feel('DarkRed')
+        self.msg = f"\nJá existe Empréstimo registrado com esse id\n"
+        sg.Popup(self.msg)
+
+class TrocaJaRegistrada():
+    def __init__(self):
+        sg.change_look_and_feel('DarkRed')
+        self.msg = f"\nJá existe Troca registrada com esse id\n"
+        sg.Popup(self.msg)
+
+class CifraComNumero():
+    def __init__(self):
+        sg.change_look_and_feel('DarkRed')
+        self.msg = f"\nNão pode haver números na cifra da moeda\n"
         sg.Popup(self.msg)

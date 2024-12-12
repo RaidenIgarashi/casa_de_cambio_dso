@@ -32,15 +32,16 @@ class ControladorCliente(Controlador):
                 
     def inclui(self):
         dados_cliente = self.__tela.cadastrar_dados()
-        if dados_cliente is not None:   # se nada for digitado incorretamente
-            if 'idade' in dados_cliente: 
-                self.__pessoas.add(Pessoa(dados_cliente['nome'], dados_cliente['id'], dados_cliente['idade']))
-                #self.__pessoas.append(Pessoa(dados_cliente['nome'], dados_cliente['id'], dados_cliente['idade']))
-            else:
-                self.__organizacoes.add(Organizacao(dados_cliente['nome'], dados_cliente['id']))
-            self.__tela.mostrar_msg(f"Cliente '{dados_cliente['nome']}' adicionado com sucesso")
-            self.__relatorio.add_operacao('inclusao', f"Inclusao do Cliente '{dados_cliente['nome']}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
-                
+        if self.pega_objeto(dados_cliente['id']) == None:
+            if dados_cliente is not None:   # se nada for digitado incorretamente
+                if 'idade' in dados_cliente: 
+                    self.__pessoas.add(Pessoa(dados_cliente['nome'], dados_cliente['id'], dados_cliente['idade']))
+                else:
+                    self.__organizacoes.add(Organizacao(dados_cliente['nome'], dados_cliente['id']))
+                self.__tela.mostrar_msg(f"Cliente '{dados_cliente['nome']}' adicionado com sucesso")
+                self.__relatorio.add_operacao('inclusao', f"Inclusao do Cliente '{dados_cliente['nome']}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+        else:
+            ClienteJaRegistrado()
 
     def mostra_dados(self):
         id = self.__tela.ver_dados()
@@ -96,8 +97,8 @@ class ControladorCliente(Controlador):
 
     def altera(self):
         id = self.__tela.alterar_dados()
-        id_a_alterar = self.pega_objeto(id)
-        if id != None:   # se o id nao for digitado incorretamente
+        if id != None:
+            id_a_alterar = self.pega_objeto(id)# se o id nao for digitado incorretamente
             if id_a_alterar != None:  # se o id estiver registrado
                 lista = self.__pessoas.get_all() if eh_pessoa(id) else self.__organizacoes.get_all()
                 for cliente in lista:
@@ -108,6 +109,7 @@ class ControladorCliente(Controlador):
                         if len(id) == 3:
                             cliente.idade = novo_cliente['idade']
                 self.__relatorio.add_operacao('alteracao', f"Alteracao dos dados do Cliente '{cliente.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+                self.__tela.mostrar_msg(f'Cliente "{cliente.nome}" alterado com sucesso.')
             else:
                 NaoFoiEncontradoComEsteId('cliente')
             

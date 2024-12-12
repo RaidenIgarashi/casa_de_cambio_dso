@@ -1,6 +1,7 @@
 from abstratas.absTela import Tela
 from excecoes import *
 import PySimpleGUI as sg
+from funcoes import *
 
 
 class TelaMoeda(Tela):
@@ -49,7 +50,8 @@ class TelaMoeda(Tela):
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
         self.close()
-        return valores['nome']
+        if botao not in (None, 'Cancelar'):
+            return valores['nome']
     
 
     def cadastrar_dados(self):
@@ -71,10 +73,15 @@ class TelaMoeda(Tela):
 
         if botao not in (None, 'Cancelar'):
             corretos = True
-            for char in nome:
-                if char.isnumeric():
+            if not eh_alpha(nome):
+                corretos = False
+            for regiao in regioes:
+                if not eh_alpha(regiao):
                     corretos = False
-                    NomeComDigito()
+            for c in cifra:
+                if c.isnumeric():
+                    corretos = False
+                    CifraComNumero()
             try:
                 if '.' not in valor:
                     valor = int(valor)

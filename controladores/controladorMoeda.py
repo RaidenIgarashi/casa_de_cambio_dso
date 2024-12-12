@@ -23,17 +23,14 @@ class ControladorMoeda(Controlador):
 
     def inclui(self):
         dados = self.__tela.cadastrar_dados()
-        if dados is not None:
-            try:
-                for moeda in self.__moeda_DAO.get_all():
-                    if dados['nome'].lower() == moeda.nome.lower():
-                        ValueError
-            except:
-                self.__tela.mostrar_msg(f'\n## a moeda {moeda.nome} já está registrada ##\n')
-                return
-            self.__moeda_DAO.add(Moeda(dados['nome'], dados['regioes'], dados['cifra'], dados['valor']))
-            self.__tela.mostrar_msg(f'Moeda {dados['nome']} adicionada com sucesso')
-            self.__relatorio.add_operacao('inclusao', f"Inclusao da Moeda '{dados['nome']}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+        if dados != None:
+            ja_add = self.pega_objeto(dados['nome'])
+            if ja_add == None and dados != None:
+                self.__moeda_DAO.add(Moeda(dados['nome'], dados['regioes'], dados['cifra'], dados['valor']))
+                self.__tela.mostrar_msg(f'Moeda {dados['nome']} adicionada com sucesso')
+                self.__relatorio.add_operacao('inclusao', f"Inclusao da Moeda '{dados['nome']}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+            elif ja_add != None:
+                MoedaJaRegistrada()
             
 
     def exclui(self):
@@ -45,14 +42,14 @@ class ControladorMoeda(Controlador):
                 self.__tela.mostrar_msg(f'A moeda {moeda.nome} foi excluida com sucesso')
                 self.__relatorio.add_operacao('exclusao', f"Exclusao da Moeda '{moeda.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
-                MoedaNaoEncontrada
+                MoedaNaoEncontrada()
 
     def pega_objeto(self, nome):
         if nome != None:
             for moeda in self.__moeda_DAO.get_all():
                 if nome.lower() == moeda.nome.lower():
                     return moeda     
-            return None   
+                
 
     def altera(self):
         nome = self.__tela.alterar_dados()
@@ -65,8 +62,9 @@ class ControladorMoeda(Controlador):
                 moeda.cifra = new_moeda['cifra']
                 moeda.valor_usd = new_moeda['valor']
                 self.__relatorio.add_operacao('alteracao', f"Alteracao da Moeda '{moeda.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+                self.__tela.mostrar_msg(f'Moeda "{moeda.nome}" alterada com sucesso.')
             else:
-                MoedaNaoEncontrada
+                MoedaNaoEncontrada()
             
     def mostra_todas(self):
         dados_moedas = []
@@ -77,6 +75,7 @@ class ControladorMoeda(Controlador):
             self.__relatorio.add_operacao('mostragem', f"Mostragem de todas as moedas registradas, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
         except FileNotFoundError:
             NenhumRegistrado('moeda')
+
         
     def voltar_tela(self):
         self.__controlador_sistema.abre_tela()
@@ -84,7 +83,13 @@ class ControladorMoeda(Controlador):
 
     def mostra_dados(self):
         nome = self.__tela.ver_dados()
-        for moeda in self.__moeda_DAO.get_all():
-            if nome.lower() == moeda.nome.lower():
-                self.__tela.mostrar_tabela([{'nome': moeda.nome, 'regioes': moeda.regioes, 'cifra': moeda.cifra, 'valor': moeda.valor_usd}])
-                self.__relatorio.add_operacao('mostragem', f"Mostragem de dados da moeda '{moeda.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+        if nome != None:
+            existe = False
+            for moeda in self.__moeda_DAO.get_all():
+                if nome.lower() == moeda.nome.lower():
+                    self.__tela.mostrar_tabela([{'nome': moeda.nome, 'regioes': moeda.regioes, 'cifra': moeda.cifra, 'valor': moeda.valor_usd}])
+                    self.__relatorio.add_operacao('mostragem', f"Mostragem de dados da moeda '{moeda.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+                    existe = True
+                    break
+            if not existe:
+                MoedaNaoEncontrada()
