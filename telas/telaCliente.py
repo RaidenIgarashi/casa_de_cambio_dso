@@ -22,7 +22,7 @@ class TelaCliente(Tela):
         self.tela_opcoes()
         botao, valores = self.open()
         opcao = 0
-        for x in range(1, 7):
+        for x in range(1, 6):
             if valores[f'{x}']:
                 opcao = x
         if botao in (None, 'Voltar', 'Cancelar'):
@@ -39,7 +39,6 @@ class TelaCliente(Tela):
             [sg.Radio("3 - Excluir Cliente", "RDC", key='3')],
             [sg.Radio("4 - Listar todos Clientes", "RDC", key='4')],
             [sg.Radio("5 - Alterar Cliente", "RDC", key='5')],
-            [sg.Radio("6 - Ver Transações de um Cliente", "RDC", key='6')],
             [sg.Cancel('Voltar'), sg.Button('Confirmar')]
         ]
         self.__window = sg.Window("CLIENTES").Layout(layout)
@@ -177,18 +176,3 @@ class TelaCliente(Tela):
             if event in (sg.WINDOW_CLOSED, "OK"):
                 window.close()
                 break
-    
-    
-    def ver_transacoes(self):
-        sg.change_look_and_feel('DarkBlue1')
-        layout = [
-            [sg.Text('Digite o cpf/cnpj do cliente que deseja ver as transações: '), sg.InputText('', key='id')],
-            [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
-        ]
-        self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
-        botao, valores = self.open()
-        self.close()
-        
-        if botao not in (None, 'Cancelar') and eh_numerico(valores['id'], "cpf/cnpj"):
-            return valores['id']
-        

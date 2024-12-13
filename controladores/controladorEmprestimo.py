@@ -87,10 +87,8 @@ class ControladorEmprestimo(Controlador):
             emprestimo = self.pega_objeto(id)
             if emprestimo != None:
                 self.__emprestimos.remove(emprestimo.id)
-                emprestimo.cliente.emprestimos_pedidos.remove(emprestimo)
-                emprestimo.emprestador.emprestimos_concedidos.remove(emprestimo)
-                self.__relatorio.add_operacao('exclusao', f"Exclusão do Empréstimo '{emprestimo.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
-                self.__tela.mostrar_msg(f"\n# Exclusão do empréstimo {emprestimo.nome} feita com sucesso #\n")
+                self.__controlador_sistema.add_operacao('exclusao', f"Exclusão do Empréstimo '{emprestimo.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+                self.__tela.mostrar_msg(f"\n# Exclusão do empréstimo {emprestimo.id} feita com sucesso #\n")
             else:
                 NaoFoiEncontradoComEsteId('emprestimo')
             
@@ -101,15 +99,14 @@ class ControladorEmprestimo(Controlador):
             emp = self.pega_objeto(id)
             if emp != None:
                 novos_dados = self.__tela.cadastrar_dados()
-                nomes = ['id', 'cliente', 'emprestador', 'moeda', 'quantia_repassada', 'data_do_repasse', 
-                        'data_devolvida', 'data_pretendida', 'juros_normal', 'juros_mensal_atraso', 'devolvido']
+                emp = Emprestimo(novos_dados['id'], self.__cliente.pega_objeto(novos_dados['cliente_id']), self.__cliente.pega_objeto(novos_dados['emprestador_id']), 
+                                 self.__moeda.pega_objeto(novos_dados['moeda']), novos_dados['quantia_repassada'], novos_dados['data_do_repasse'], 
+                                 novos_dados['data_pretendida'], novos_dados['juros_normal'], novos_dados['juros_mensal_atraso'], 
+                                 novos_dados['devolvido'], novos_dados['data_devolvida'])
 
-                dados_alterar = [emp.id, emp.cliente.id, emp.emprestador.id, emp.moeda, emp.quantia_repassada, emp.data_do_repasse, 
-                        emp.data_devolvida, emp.data_pretendida, emp.juros_normal, emp.juros_mensal_atraso, emp.devolvido]
-                for d in range(len(dados_alterar)):
-                    dados_alterar[d] = novos_dados[nomes[d]]
                 self.__emprestimos.update(emp)
-                self.__relatorio.add_operacao('alteracao', f"Alteracao de dados do Empréstimo '{emp.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+                self.__tela.mostrar_msg(f'Emprestimo "{novos_dados['id']}" alterado com sucesso.')
+                self.__controlador_sistema.add_operacao('alteracao', f"Alteracao de dados do Empréstimo '{emp.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
                 NaoFoiEncontradoComEsteId('emprestimo')
     
@@ -141,8 +138,9 @@ class ControladorEmprestimo(Controlador):
                     else:
                         emp.devolvido = True
                         emp.data_devolvida = data
+                        self.__emprestimos.update(emp)
                         self.__tela.mostrar_msg(f'Devolucao do emprestimo de id {id} registrada - data: {data}')
-                        self.__relatorio.add_operacao('alteracao', f"Emprestimo de id '{emp.id}' registrado como devolvido na data {emp.data_devolvida}; registro feito {dt.now().strftime('dia %d/%m/%Y, às %H:%M')}")
+                        self.__controlador_sistema.add_operacao('alteracao', f"Emprestimo de id '{emp.id}' registrado como devolvido na data {emp.data_devolvida}; registro feito {dt.now().strftime('dia %d/%m/%Y, às %H:%M')}")
                     existe = True
             if not existe:
                 NaoFoiEncontradoComEsteId('emprestimo')

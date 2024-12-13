@@ -28,7 +28,7 @@ class ControladorCliente(Controlador):
 
     def abre_tela(self):
         opcoes = {1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 
-                  5: self.altera, 6: self.mostra_transacoes, 0: self.voltar_tela}
+                  5: self.altera, 0: self.voltar_tela}
         while True:
             opcao_escolhida = self.__tela.init_opcoes()
             if opcao_escolhida == None:
@@ -122,54 +122,6 @@ class ControladorCliente(Controlador):
             else:
                 NaoFoiEncontradoComEsteId('cliente')
             
-    
-    def mostra_transacoes(self):
-        id = self.__tela.ver_transacoes()
-        existente = False
-        eh_pes = eh_pessoa(id)
-        if eh_pes == True: # se for cpf
-            for pessoa in self.__pessoas.get_all():
-                if pessoa.id == id:
-                    cliente = pessoa
-                    existente = True
-        elif eh_pes == False: # se for cnpj
-            for org in self.__organizacoes.get_all():
-                if org.id == id:
-                    cliente = org
-                    existente = True
-        if existente:
-            if len(cliente.emprestimos_pedidos) > 0:
-                self.__tela_emprestimo.mostrar_msg('\n- EMPRESTIMOS PEDIDOS: \n')
-                for t in cliente.emprestimos_pedidos:
-                    self.__tela_emprestimo.mostrar_tabela({'id':t.id, 'cliente_id':t.cliente.id, 'emprestador_id':t.emprestador.id, 'moeda':t.moeda, 'quantia_repassada':t.quantia_repassada, 
-                                                         'data_do_repasse':t.data_do_repasse, 'devolvido':t.devolvido, 'data_devolvida':t.data_devolvida, 'data_pretendida':t.data_pretendida, 
-                                                         'juros_normal':t.juros_normal, 'juros_mensal_atraso':t.juros_mensal_atraso})
-            else:
-                self.__tela_emprestimo.mostrar_msg('\nEste cliente não pediu nenhum empréstimo. \n')
-
-            if len(cliente.emprestimos_concedidos) > 0:
-                self.__tela_emprestimo.mostrar_msg('\n- EMPRESTIMOS CONCEDIDOS: \n')
-                for t in cliente.emprestimos_concedidos:
-                    self.__tela_emprestimo.mostrar_tabela({'id':t.id, 'cliente_id':t.cliente.id, 'emprestador_id':t.emprestador.id, 'moeda':t.moeda, 'quantia_repassada':t.quantia_repassada, 
-                                                         'data_do_repasse':t.data_do_repasse, 'devolvido':t.devolvido, 'data_devolvida':t.data_devolvida, 'data_pretendida':t.data_pretendida, 
-                                                         'juros_normal':t.juros_normal, 'juros_mensal_atraso':t.juros_mensal_atraso})
-            else:
-                self.__tela_emprestimo.mostrar_msg('\nEste cliente não concedeu empréstimos a ninguém. \n')
-
-            if eh_pes:
-                if len(cliente.trocas_feitas) > 0:
-                    self.__tela_emprestimo.mostrar_tabela('\n- TROCAS CAMBIAIS FEITAS: \n')
-                    for t in cliente.trocas_feitas:
-                        self.__tela_troca.mostrar_tabela({'id': t.id, 'id_pessoa':cliente.id, 'data': t.data, 
-                                                        'moeda_entrada': t.moeda_entrada, 'moeda_saida': t.moeda_saida, 
-                                                        'quantidade_entrada': t.quantidade_entrada, 'quantidade_saida': t.quantidade_saida, 
-                                                        'juros': t.porcentagem_juros})   
-                else:
-                    self.__tela_emprestimo.mostrar_msg('\nEste cliente não fez nenhuma troca cambial. \n')
-            self.__controlador_sistema.add_operacao('mostragem', f"Mostragem de todas as transações do cliente '{cliente.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
-        elif eh_pes != None:
-            NenhumRegistrado('cliente')
-            
     def pega_objeto(self, id):  # funcao interna
         if id != None:
             for cli in self.__pessoas.get_all():
@@ -181,4 +133,4 @@ class ControladorCliente(Controlador):
 
 
     def voltar_tela(self):
-        self.____controlador_sistema.abre_tela()
+        self.__controlador_sistema.abre_tela()
