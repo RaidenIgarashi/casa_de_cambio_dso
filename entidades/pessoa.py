@@ -5,9 +5,6 @@ class Pessoa(Cliente):
     def __init__(self, nome:str, id:str, idade:int):
         super().__init__(nome, id)
         self.__idade = idade
-        self.__emprestimos_pedidos = []
-        self.__emprestimos_concedidos = []
-        self.__trocas_feitas = []
 
     @property
     def idade(self):
