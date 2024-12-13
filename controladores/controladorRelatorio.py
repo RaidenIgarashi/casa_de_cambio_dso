@@ -47,16 +47,8 @@ class Relatorio():
             elif credito < menor_credito[0]:
                 menor_credito = (credito, cli.nome, cli.id) 
              
-        msg = f'''Quantidade de clientes registrados:   {len(pessoas) + len(organizacoes)-1}
-Quantidade de Pessoas:   {len(pessoas)}
-Quantidade de Organizacoes:   {len(organizacoes)-1}'''
-
-# Cliente com mais transacoes:  '{mais_trans[1]}' (id {mais_trans[2]}) com {mais_trans[0]} transações
-
-# Cliente com MAIOR crédito em empréstimos:  '{maior_credito[1]}' (id {maior_credito[2]}) com U$D {maior_credito[0]:.2f}
-# Cliente com MENOR crédito em empréstimos:  '{menor_credito[1]}' (id {menor_credito[2]}) com U$D {menor_credito[0]:.2f}'''
-        
-        self.__tela.mostra_msg(msg, 'CLIENTES')
+        self.__tela.mostra_cliente({'len_pessoas':len(pessoas), 'len_org':len(organizacoes), 
+                                    'maior_credito':maior_credito, 'menor_credito':menor_credito, 'mais_trans':mais_trans})
         
     
     def relatorio_moedas(self):
@@ -72,12 +64,7 @@ Quantidade de Organizacoes:   {len(organizacoes)-1}'''
             elif valor < menor_valor[0]:
                 menor_valor = (valor, m.nome)
             
-        msg = f'''Quantidade de moedas registradas:   {len(moedas)}
-
-Moeda com MAIOR valor em dólares:  '{maior_valor[1]}' com U$D {maior_valor[0]:.2f}
-Moeda com MENOR valor em dólares:  '{menor_valor[1]}' com U$D {menor_valor[0]:.2f}'''
-        
-        self.__tela.mostra_msg(msg, 'MOEDAS')
+        self.__tela.mostra_moeda({'len_moedas':len(moedas), 'maior_valor':maior_valor, 'menor_valor':menor_valor})
         
     
     def relatorio_trocas(self):
@@ -95,12 +82,7 @@ Moeda com MENOR valor em dólares:  '{menor_valor[1]}' com U$D {menor_valor[0]:.
             elif valor < menor_valor[0]:
                 menor_valor = (valor, t.id, t.pessoa.nome) 
             
-        msg = f'''Quantidade de trocas registradas:   {len(trocas)}
-
-Troca de MAIOR valor:  '{maior_valor[1]}' feita por {maior_valor[2]} - U$D {maior_valor[0]:.2f}
-Troca de MENOR valor:  '{menor_valor[1]}' feita por {menor_valor[2]} - U$D {menor_valor[0]:.2f}'''
-        
-        self.__tela.mostra_msg(msg, 'TROCAS')
+        self.__tela.mostra_troca({'len_trocas':len(trocas), 'maior_valor':maior_valor, 'menor_valor':menor_valor})
         
     
     def relatorio_emprestimos(self):
@@ -120,13 +102,8 @@ Troca de MENOR valor:  '{menor_valor[1]}' feita por {menor_valor[2]} - U$D {meno
                 menor_valor = (valor, emp.id, emp.emprestador.nome, emp.cliente.nome) 
             if emp.devolvido:
                 devolvidos += 1
-            
-        msg = f'''Quantidade de emprestimos registradas:   {len(emprestimos)}
 
-Empréstimo de MAIOR valor:  '{maior_valor[1]}' de {maior_valor[2]} para {maior_valor[3]} | U$D {maior_valor[0]:.2f}
-Empréstimo de MENOR valor:  '{menor_valor[1]}' de {menor_valor[2]} para {menor_valor[3]} | U$D {menor_valor[0]:.2f}
-Porcentagem de empréstimos que já foram devolvidos: {100 * devolvidos/len(emprestimos)}%'''
-        self.__tela.mostra_msg(msg, 'EMPRÉSTIMOS')
+        self.__tela.mostra_emprestimo({'len_emprestimos':len(emprestimos), 'maior_valor':maior_valor, 'menor_valor':menor_valor, 'devolvidos':devolvidos})
             
             
     def gera_relatorio(self):

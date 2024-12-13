@@ -20,6 +20,7 @@ class InicializadorSistema():
         self.__indefinidos = []
         self.__relatorio = Relatorio(self, self.__controlador_cliente, self.__controlador_moeda, self.__controlador_troca, self.__controlador_emprestimo)
         
+    
     def add_operacao(self, tipo: str, info: str):
         if tipo == 'inclusao':
             self.__inclusoes.append(info)
