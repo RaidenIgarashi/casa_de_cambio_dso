@@ -86,7 +86,7 @@ class ControladorEmprestimo(Controlador):
         if id != None:
             emprestimo = self.pega_objeto(id)
             if emprestimo != None:
-                self.__emprestimos.remove(emprestimo.id)
+                self.__emprestimos.remove(emprestimo)
                 emprestimo.cliente.emprestimos_pedidos.remove(emprestimo)
                 emprestimo.emprestador.emprestimos_concedidos.remove(emprestimo)
                 self.__controlador_sistema.add_operacao('exclusao', f"Exclusão do Empréstimo '{emprestimo.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")

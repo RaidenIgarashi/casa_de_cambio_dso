@@ -38,9 +38,9 @@ class NaoFoiEncontradoComEsteId():
         sg.Popup(self.msg)
 
 class MoedaNaoEncontrada():
-    def __init__(self, nome):
+    def __init__(self):
         sg.change_look_and_feel('DarkRed')
-        self.msg = f"\nNao foi encontrada moeda registrada com o nome '{nome}'\n"
+        self.msg = f"\nNao foi encontrada moeda registrada com esse nome\n"
         sg.Popup(self.msg)
         
 class NenhumRegistrado():

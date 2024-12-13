@@ -69,7 +69,7 @@ class ControladorMoeda(Controlador):
                     self.__controlador_sistema.add_operacao('alteracao', f"Alteracao da Moeda '{moeda.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
                     self.__tela.mostrar_msg(f'Moeda "{moeda.nome}" alterada com sucesso.')
                     return
-            MoedaNaoEncontrada(nome)
+            MoedaNaoEncontrada()
         else:
             MoedaNaoEncontrada()
             
