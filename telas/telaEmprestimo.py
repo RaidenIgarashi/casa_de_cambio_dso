@@ -31,7 +31,7 @@ class TelaEmprestimo(Tela):
         return opcao
     
     def tela_opcoes(self):
-        sg.change_look_and_feel('DarkPurple')
+        sg.change_look_and_feel("DarkGrey11")
         layout = [
             [sg.Radio("1 - Ver empréstimo registrado", "RDE", key='1')],
             [sg.Radio("2 - Registrar empréstimo", "RDE", key='2')],
@@ -59,6 +59,7 @@ class TelaEmprestimo(Tela):
     
 
     def cadastrar_dados(self):
+        sg.change_look_and_feel("LightGreen1")
         layout = [ 
             [sg.Text('--------INFORMAÇÕES DA MOEDA--------')],
             [sg.Text(f'ID DO EMPRESTIMO: '), sg.InputText('', key='id')],
@@ -91,8 +92,7 @@ class TelaEmprestimo(Tela):
             id_cliente = valores['id_cliente']
             id_emprestador = valores['id_emprestador']
             moeda = valores['moeda']
-            data_pretendida = valores['data_devolvida']
-            
+            data_pretendida = valores['data_pretendida']
             juros_normal = float(valores['juros'])
             juros_mensal_atraso = float(valores['juros_atraso'])
             data_do_repasse = valores['data_repasse']
@@ -104,17 +104,17 @@ class TelaEmprestimo(Tela):
                 
             
             if valores['sim']:
-                devolvido = True
+                devolvido_bool = True
                 data_devolvida = devolvido['data_devolvida']
             else:
-                devolvido = False
+                devolvido_bool = False
                 data_devolvida = ''
             
 
             self.close()
             return {'id':id, 'cliente_id':id_cliente, 'emprestador_id':id_emprestador, 'moeda':moeda, 'quantia_repassada':quantia_repassada, 
                     'data_do_repasse':data_do_repasse, 'data_devolvida':data_devolvida, 'data_pretendida':data_pretendida, 
-                    'juros_normal':juros_normal, 'juros_mensal_atraso':juros_mensal_atraso, 'devolvido': devolvido}
+                    'juros_normal':juros_normal, 'juros_mensal_atraso':juros_mensal_atraso, 'devolvido': devolvido_bool}
 
     
     
@@ -132,7 +132,7 @@ class TelaEmprestimo(Tela):
 
 
     def alterar_dados(self):
-        sg.change_look_and_feel('DarkRed')
+        sg.change_look_and_feel("DarkBrown7")
         layout = [
             [sg.Text('Escreva o id do emprestimo que deseja alterar: '), sg.InputText('', key='id')],           
             [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
@@ -145,6 +145,7 @@ class TelaEmprestimo(Tela):
 
 
     def mostrar_tabela(self, dados_emprestimo):
+        sg.change_look_and_feel('DarkTeal4')
         emprestimo = []
         keys = ['id', 'cliente_id', 'emprestador_id', 'moeda', 'quantia_repassada', 
                 'data_do_repasse', 'data_devolvida', 'data_pretendida', 

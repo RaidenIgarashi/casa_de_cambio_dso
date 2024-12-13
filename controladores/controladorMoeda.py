@@ -54,17 +54,21 @@ class ControladorMoeda(Controlador):
     def altera(self):
         nome = self.__tela.alterar_dados()
         if nome != None:
-            moeda = self.pega_objeto(nome)
-            if moeda is not None:
-                new_moeda = self.__tela.cadastrar_dados()
-                moeda.nome = new_moeda['nome']
-                moeda.regioes = new_moeda['regioes']
-                moeda.cifra = new_moeda['cifra']
-                moeda.valor_usd = new_moeda['valor']
-                self.__relatorio.add_operacao('alteracao', f"Alteracao da Moeda '{moeda.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
-                self.__tela.mostrar_msg(f'Moeda "{moeda.nome}" alterada com sucesso.')
-            else:
-                MoedaNaoEncontrada()
+            for m in self.__moeda_DAO.get_all():
+                if m.nome == nome:
+                    moeda = self.pega_objeto(nome)
+                    new_moeda = self.__tela.cadastrar_dados()
+                    moeda.nome = new_moeda['nome']
+                    moeda.regioes = new_moeda['regioes']
+                    moeda.cifra = new_moeda['cifra']
+                    moeda.valor_usd = new_moeda['valor']
+                    self.__moeda_DAO.update(moeda)
+                    self.__relatorio.add_operacao('alteracao', f"Alteracao da Moeda '{moeda.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+                    self.__tela.mostrar_msg(f'Moeda "{moeda.nome}" alterada com sucesso.')
+                    return
+            MoedaNaoEncontrada(nome)
+        else:
+            MoedaNaoEncontrada()
             
     def mostra_todas(self):
         dados_moedas = []

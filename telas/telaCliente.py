@@ -32,7 +32,7 @@ class TelaCliente(Tela):
     
       
     def tela_opcoes(self):
-        sg.change_look_and_feel('DarkPurple')
+        sg.change_look_and_feel("DarkGrey11")
         layout = [
             [sg.Radio("1 - Ver dados de um Cliente", "RDC", key='1')],
             [sg.Radio("2 - Adicionar Cliente", "RDC", key='2')],
@@ -46,7 +46,7 @@ class TelaCliente(Tela):
     
 
     def ver_dados(self):
-        sg.change_look_and_feel('Purple')
+        sg.change_look_and_feel('DarkPurple')
         layout = [
             [sg.Text('Digite o cpf/cnpj do cliente que deseja ver: '), sg.InputText('', key='id')],
             [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
@@ -59,6 +59,7 @@ class TelaCliente(Tela):
     
 
     def cadastrar_dados(self):
+        sg.change_look_and_feel("LightGreen1")
         layout = [ 
             [sg.Text('--------CADASTRAR INFORMAÇÕES DO CLIENTE--------')],
             [sg.Radio('1 - Cadastrar Pessoa Física', 'cli', key='1')],
@@ -134,7 +135,7 @@ class TelaCliente(Tela):
         
 
     def alterar_dados(self):
-        sg.change_look_and_feel('LightBrown')
+        sg.change_look_and_feel("DarkBrown7")
         layout = [
             [sg.Text('Escreva o CPF/CNPJ do cliente que deseja alterar: '), sg.InputText('', key='id')],
             [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
@@ -147,6 +148,7 @@ class TelaCliente(Tela):
         
     
     def mostrar_tabela(self, dados_cliente, tipo):
+        sg.change_look_and_feel('DarkTeal4')
         client = []
         keys = []
         if tipo == 0:
@@ -178,7 +180,7 @@ class TelaCliente(Tela):
     
     
     def ver_transacoes(self):
-        sg.change_look_and_feel('DarkPurple')
+        sg.change_look_and_feel('DarkBlue1')
         layout = [
             [sg.Text('Digite o cpf/cnpj do cliente que deseja ver as transações: '), sg.InputText('', key='id')],
             [sg.Cancel('Cancelar'), sg.Button('Confirmar')]

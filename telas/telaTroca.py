@@ -30,7 +30,7 @@ class TelaTroca(Tela):
         return opcao
 
     def tela_opcoes(self):
-        sg.change_look_and_feel('DarkPurple')
+        sg.change_look_and_feel("DarkGrey11")
         layout = [
             [sg.Radio("1 - Ver dados de uma Troca", "RDT", key='1')],
             [sg.Radio("2 - Adicionar Troca", "RDT", key='2')],
@@ -56,6 +56,7 @@ class TelaTroca(Tela):
         
     
     def cadastrar_dados(self):
+        sg.change_look_and_feel("LightGreen1")
         layout = [ 
             [sg.Text('--------INFORMAÇÕES DA TROCA--------')],
             [sg.Text(f'ID DA TROCA: '), sg.InputText('', key='id')],
@@ -113,7 +114,7 @@ class TelaTroca(Tela):
             return valores['id'] 
 
     def alterar_dados(self):
-        sg.change_look_and_feel('LightBrown')
+        sg.change_look_and_feel('DarkBrown7')
         layout = [
             [sg.Text('Escreva o id da troca que deseja alterar: '), sg.InputText('', key='id')],
             [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
@@ -126,6 +127,7 @@ class TelaTroca(Tela):
     
     
     def mostrar_tabela(self, dados_troca):
+        sg.change_look_and_feel('DarkTeal4')
         trocas = []
         keys = ['ID', 'CPF', 'Data', 'Moeda Entregue', 'Moeda Recebida', 'Quantidade da Moeda Entregue', 'Quantidade da Moeda Recebida', 'Juros']
         for t in dados_troca:

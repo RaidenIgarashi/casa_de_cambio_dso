@@ -29,7 +29,7 @@ class TelaMoeda(Tela):
         return opcao
     
     def tela_opcoes(self):
-        sg.change_look_and_feel('DarkPurple')
+        sg.change_look_and_feel("DarkGrey11")
         layout = [
             [sg.Radio("1 - Ver dados Moeda", "RDM", key='1')],
             [sg.Radio("2 - Adicionar Moeda", "RDM", key='2')],
@@ -55,6 +55,7 @@ class TelaMoeda(Tela):
     
 
     def cadastrar_dados(self):
+        sg.change_look_and_feel("LightGreen1")
         layout = [ 
             [sg.Text('--------INFORMAÇÕES DA MOEDA--------')],
             [sg.Text(f'NOME: '), sg.InputText('', key='nome')],
@@ -108,7 +109,7 @@ class TelaMoeda(Tela):
     
 
     def alterar_dados(self):
-        sg.change_look_and_feel('LightBrown')
+        sg.change_look_and_feel("DarkBrown7")
         layout = [
             [sg.Text('Escreva o nome da moeda que deseja alterar: '), sg.InputText('', key='nome')],
             [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
@@ -121,6 +122,7 @@ class TelaMoeda(Tela):
     
     
     def mostrar_tabela(self, dados_moeda):
+        sg.change_look_and_feel('DarkTeal4')
         moeda = []
         keys = ['nome', 'regiao', 'cifra', 'valor_usd']
         for m in dados_moeda:

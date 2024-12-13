@@ -107,20 +107,23 @@ class ControladorEmprestimo(Controlador):
                         emp.data_devolvida, emp.data_pretendida, emp.juros_normal, emp.juros_mensal_atraso, emp.devolvido]
                 for d in range(len(dados_alterar)):
                     dados_alterar[d] = novos_dados[nomes[d]]
+                self.__emprestimos.update(emp)
                 self.__relatorio.add_operacao('alteracao', f"Alteracao de dados do Empréstimo '{emp.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
                 NaoFoiEncontradoComEsteId('emprestimo')
     
     
     def mostra_todas(self):
+        dados_emprestimos = []
         if len(self.__emprestimos.get_all()) == 0:
             NenhumRegistrado('empréstimo')
         else:
             for emp in self.__emprestimos.get_all():
-                self.__tela.mostrar_tabela([{'id':emp.id, 'cliente_id':emp.cliente.id, 'emprestador_id':emp.emprestador.id, 
+                dados_emprestimos.append({'id':emp.id, 'cliente_id':emp.cliente.id, 'emprestador_id':emp.emprestador.id, 
                                        'moeda':emp.moeda.nome, 'quantia_repassada':emp.quantia_repassada, 'data_do_repasse':emp.data_do_repasse, 
                                        'data_devolvida':emp.data_devolvida, 'data_pretendida':emp.data_pretendida, 
-                                       'juros_normal':emp.juros_normal, 'juros_mensal_atraso':emp.juros_mensal_atraso, 'devolvido': emp.devolvido}])
+                                       'juros_normal':emp.juros_normal, 'juros_mensal_atraso':emp.juros_mensal_atraso, 'devolvido': emp.devolvido})
+            self.__tela.mostrar_tabela(dados_emprestimos)
             self.__relatorio.add_operacao('mostragem', f"Mostragem de todos os empréstimos registrados, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
 
 

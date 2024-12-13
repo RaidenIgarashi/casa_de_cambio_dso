@@ -25,7 +25,7 @@ class TelaInicializador():
         return opcao
 
     def init_components(self):
-        sg.change_look_and_feel('DarkPurple')
+        sg.change_look_and_feel("DarkGrey11")
         layout = [
             [sg.Text("OPÇÕES:")],
             [sg.Radio("1 - Clientes", "RD_init", key='1')],

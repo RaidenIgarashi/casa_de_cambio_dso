@@ -98,6 +98,7 @@ class ControladorTroca(Controlador):
                 troca.moeda_entrada = self.__moeda.pega_objeto(new_dados['nome_moeda_entrada'])
                 troca.moeda_saida = self.__moeda.pega_objeto(new_dados['nome_moeda_saida'])
                 troca.porcentagem_juros = new_dados['juros']
+                self.__trocas.update(troca)
                 self.__relatorio.add_operacao('alteracao', f"Alteracao de dados da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
                 NaoFoiEncontradoComEsteId('troca')

@@ -118,7 +118,7 @@ class ControladorCliente(Controlador):
             
     
     def mostra_transacoes(self):
-        id = self.__tela.ver_dados()
+        id = self.__tela.ver_transacoes()
         existente = False
         eh_pes = eh_pessoa(id)
         if eh_pes == True: # se for cpf
