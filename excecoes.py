@@ -96,3 +96,9 @@ class JurosNegativo():
         sg.change_look_and_feel('DarkRed')
         self.msg = f"\nO juros precisa ser maior ou igual a zero\n"
         sg.Popup(self.msg)
+        
+class ValorNegativo():
+    def __init__(self, tipo):
+        sg.change_look_and_feel('DarkRed')
+        self.msg = f"\nO valor de {tipo} precisa ser maior ou igual a zero\n"
+        sg.Popup(self.msg)

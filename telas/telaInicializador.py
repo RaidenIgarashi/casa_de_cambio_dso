@@ -19,6 +19,8 @@ class TelaInicializador():
             opcao = 4
         if valores['5']:
             opcao = 5
+        if valores['6']:
+            opcao = 6
         if botao in (None, 'X'):
             opcao = 0
         self.__window.Close()
@@ -28,11 +30,12 @@ class TelaInicializador():
         sg.change_look_and_feel("DarkGrey11")
         layout = [
             [sg.Text("OPÇÕES:")],
-            [sg.Radio("1 - Clientes", "RD_init", key='1')],
-            [sg.Radio("2 - Moedas", "RD_init", key='2')],
-            [sg.Radio("3 - Trocas", "RD_init", key='3')],
-            [sg.Radio("4 - Empréstimos", "RD_init", key='4')],
-            [sg.Radio("5 - Gerar Relatório", "RD_init", key='5')],
+            [sg.Radio("1 - Clientes", "RDI", key='1')],
+            [sg.Radio("2 - Moedas", "RDI", key='2')],
+            [sg.Radio("3 - Trocas", "RDI", key='3')],
+            [sg.Radio("4 - Empréstimos", "RDI", key='4')],
+            [sg.Radio("5 - Gerar Relatório", "RDI", key='5')],
+            [sg.Radio("6 - Relatório de ações desta sessão", "RDI", key='6')],
             [sg.Cancel(' X '), sg.Button('Confirmar')]
         ]
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)        

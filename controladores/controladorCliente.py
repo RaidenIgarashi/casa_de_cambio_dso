@@ -11,14 +11,20 @@ from DAOs.pessoa_dao import PessoaDAO
 from DAOs.organizacao_dao import OrganizacaoDAO
 
 class ControladorCliente(Controlador):
-    def __init__(self, controlador_sistema, relatorio):
-        self.__controlador_sistema = controlador_sistema
-        self.__relatorio = relatorio
+    def __init__(self, __controlador_sistema):
+        self.__controlador_sistema = __controlador_sistema
         self.__tela = TelaCliente()
         self.__tela_emprestimo = TelaEmprestimo()
         self.__tela_troca = TelaTroca()
         self.__pessoas = PessoaDAO()
         self.__organizacoes = OrganizacaoDAO()
+        
+    @property
+    def pessoas(self):
+        return self.__pessoas
+    @property
+    def organizacoes(self):
+        return self.__organizacoes
 
     def abre_tela(self):
         opcoes = {1: self.mostra_dados, 2: self.inclui, 3: self.exclui, 4: self.mostra_todas, 
@@ -39,7 +45,7 @@ class ControladorCliente(Controlador):
                 else:
                     self.__organizacoes.add(Organizacao(dados_cliente['nome'], dados_cliente['id']))
                 self.__tela.mostrar_msg(f"Cliente '{dados_cliente['nome']}' adicionado com sucesso")
-                self.__relatorio.add_operacao('inclusao', f"Inclusao do Cliente '{dados_cliente['nome']}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+                self.__controlador_sistema.add_operacao('inclusao', f"Inclusao do Cliente '{dados_cliente['nome']}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
                 ClienteJaRegistrado()
 
@@ -51,12 +57,12 @@ class ControladorCliente(Controlador):
                 if pessoa.id == id:
                     self.__tela.mostrar_tabela([{'nome': pessoa.nome, 'id': pessoa.id, 'idade':pessoa.idade}], 1)
                     existente = True
-                    self.__relatorio.add_operacao('mostragem', f"Mostragem de dados do Cliente '{pessoa.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+                    self.__controlador_sistema.add_operacao('mostragem', f"Mostragem de dados do Cliente '{pessoa.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             for org in self.__organizacoes.get_all():
                 if org.id == id:
                     self.__tela.mostrar_tabela([{'nome': org.nome, 'id': org.id}], 0)
                     existente = True
-                    self.__relatorio.add_operacao('mostragem', f"Mostragem de dados do Cliente '{org.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+                    self.__controlador_sistema.add_operacao('mostragem', f"Mostragem de dados do Cliente '{org.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             if not existente:
                 NaoFoiEncontradoComEsteId('cliente')
 
@@ -71,7 +77,7 @@ class ControladorCliente(Controlador):
                 else:
                     self.__organizacoes.remove(cliente.id)
                 self.__tela.mostrar_msg(f'Cliente "{cliente.nome}" excluído.')
-                self.__relatorio.add_operacao('exclusao', f"Exclusão do Cliente '{cliente.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+                self.__controlador_sistema.add_operacao('exclusao', f"Exclusão do Cliente '{cliente.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
                 NaoFoiEncontradoComEsteId('cliente')
             
@@ -92,7 +98,7 @@ class ControladorCliente(Controlador):
             self.__tela.mostrar_tabela(dados_pessoa, 1)
         else:
             self.__tela.mostrar_msg("Nenhuma Pessoa cadastrada.\n")
-        self.__relatorio.add_operacao('mostragem', f"Mostragem de todos as Pessoas e Organizacoes registradas, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+        self.__controlador_sistema.add_operacao('mostragem', f"Mostragem de todos as Pessoas e Organizacoes registradas, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
         
 
     def altera(self):
@@ -111,7 +117,7 @@ class ControladorCliente(Controlador):
                             self.__pessoas.update(cliente)
                         else:
                             self.__organizacoes.update(cliente)
-                self.__relatorio.add_operacao('alteracao', f"Alteracao dos dados do Cliente '{cliente.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+                self.__controlador_sistema.add_operacao('alteracao', f"Alteracao dos dados do Cliente '{cliente.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
                 self.__tela.mostrar_msg(f'Cliente "{cliente.nome}" alterado com sucesso.')
             else:
                 NaoFoiEncontradoComEsteId('cliente')
@@ -160,7 +166,7 @@ class ControladorCliente(Controlador):
                                                         'juros': t.porcentagem_juros})   
                 else:
                     self.__tela_emprestimo.mostrar_msg('\nEste cliente não fez nenhuma troca cambial. \n')
-            self.__relatorio.add_operacao('mostragem', f"Mostragem de todas as transações do cliente '{cliente.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+            self.__controlador_sistema.add_operacao('mostragem', f"Mostragem de todas as transações do cliente '{cliente.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
         elif eh_pes != None:
             NenhumRegistrado('cliente')
             

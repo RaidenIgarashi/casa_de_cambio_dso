@@ -61,30 +61,33 @@ class TelaTroca(Tela):
             [sg.Text('--------INFORMAÇÕES DA TROCA--------')],
             [sg.Text(f'ID DA TROCA: '), sg.InputText('', key='id')],
             [sg.Text(f'CPF DA PESSOA: '), sg.InputText('', key='cpf')],
-            [sg.Text(f'MOEDA ENTRADA: '), sg.InputText('', key='nome_moeda_entrada')],
-            [sg.Text(f'MOEDA SAIDA: '), sg.InputText('', key='nome_moeda_saida')],
+            [sg.Text(f'MOEDA ENTRADA (nome): '), sg.InputText('', key='nome_moeda_entrada')],
+            [sg.Text(f'MOEDA SAIDA (nome): '), sg.InputText('', key='nome_moeda_saida')],
             [sg.Text(f'QUANTIDADE ENTRADA: '), sg.InputText('', key='quantidade_entrada')],
-            [sg.Text(f'JUROS: '), sg.InputText('', key='juros')],
-            [sg.Text(f'DATA: '), sg.InputText('', key='data')],
+            [sg.Text(f'JUROS (%): '), sg.InputText('', key='juros')],
+            [sg.Text(f'DATA (dd/mm/yyyy): '), sg.InputText('', key='data')],
             [sg.Cancel('Cancelar'), sg.Button('Confirmar')]
         ]
         self.__window = sg.Window("CASA DE CAMBIO E EMPRÉSTIMOS").Layout(layout)
         botao, valores = self.open()
         self.close()
         
-        id = valores['id']
-        cpf = valores['cpf']
-        nome_moeda_entrada = valores['nome_moeda_entrada']
-        nome_moeda_saida = valores['nome_moeda_saida']
-        data = valores['data']
-        corretos = True
         if botao not in (None, 'Cancelar'):
+            id = valores['id']
+            cpf = valores['cpf']
+            nome_moeda_entrada = valores['nome_moeda_entrada']
+            nome_moeda_saida = valores['nome_moeda_saida']
+            data = valores['data']
+            corretos = True
+            
             if id in (None, ''):
                 CampoVazio('id')
                 corretos = False
                           
             try:
                 quantidade_entrada = float(valores['quantidade_entrada'])
+                if quantidade_entrada < 0:
+                    ValorNegativo("'quantidade_entrada'")
             except:
                 NaoNumericoGeral("'quantidade entrada'")
                 corretos = False

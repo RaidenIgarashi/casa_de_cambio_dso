@@ -6,13 +6,16 @@ from excecoes import *
 from DAOs.troca_dao import TrocaDAO
 
 class ControladorTroca(Controlador):
-    def __init__(self, controlador_sistema, controlador_moeda, controlador_cliente, relatorio):
+    def __init__(self, controlador_sistema, controlador_moeda, controlador_cliente):
         self.__trocas = TrocaDAO()
         self.__controlador_sistema = controlador_sistema
-        self.__relatorio = relatorio
         self.__tela = TelaTroca()
         self.__moeda = controlador_moeda
         self.__cliente = controlador_cliente
+        
+    @property
+    def trocas(self):
+        return self.__trocas
         
         
     def abre_tela(self):
@@ -37,7 +40,7 @@ class ControladorTroca(Controlador):
                                         'nome_moeda_entrada': troca.moeda_entrada.nome, 'nome_moeda_saida': troca.moeda_saida.nome, 
                                         'quantidade_entrada': troca.quantidade_entrada, 'quantidade_saida': troca.quantidade_saida, 
                                         'juros': troca.porcentagem_juros }])
-                self.__relatorio.add_operacao('mostragem', f"Mostragem de dados da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")  
+                self.__controlador_sistema.add_operacao('mostragem', f"Mostragem de dados da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")  
                       
 
     def inclui(self):
@@ -67,7 +70,7 @@ class ControladorTroca(Controlador):
             self.__trocas.add(trc)
             pessoa = self.__cliente.pega_objeto(dados['id_pessoa'])
             pessoa.trocas_feitas.append(trc)
-            self.__relatorio.add_operacao('inclusao', f"Inclusao da Troca de id '{dados['id']}', realizada por '{pessoa.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+            self.__controlador_sistema.add_operacao('inclusao', f"Inclusao da Troca de id '{dados['id']}', realizada por '{pessoa.nome}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             self.__tela.mostrar_msg(f"Troca de id '{dados['id']}' registrada com sucesso")
 
 
@@ -79,7 +82,7 @@ class ControladorTroca(Controlador):
                 self.__trocas.remove(troca.id)
                 troca.pessoa.trocas_feitas.remove(troca)
                 self.__tela.mostrar_msg(f"Troca de id '{id}' exluida com sucesso")
-                self.__relatorio.add_operacao('exclusao', f"Exclusao da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+                self.__controlador_sistema.add_operacao('exclusao', f"Exclusao da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
                 NaoFoiEncontradoComEsteId('troca')
 
@@ -99,7 +102,7 @@ class ControladorTroca(Controlador):
                 troca.moeda_saida = self.__moeda.pega_objeto(new_dados['nome_moeda_saida'])
                 troca.porcentagem_juros = new_dados['juros']
                 self.__trocas.update(troca)
-                self.__relatorio.add_operacao('alteracao', f"Alteracao de dados da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+                self.__controlador_sistema.add_operacao('alteracao', f"Alteracao de dados da troca de id '{troca.id}', {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             else:
                 NaoFoiEncontradoComEsteId('troca')
     
@@ -115,7 +118,7 @@ class ControladorTroca(Controlador):
                                       'quantidade_entrada': troca.quantidade_entrada, 'quantidade_saida': troca.quantidade_saida, 
                                       'juros': troca.porcentagem_juros })
             self.__tela.mostrar_tabela(dados_trocas)
-            self.__relatorio.add_operacao('mostragem', f"Mostragem dos dados de todas as trocas, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
+            self.__controlador_sistema.add_operacao('mostragem', f"Mostragem dos dados de todas as trocas, {dt.now().strftime('Dia %d/%m/%Y, às %H:%M')}")
             
 
     def calculo_moeda_saida(self, moeda1_nome, moeda2_nome, quantidade_entrada, juros):
